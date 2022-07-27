@@ -1,0 +1,239 @@
+\documentclass[
+%reprint,
+%preprint, 
+%11pt,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+% frontmatterverbose, 
+%preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+aps,
+pra,
+linenumbers,
+% twocolumn,
+% prl,
+% prb,
+% prd,
+% rmp,
+% prstab,
+% prstper,
+floatfix,
+%longbibliography
+]{revtex4-2} 
+% \usepackage{revquantum}
+% new linux font, ignore mono
+% \usepackage[mono=false]{libertine} 
+% \renewcommand{\baselinestretch}{1.05}
+% \usepackage[top=0.7in,left=1in,bottom=1in,right=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,epsfig,graphicx,mathrsfs,amsfonts,dsfont,bbm}
+% \usepackage{bbm} % for \mathbb{1}, but ruins the letter
+% \usepackage{unicode-math}
+% \DeclareMathOperator*{\argmax}{argmax}
+% \DeclareMathOperator*{\argmin}{argmin}
+\usepackage{pict2e}
+\usepackage[percent]{overpic}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{caption}
+% \usepackage{fullpage}
+\usepackage[toc,title,titletoc,header]{appendix}
+\usepackage{color}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{hyperref}
+\hypersetup{
+    citecolor=magenta,
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=green,      
+    urlcolor=cyan,
+}
+\usepackage[capitalise]{cleveref}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{tikz}
+%\usepackage{tikzit}
+%\input{path_integral.tikzstyles}
+\usepackage{braket}
+\usepackage{physics}
+% \usepackage{luatex85} % for qcircuit
+\usepackage{luatex85,qcircuit}
+\usepackage{blkarray}
+
+% \setlength\parindent{0pt}
+\setcounter{secnumdepth}{3}
+
+\theoremstyle{plain}
+\newtheorem{axiom}{Axiom}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Conjecture} 
+\newtheorem{question}{Question} 
+\newtheorem{claim}{Claim} 
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{observation}{Observation} 
+\newtheorem{fact}{Fact}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{problem}{Problem}
+
+
+\input{./macros.tex}
+\renewcommand{\llaplacian}{\hat{\mathfrak{L}}}
+%\newcommand{\zpartition}{\mathcal{Z}}
+\newcommand{\hamiltonian}{\hat{H}}
+\newcommand{\ew}{\hat{W}}
+\newcommand{\ob}{\hat{O}}
+\newcommand{\U}{\hat{U}}
+\newcommand{\dm}{\hat{\rho}}
+\newcommand{\oracle}{\hat{O}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\proj}{\hat{P}}
+%\newcommand{\deltat}{\Delta t}
+%\newcommand{\deltatau}{\Delta \tau}
+\newcommand{\cz}{\textup{\textsc{cz}}}
+\newcommand{\cx}{\textup{\textsc{cx}}}
+\newcommand{\toffoli}{\textup{\textsc{toffoli}}}
+\newcommand{\lleft}{\leftarrow}
+\newcommand{\rright}{\rightarrow}
+\newcommand{\intinf}{\int_{-\infty}^{\infty}}
+
+% disable subsections and subsubsections in the TOC
+\makeatletter
+%\def\l@subsection#1#2{}
+\def\l@subsubsection#1#2{}
+\makeatother
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%
+\title{Entanglement witness by quantum circuits}
+\author{Jue Xu}
+\email{juexu@cs.umd.edu}
+\author{Qi Zhao}
+\email{email}
+
+
+%\affiliation{Department of Computer Science, University of Maryland, College Park.}
+\date{\today}
+%%%%%%%%%%%%%%%%%%%
+% \vspace{10mm}
+\begin{abstract}
+	Machine learning algorithms are applied to the entanglement witness problem.
+\end{abstract}
+
+\maketitle
+% \setcounter{tocdepth}{0}
+ \tableofcontents
+% \newpage
+
+%%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
+\section{Introduction}
+Entanglement \cite{horodeckiQuantumEntanglement2009} is the key ingredient of quantum computation, quantum communication, and quantum cryptography [ref].
+
+\section{Preliminary}
+% \subsection{Related works}
+\subsection{Notations}
+\subsection{Entanglement witness}
+\begin{definition}[Entangled state]
+\end{definition}
+\begin{definition}[Bipartite state]
+\end{definition}
+\begin{definition}[Multi-partite state]
+\end{definition}
+\begin{definition}[Fully separable state]
+\end{definition}
+\begin{definition}[Genuine entangled state]
+\end{definition}
+\begin{definition}[Graph state]
+\end{definition}
+\cite{heinEntanglementGraphStates2006}.
+MBQC \cite{briegelMeasurementbasedQuantumComputation2009}
+
+\begin{definition}[Entanglement witness]
+	entanglement witness $\ew$
+	\begin{equation}
+		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
+		\Tr(\ew\dm) < 0 , \text{ for some entangled }
+	\end{equation}
+\end{definition}
+\begin{figure}[!ht]
+	\centering
+	% \includegraphics[width=1\linewidth]{}
+	\caption{(a) entanglement witness, PPT criteria, SVM (kernel). (b) with training data}
+\end{figure}
+\begin{problem}[Entanglement witness with prior]
+	\cite{zhouDetectingMultipartiteEntanglement2019}
+\end{problem}
+
+\subsection{Shadow tomography}
+Inspired by \cite{aaronsonShadowTomographyQuantum2018}, Huang et. al \cite{huangPredictingManyProperties2020}
+\begin{definition}[classical shadow]\label{def:classical_shadow}
+\end{definition}
+\begin{theorem}
+\end{theorem}
+
+\section{Quantum Algorithms}
+
+\subsection{Machine learning assisted}
+separability classifier by neural network \cite{luSeparabilityEntanglementClassifierMachine2018}.
+rigorous quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}.
+classical machine learning with \nameref{def:classical_shadow} \cite{huangProvablyEfficientMachine2021}.
+\begin{definition}[SVM]
+\end{definition}
+\begin{definition}[Kernel]
+\end{definition}
+
+\subsection{Variational quantum circuits}
+ansatz
+
+\subsection{Upper bounds and lower bounds}
+quantum advantage
+\begin{itemize}
+	\item input encoding problem \cite{tangQuantumPrincipalComponent2021}
+	\item 
+\end{itemize}
+
+\section{Numerical Simulation}
+% \input{complexity.tex}
+% \input{optimization.tex}
+
+\section{Conclusion and Discussion}
+todo
+\begin{itemize}
+	\item experiment
+\end{itemize}
+
+%\subsection*{Acknowledgements}
+% \thanks{The author thanks} 
+% The author thanks
+% TikZiT, QuTip
+
+% %\begin{appendices}
+%     %\chapter{}
+% %\end{appendices}
+
+% %%%%%%%%%%%%%%%Reference%%%%%%%%%%%%%%%
+% % \newpage
+% % \printbibliography
+\bibliographystyle{apsrev4-2}
+%\bibliographystyle{alpha}
+\bibliography{ref}
+
+%\begin{widetext}
+\onecolumngrid
+\appendix
+%\input{pathintegral.tex}
+%\input{hamiltonian.tex}
+%\input{cs.tex}
+%\input{appendix.tex}
+%\end{widetext}
+
+\end{document}
