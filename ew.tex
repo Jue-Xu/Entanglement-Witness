@@ -94,9 +94,12 @@ floatfix,
 %\newcommand{\zpartition}{\mathcal{Z}}
 \newcommand{\hamiltonian}{\hat{H}}
 \newcommand{\ew}{\hat{W}}
+\newcommand{\ghz}{\text{GHZ}}
+\newcommand{\shadow}{\text{shadow}}
+\newcommand{\noise}{\text{noise}}
 \newcommand{\ob}{\hat{O}}
 \newcommand{\U}{\hat{U}}
-\newcommand{\dm}{\hat{\rho}}
+\newcommand{\dm}{\rho}
 \newcommand{\oracle}{\hat{O}}
 \newcommand{\D}{\mathcal{D}}
 \newcommand{\proj}{\hat{P}}
@@ -117,7 +120,7 @@ floatfix,
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%
-\title{Entanglement witness by quantum circuits}
+\title{Towards efficient entanglement structure detection}
 \author{Jue Xu}
 \email{juexu@cs.umd.edu}
 \author{Qi Zhao}
@@ -127,8 +130,9 @@ floatfix,
 %%%%%%%%%%%%%%%%%%%
 % \vspace{10mm}
 \begin{abstract}
-	Machine learning algorithms are applied to the entanglement detection problem.
-	We compare complexity and performance of different methods, including conventional methods, machine learning, quantum algorithms.
+	Verification (detection) of entanglement structure is an indispenable step for pratical quantum computation (communication).
+	In this work, we compare complexity and performance of several recently-developed methods, including conventional entanglement witness methods, shadow tomography, classical machine learning, and quantum algorithms (trace estimation).
+	Machine learning algorithms and quantum advantages ...
 \end{abstract}
 
 \maketitle
@@ -140,6 +144,7 @@ floatfix,
 \section{Introduction}
 Entanglement \cite{horodeckiQuantumEntanglement2009} is the key ingredient of quantum computation \cite{}, quantum communication \cite{}, and quantum cryptography \cite{}.
 It is essential to benckmark (characterize) entanglement structures of target states.
+multipartite
 
 \section{Preliminary}
 % \subsection{Related works}
@@ -152,7 +157,7 @@ For simplicity, we assume $\Sigma=\qty{-1,1}$ (binary classification).
 
 Notations: a graph $\graph=(V,E)$ with vertices $V$ and edges $E$; 
 % a group $\group$ with a subgroup $\subgroup$. 
-The hats on the matrices such as $\hat{A}$, $\hamiltonian$, $\dm$, $\ob$, $\ew$, emphasize that they play the roles of operators.
+The hats on the matrices such as $\hat{A}$, $\hamiltonian$, $\dm$, $\ob$ (omitted), $\ew$, emphasize that they play the roles of operators.
 denote vector (matrix) $\vbx$, $\vb{K}$ by boldface font.
 
 For specific purpose, we use different basis (representations) for quantum states.
@@ -162,22 +167,44 @@ For simplicity, we let $N \equiv 2^n$ and $\ket{\vb{0}}\equiv\ket{0^n} \equiv\ke
 $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $
 
 \subsection{Entanglement detection}
+For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
+An identification of the entanglement structure may thus provide us with a hint about where imperfections in the setup may occur, as well as where we can identify groups of subsystems that can still exhibit strong quantum-informationprocessing capabilities.
+To benchmark our technological progress towards the generation of largescale genuine multipartite entanglement, it is thus essential to determine the corresponding entanglement depth.
 \begin{definition}[Entangled state]
 	pure state; mixed state is convex combination of entangled ...
 \end{definition}
 \begin{definition}[Bipartite state]
 \end{definition}
 
+\subsubsection{entanglement measures}
+\begin{definition}[Schmidt coefficient/rank/measure]
+	Schmidt decomposition
+\end{definition}
+\begin{definition}[entropy]\label{def:entropy}
+	% entanglement entropy
+	von Neumann \emph{entropy} of a density matrix is $H_N: = \Tr(\dm \log \dm)$
+\end{definition}
+
 \subsubsection{entanglement structures}
 Given a $n$-partite quantum system and its partition into $m$ subsystems, the \emph{entanglement structure} indicates how the subsystems are entangled with each other.
 In some specific systems, such as distributed quantum computing[] quantum networks[] or atoms in a lattice, the geometric configuration can naturally determine the system partition.
-\begin{remark}
-	Compared with genuine entanglement, multipartite entanglement structure still lacks a systematic exploration, due to the rich and complex structures of N-partite system.
-	Unfortunately, it remains an open problem of efﬁcient entanglement-structure detection of general multipartite quantum states.
-\end{remark}
-\begin{definition}[Multi-partite state]
+
+\begin{definition}[genuine entangled]\label{def:genuinely_entangled}
+	A state possesses \emph{genuine multipartite entanglement} (GME) if it is outside of $S_2$, and is (fully) $n$-separable if it is in $S_n$.
+	A state possesses P-genuine entanglement if it is outside of $S_b^P$.
+	A state $\dm$ possesses P-genuine entanglement iff $\dm\notin S_b^P$.
 \end{definition}
-\begin{definition}[Fully separable state?]\label{def:fully_separable}
+% \begin{remark}
+	Compared with genuine entanglement, multipartite entanglement structure still lacks a systematic exploration, due to the rich and complex structures of $n$-partite system.
+	Unfortunately, it remains an open problem of efficient entanglement-structure detection of general multipartite quantum states.
+% \end{remark}
+\begin{definition}[Multipartite state]
+	denote the partition $\mathcal{P}_m = \qty{A_i}$
+	and omit the index $m$ when it is clear from the context.
+\end{definition}
+define fully- and biseparable states with respect to a \emph{specific partition} $\mathcal{P}_m$
+\begin{definition}[fully separable state]\label{def:fully_separable}
+	An $n$-qubit pure state $\ket{\psi_f}$ is \emph{fully separable} \iff .
 	An $n$-qubit pure state $\ket{\psi_f}$ is \emph{P-fully separable} \iff it can be written as 
 	$\ket{\psi_f}=\otimes_i^m \ket{\phi_{A_i}}$.
 	An $n$-qubit mixed state $\dm_f$ is P-fully separable $\iff$ it can be decomposed into a conex mixture of P-fully separable pure states 
@@ -187,45 +214,93 @@ In some specific systems, such as distributed quantum computing[] quantum networ
 	P-bi-separable... $S_f^P \subset S_b^P$
 \end{definition}
 By going through all possible partitions, one can investigate higher level entanglement structures, such as entanglement intactness (non-separability), which quantifies how many pieces in the $n$-partite state are separated.
+
+\begin{remark}
+	P-... can be viewed as generalized versions of regular fully separable, biseparable, and genuinely entangled states, respectively.
+	In fact, when $m=n$, these pairs of definitions are the same.
+	By definitions, one can see that if a state is $P_m$-fully separable, it must be m-separable. Of course, an m-separable state might not be $P_m$-fully separable, for example, if the partition is not properly chosen.
+	Moreover, for some systems, such as distributed quantum computing, multiple quantum processor, and quantum network, natural partition exists due to the system geometric conﬁguration. Therefore, it is practically interesting to study entanglement structure under partitions.
+\end{remark}
+entanglement structure measures
 \begin{definition}[Entanglement intactness, depth]
 	the entanglement intactness of a state $\dm$ to be $m$, \iff $\dm\notin S_{m+1}$ and $\dm\in S_m$.
+	$k$-producible
 \end{definition}
-\begin{remark}
-	When the entanglement intactness is 1, the state is \nameref{def:genuinely_entangled}; and when the intactness is N, the state is fully separable.
-\end{remark}
-\begin{example}[GHZ, W]
+% \begin{remark}
+	When the entanglement intactness is 1, the state is \nameref{def:genuinely_entangled}; and when the intactness is $n$, the state is fully separable.
+% \end{remark}
+\begin{example}[GHZ]\label{exm:ghz}
 	bipartite: Bell states;
-	nontrivial multipartite: tripartite
+	nontrivial multipartite: tripartite.
+	GHZ state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$ (eight-photon) produce the five different entangled states (one from each entanglement structure): 
+	\begin{equation*}
+		\ket{\ghz_8},\ket{\ghz_{62}},\ket{\ghz_{44}},\ket{\ghz_{422}},\ket{\ghz_{2222}}.
+	\end{equation*}
+	W state
 \end{example}
 
-\begin{definition}[genuine entangled]\label{def:genuinely_entangled}
-	A state $\dm$ possesses P-genuine entanglement iff $\dm\notin S_b^P$.
-	A state possesses P-genuine entanglement if it is outside of $S_b^P$.
-	A state possesses \emph{genuine multipartite entanglement} (GME) if it is outside of $S_2$, and is (fully) $n$-separable if it is in $S_n$.
-\end{definition}
 \begin{figure}[!ht]
 	\centering
 	\begin{subfigure}{0.3\textwidth}
 		\centering
-		\includegraphics[width=.9\linewidth]{gme.png}
+		\includegraphics[width=.9\linewidth]{gme.jpg}
 	\end{subfigure}
 	\begin{subfigure}{0.3\textwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{sep.png}
+		\includegraphics[width=.8\linewidth]{sep.jpg}
 	\end{subfigure}
 	\begin{subfigure}{0.3\textwidth}
 		\centering
-		\includegraphics[width=.9\linewidth]{ppt.png}
+		\includegraphics[width=.9\linewidth]{ppt.jpg}
 	\end{subfigure}
 	\caption{(a) entanglement witness, PPT criteria, SVM (kernel)?. (c) convex hull... }
 	\label{fig:entangle}
 \end{figure}
 
+\subsubsection{Entanglement witness}\label{sec:entanglement_witness}
+\begin{theorem}[\cite{gurvitsClassicalDeterministicComplexity2003}]
+	% The problem of determining whether a given quantum state is entangled lies at the heart of quantum information processing, which is an NP-hard problem in general.
+	The weak membership problem for the convex set of separable normalized bipartite density matrices is NP-Hard.
+	\begin{itemize}
+		\item \textbf{Input}: ??
+		\item \textbf{Output}: ??
+	\end{itemize}
+\end{theorem}
+\begin{question}
+	specific cases? approximately correct? quantum computation? machine learning (data)?
+\end{question}
+
+\begin{theorem}[PPT criterion]
+	the positive partial transpose (PPT) criterion, saying that a separable state must have PPT.
+	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
+\end{theorem}
+see \cref{fig:entangle}
+\begin{definition}[entanglement witness]\label{def:entanglement_witness}
+	Given an (unknown) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
+	\begin{equation}
+		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
+		\Tr(\ew\dm) < 0 , \text{ for some entangled }
+	\end{equation}
+\end{definition}
+It is natural to ask nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  
+\nameref{def:kernel_method} ML
+
+\begin{problem}[Entanglement witness with prior]
+	% \cite{zhouDetectingMultipartiteEntanglement2019}
+	with prior knowledge
+	\begin{itemize}
+		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
+		\item \textbf{Output}: ???
+	\end{itemize}
+	decision problem
+\end{problem}
+
 \subsubsection{Graph state}
 graph state is an important class of multipartite states in quantum information.
-cluster state is the special case of graph state.
+Typical graph states include cluster states, \nameref{exm:ghz} state, and the states involved in error correction.
+% cluster state is the special case of graph state.
 2D cluster state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
-\begin{definition}[graph state]
+\begin{definition}[graph state]\label{def:graph_state}
 	Given a graph $G=(V,E)$, a graph state is constructed as 
 	\begin{itemize}
 		\item vertices: $\ket{+}^{\otimes n}$
@@ -236,10 +311,19 @@ cluster state is the special case of graph state.
 	$S_i:= X_i \bigotimes_{j\in n}Z_j$, 
 	which commute with each other and $\forall i,S_i\ket{G}=\ket{G}$.
 \end{definition}
+\begin{example}[graph states]
+	GHZ; complete graph, hypercube, Petersen graph; cluster state
+\end{example}
+\begin{question}
+	Hamiltona cycle of a graph state? vertex cover
+\end{question}
+% \begin{problem}[Entanglement structure detection]
+% \end{problem}
 \begin{problem}[Certify entanglement]
 	Multipartite entanglement-structure detection
 	\begin{itemize}
-		\item \textbf{Input}: Given a state close to a \textbf{known} state $\ket{\psi}$,
+		\item \textbf{Input}: Given a state close to a \textbf{known} (general multipartite) state $\ket{\psi}$,
+		certain partition?
 		\item \textbf{Output}: the certified lower-order entanglement among several subsystems could be still useful for some quantum information tasks.
 		entanglement structure
 	\end{itemize}
@@ -264,39 +348,42 @@ cluster state is the special case of graph state.
 \end{theorem}
 \begin{proposition}[Entanglement of graph state]
 	\cite{heinEntanglementGraphStates2006}.
-	witness; bounds
+	witness; bounds; graph property? vertex cover?
 \end{proposition}
+generalize \cite{zhangEfficientEntanglementGeneration2021}
+stabilizer state, neural network state?
 
-\subsubsection{Entanglement witness}
-\begin{theorem}[\cite{gurvitsClassicalDeterministicComplexity2003}]
-	% The problem of determining whether a given quantum state is entangled lies at the heart of quantum information processing, which is an NP-hard problem in general.
-	The weak membership problem for the convex set of separable normalized bipartite density matrices is NP-Hard.
-	\begin{itemize}
-		\item \textbf{Input}: ??
-		\item \textbf{Output}: ??
-	\end{itemize}
+
+\subsection{Shadow tomography}
+% \label{sec:shadow_tomography}
+Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} that extract all information about a state requires exponential copies (samples/measurements).
+\begin{theorem}[lower bound of tomography?\cite{haahSampleOptimalTomographyQuantum}]
+	Known fundamental lower bounds [66, 73] state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace distance.
 \end{theorem}
-\begin{question}
-	specific cases? approximately correct? quantum computation? machine learning (data)?
-\end{question}
-\begin{theorem}[PPT criterion]
-	the positive partial transpose (PPT) criterion, saying that a separable state must have PPT.
-	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
-\end{theorem}
-see \cref{fig:entangle}
-\begin{definition}[Entanglement witness]
-	entanglement witness $\ew$
-	\begin{equation}
-		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
-		\Tr(\ew\dm) < 0 , \text{ for some entangled }
-	\end{equation}
-\end{definition}
-natural question: nonlinear EW \cite{guhneNonlinearEntanglementWitnesses2006} (kernel method)
-\begin{definition}[Fidelity]\label{def:fidelity}
+\begin{definition}[fidelity]\label{def:fidelity}
 	Given a pair of states (target and real), 
+	% \begin{equation}
+	% 	F(\ket{\psi},\ket{\psi'}) :=
+	% \end{equation}
 	\begin{equation}
-		F(\ket{\psi},\ket{\psi'}) :=
+		F(\rho,\rho') : = \Tr \sqrt{\sqrt{\rho}\rho'\sqrt{\rho}}
 	\end{equation}
+	trace distance
+	\begin{equation}
+		d_{tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1
+	\end{equation}
+	% relation
+	% \begin{equation}
+	% 	1-F\le D_{tr} \le \sqrt{1-F^2}
+	% \end{equation}
+\end{definition}
+\begin{definition}[norm]\label{def:norm}
+	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
+	Euclidean norm $l_2$ norm;
+	Spectral (operator) norm ;
+	Trace norm $\norm{A}_{tr}:=\Tr(\sqrt{A^\dagger A})$, $p=1$;
+	Frobenius norm $\norm{A}_{tr}:=\sqrt{\Tr(A^\dagger A)}$, $p=2$;
+	Hilbert-Schmidt norm
 \end{definition}
 \begin{problem}[Fidelity estimate]
 	defined as follows
@@ -312,20 +399,10 @@ natural question: nonlinear EW \cite{guhneNonlinearEntanglementWitnesses2006} (k
 		\item \textbf{Output}: the expectation value $\Tr(\ob \dm) = $ with error $\epsilon$ (trace distance)
 	\end{itemize}
 \end{problem}
-\begin{problem}[Entanglement witness with prior]
-	% \cite{zhouDetectingMultipartiteEntanglement2019}
-	with prior knowledge
-	\begin{itemize}
-		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
-		\item \textbf{Output}: ???
-	\end{itemize}
-	decision problem
-\end{problem}
-
-\subsection{Shadow tomography}
-Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} that extract all information about a state requires exponential copies (samples/measurements).
+Nevertheless, we usually only need specific property of a target state rather than all information about the state.
+This enables the possibility to
 Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum2018}, Huang et. al \cite{huangPredictingManyProperties2020}
-\begin{problem}[Shadow tomography]
+\begin{problem}[Shadow tomography]\label{prm:shadow_tomography}
 	\emph{shadow tomography}
 	\begin{itemize}
 		\item \textbf{Given (Input):} \textbf{unknown} $D$-dimensional mixed state $\rho$, known 2-outcome measurements $E_1,\dots,E_M$
@@ -336,7 +413,7 @@ Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum20
 	It is possible to do shadow tomography using $\tilde{\bigO}(\frac{\log^4 M\cdot \log D}{\epsilon^4})$ copies. [no construction algorithm?]
 	sample complexity lower bound $\Omega(\log M\cdot \epsilon^{-2})$, 
 \end{theorem}
-	random Pauli measurements
+random Pauli measurements
 \begin{definition}[classical shadow]\label{def:classical_shadow}
 	classical shadow
 	\begin{equation}
@@ -349,18 +426,39 @@ predict linear function with classical shadows
 	\text{ obeys }
 	\expectation[o] =\Tr(O_i \dm)
 \end{equation}
+The classical shadow attempts to approximate this expectation value by an empirical average over $T$ independent samples, much like Monte Carlo sampling approximates an integral.
+% \begin{remark}
+The classical shadow size required to accurately approximate all reduced $r$-body density matrices scales exponentially in subsystem size $r$, but is independent of the total number of qubits $n$.
+% \end{remark}
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{density matrix $\dm$, ..}
+    \Output{classical shadow}
+    \BlankLine
+    \For{ $i = 1,2, \ldots, m$} {
+        random Pauli measurements \tcp*{a comment}
+        % \tcc{comment in a new line}
+    {\Return "?"}
+    }
+    \Return ?
+    \caption{Shadow tomography}
+    \label{alg:classical_shadow}
+\end{algorithm}
 \begin{lemma}
 	the variance
 	\begin{equation}
 		\variance[o] = \expectation[(o-\expectation[o])^2]
-		\le \norm{O - \frac{\Tr(O)}{2^n} \identity}^2_{\text{shadow}}
+		\le \norm{O - \frac{\Tr(O)}{2^n} \identity}^2_{\shadow}
 	\end{equation}
 \end{lemma}
 sample complexity
 \begin{equation}
 	N_{tot} = \bigO \qty(
 		\frac{\log (M)}{\epsilon^2} \max_{1\le i\le M} 
-		\norm{O_i - \frac{\Tr(O_i)}{2^n} \identity}^2_{shadow}
+		\norm{O_i - \frac{\Tr(O_i)}{2^n} \identity}^2_{\shadow}
 	)
 \end{equation}
 \begin{theorem}[Pauli/Clifford measurements]
@@ -369,7 +467,7 @@ sample complexity
 	$\Omega(\log(M) 3^k/\epsilon^2)$ copies of the state $\dm$.
 \end{theorem}
 
-\section{Classical and Quantum Algorithms}
+\section{Classical, data-powered, and quantum algorithms}
 We consider the problem 
 \begin{problem}[???]
 	problem without training data
@@ -379,13 +477,13 @@ We consider the problem
 	\end{itemize}
 	with training data
 	\begin{itemize}
-		\item \textbf{features}:
+		\item \textbf{features}: classical shadow?
 		\item label: 
 	\end{itemize}
 \end{problem}
 
 \subsection{Quantum-classical (ML) hybrid method}
-\subsubsection{Classical machine learning}
+\subsubsection{Classical machine learning}\label{sec:classical_machine_learning}
 separability classifier by neural network \cite{luSeparabilityEntanglementClassifierMachine2018}.
 rigorous quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}.
 classical machine learning with \nameref{def:classical_shadow} \cite{huangProvablyEfficientMachine2021}.
@@ -393,21 +491,37 @@ classical machine learning with \nameref{def:classical_shadow} \cite{huangProvab
 	find a hyperplane (a linear function)
 \end{definition}
 nonlinear boundary. map to a higher dimensional (feature) space, in which data is linearly separable.
-\begin{definition}[Kernel method]
+\begin{definition}[kernel method]\label{def:kernel_method}
 	Gaussian kernel; 
 	graph kernel;
 	shadow kernel
 \end{definition}
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=.35\linewidth]{data.png}
+	\includegraphics[width=.35\linewidth]{data.jpg}
 	\caption{computational model powered by training data}
 \end{figure}
 \begin{theorem}[power of data]
 	data learning
 \end{theorem}
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{labeled features (data)}
+    \Output{entanglement structure}
+    \BlankLine
+    \For{ $i = 1,2, \ldots, m$} {
+        kernel estimation \tcp*{a comment}
+        % \tcc{comment in a new line}
+    {\Return "?"}
+    }
+    \Return ?
+    \caption{Classical learning (SVM)}
+    \label{alg:classical_learning}
+\end{algorithm}
 
-\subsubsection{Quantum trace estimation}
+\subsubsection{Quantum trace estimation and kernel estimation}
 The task of estimating quantities like 
 \begin{equation}
 	\Tr(\rho_1 \cdots \rho_m)
@@ -416,6 +530,7 @@ The task of estimating quantities like
 given access to copies of the quantum states $\rho_1$  through $\rho_m$.
 % is a fundamental building block in quantum information science
 \begin{theorem}[Quantum trace estimation]
+	\cite{quekMultivariateTraceEstimation2022}
 	multivariate trace estimation can be implemented in constant quantum depth, with only linearly-many controlled two-qubit gates and a linear amount of classical pre-processing	
 \end{theorem}
 
@@ -440,40 +555,56 @@ an ansatz
     }
     \Return entangled ?
     \caption{Entanglement witness by ...}
-    \label{alg:miller_rabin}
+    \label{alg:entanglement_witness}
 \end{algorithm}
 
 \subsubsection{Variational trace estimate}
 find optimal entanglement witness (qunatum circuit?)
+\cite{glickCovariantQuantumKernels2021}
+% \cite{liuRigorousRobustQuantum2021}
+\cite{havlicekSupervisedLearningQuantum2019}
+\cite{schuldQuantumMachineLearning2019}
 
-\subsection{Theoretical upper bounds and lower bounds}
+\subsection{Theoretic upper bounds and lower bounds}
+\cite{huangPowerDataQuantum2021}
+\cite{huangPredictingManyProperties2020}
+\cite{aaronsonShadowTomographyQuantum2018}
+\cite{huangInformationtheoreticBoundsQuantum2021}
+\cite{liuRigorousRobustQuantum2021}
 \begin{definition}[graph property]\label{def:graph_property}
 	monotone
 \end{definition}
 \begin{problem}[Graph property test]
 \end{problem}
-quantum advantage
+quantum advantages:
 \begin{itemize}
-	\item no input encoding problem \cite{tangQuantumPrincipalComponent2021}
+	\item no input encoding problem \cite{tangQuantumPrincipalComponent2021} in most quantum machine learning algorithm.
 	\item contrived problem? for exponential speedup
 	\item convex body query? complexity
 \end{itemize}
+obstacles: (i)
 \begin{table}[!ht]
 \centering
-\begin{tabular}{c|c|c|c}
-	& gate/depth/computation & query?complexity & measurements/samples \\  
+\begin{tabular}{c|c|c|c|c}
+	& gate/depth/computation & query?complexity & measurements/samples & necessary/sufficient \\  
 	\hline
-	shadow tomography:  & & & $\bigO$, $\Omega$ \\  
-	entanglement witness (no ML, data); & & & \\  
-	classical machine learning;  & & & \\  
-	quantum (variational) circuits & & & \\  
+	\nameref{prm:shadow_tomography}:  & & N/A & $\bigO$, Holevo bound $\Omega$ & \\  
+	indirect? direct (no prior) & & & & \\  
+	promise (low-rank?), partial, decision? & & & & \\  
+	entanglement witness (\cref{sec:entanglement_witness}) & & & constant & \\  
+	classical ML (\cref{sec:classical_machine_learning})  & & & & \\  
+	quantum (variational) circuits & c-depth? & & & \\  
 	\hline
 \end{tabular}
 \caption{complexity measures of different methods}
 \end{table}
 
-\section{Numerical Simulation}
+\section{Numerical simulation}
 \subsection{Classification accuracy}
+\subsubsection{Data preparation}
+generate synthetic data from
+
+\subsubsection{Results}
 performance of different methods: 
 % \begin{itemize}
 % 	\item shadow tomography: 
@@ -485,7 +616,7 @@ performance of different methods:
 \subsection{Robustness to noise}
 tradeoff between (white noise) tolerance (robustness) and efficiency (number of measurements).
 \begin{equation}
-	\dm_{noise} = (1-p_{noise}) \op{G} + p_{noise} \frac{\identity}{2^n}
+	\dm_{\noise}' = (1-p_{\noise}) \op{G} + p_{\noise} \frac{\identity}{2^n}
 \end{equation}
 $p_{noise}$ indicates the robustness of the algorithm (witness).
 \begin{remark}
@@ -495,11 +626,11 @@ $p_{noise}$ indicates the robustness of the algorithm (witness).
 % \input{complexity.tex}
 % \input{optimization.tex}
 
-\section{Conclusion and Discussion}
+\section{Conclusion and discussion}
 todo
 \begin{itemize}
 	\item experiment (generation, verification) \cite{luEntanglementStructureEntanglement2018}
-	\item error correction?
+	\item error correction? not benchmark
 \end{itemize}
 
 \subsection*{Acknowledgements}
