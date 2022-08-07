@@ -92,9 +92,6 @@ floatfix,
 
 
 \input{./macros.tex}
-\renewcommand{\llaplacian}{\hat{\mathfrak{L}}}
-%\newcommand{\zpartition}{\mathcal{Z}}
-\newcommand{\hamiltonian}{\hat{H}}
 \newcommand{\kernel}{k}
 \newcommand{\ew}{\hat{W}}
 \newcommand{\ghz}{\text{GHZ}}
@@ -103,6 +100,11 @@ floatfix,
 \newcommand{\shadow}{\text{shadow}}
 \newcommand{\noise}{\text{noise}}
 \newcommand{\ob}{\hat{O}}
+\newcommand{\separable}{S}
+
+\renewcommand{\llaplacian}{\hat{\mathfrak{L}}}
+%\newcommand{\zpartition}{\mathcal{Z}}
+\newcommand{\hamiltonian}{\hat{H}}
 \newcommand{\U}{\hat{U}}
 \newcommand{\subgroup}{\mathbb{H}}
 \newcommand{\ppartition}{\mathcal{P}}
@@ -177,6 +179,7 @@ $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $
 
 \subsection{Entanglement detection}
 Large scale entanglement is the (main) resource of quantum advantages in quantum computation and communication.
+\subsubsection{Bipartite entanglement}
 \begin{definition}[Entangled state]\label{def:entangled_state}
 	Consider a $n$-partite (subsystem) system $\hilbertspace=\bigotimes_i^n \hilbertspace_i$,
 	separable states or product states are i.e.,
@@ -194,7 +197,7 @@ Large scale entanglement is the (main) resource of quantum advantages in quantum
 % 	Bell states
 % \end{example}
 Many methods [...] have been developed to determine whether a state is separable.
-\begin{definition}[Bipartite state]
+\begin{definition}[bipartite separable]\label{def:bipartite_separable}
 	A pure state is (bi-)separable if it is in a tensor product form $\ket{\psi_b}=\ket{\phi_A}\otimes\ket{\phi_{\bar{A}}}$, 
 	where $\ppartition_2 = \qty{ A, \bar{A} }$ is a bipartition of the qubits in the system.
 	A mixed state is separable if it can be written as a mixing of pure separable states.
@@ -217,10 +220,10 @@ Instead of qualitatively determining entanglement, quantify entanglement
 	where $\qty{\ket{\psi_1^A}}$ is a basis for $\hilbertspace_A$ and ...
 	The strictly positive values $\sqrt{p_i}$ in the Schmidt decomposition are its \emph{Schmidt coefficients}. 
 	The number of Schmidt coefficients, counted with multiplicity, is called its \emph{Schmidt rank}, or Schmidt number.
-	Schmidt measure
+	Schmidt measure is minimum of log r where r is number of terms in an expansion of the state in product basis.
 \end{definition}
 \begin{example}
-	The Schmidt measure for any multi-partite \nameref{exm:ghz} states is 1.
+	The Schmidt measure for any multi-partite \nameref{exm:ghz} states is 1, because there are just two terms.
 	... 1D, 2D, 3D-cluster state is $\floor{\frac{N}{2}}$.
 	.. of tree is the size of its minimal vertex cover.
 \end{example}
@@ -236,6 +239,13 @@ Instead of qualitatively determining entanglement, quantify entanglement
 	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
 	relative entropy (\nameref{def:divergence})
 \end{definition}
+% \begin{definition}[partial trace]
+% 	partial trace
+% \end{definition}
+\begin{definition}[maximally entangled]
+	a state vector is maximually entangled $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
+	$\Tr_a(\op{\psi})=\frac{1}{2}$.
+\end{definition}
 
 \subsubsection{entanglement structures}
 For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
@@ -248,6 +258,15 @@ Therefore, it is practically interesting to study entanglement structure under p
 
 GME is the strongest form of entanglement, that is, 
 all qubits in the system are indeed entangled with each other
+\begin{definition}[fully entangled]\label{def:fully_entangled}
+	An $n$-qubit quantum state $\dm$ is a \emph{fully entangled},
+	if it is outside of the separable state set $S_b^{\ppartition_2}$ for any partition,
+	$\dm \notin S_b^{\ppartition_2},\forall \ppartition_2 = \qty{A,\bar{A}}$.
+	% \begin{equation}
+	% 	\dm \notin S_b^{\ppartition_2},
+	% 	\forall \ppartition_2 = \qty{A,\bar{A}}
+	% \end{equation}
+\end{definition}
 \begin{definition}[genuine entangled]\label{def:genuinely_entangled}
 	A state possesses \emph{genuine multipartite entanglement} (GME) if it is outside of $S_2$, and is (fully) $n$-separable if it is in $S_n$.
 	A state possesses $\ppartition$-genuine entanglement if it is outside of $S_b^\ppartition$.
@@ -270,7 +289,7 @@ define fully- and biseparable states with respect to a \emph{specific partition}
 	% \begin{equation}
 	% 	\dm_f = \sum_i p_i \op{\psi_f^i}, (\forall i) ( p_i\ge 0, \sum_i p_i = 1) .
 	% \end{equation}
-	P-bi-separable... $S_f^P \subset S_b^P$
+	P-bi-separable... $\separable_f^P \subset S_b^P$
 \end{definition}
 By going through all possible partitions, one can investigate higher level entanglement structures, such as entanglement intactness (non-separability), which quantifies how many pieces in the $n$-partite state are separated.
 
@@ -333,7 +352,7 @@ To benchmark our technological progress towards the generation of largescale gen
 \end{question}
 
 \begin{theorem}[PPT criterion]
-	the positive partial transpose (PPT) criterion, saying that a separable state must have PPT?.
+	the positive partial transpose (PPT) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 \end{theorem}
 see \cref{fig:entangle}
@@ -348,7 +367,7 @@ It is natural to ask nonlinear entanglement witness \cite{guhneNonlinearEntangle
 \nameref{def:kernel} ML
 \begin{proposition}
 	Given a state $\ket{\psi}$,
-	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness genuine multipartite entanglement near $\ket{\psi}$
+	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness (\nameref{def:genuinely_entangled}) genuine multipartite entanglement near $\ket{\psi}$
 	% \nameref{def:genuinely_entangled}
 	\begin{equation}
 		\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
@@ -374,7 +393,7 @@ Typical graph states include cluster states, \nameref{exm:ghz} states, and the s
 % cluster state is the special case of graph state.
 It worth noting that 2D cluster state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
 \begin{definition}[graph state]\label{def:graph_state}
-	Given a (undirected, unweighted) graph $G=(V,E)$, a graph state is constructed as 
+	Given a simple graph (undirected, unweighted, no loop and multiple edge) $G=(V,E)$, a graph state is constructed as 
 	from the initial state $\ket{+}^{\otimes n}$ corresponding to $n$ vertices.
 	Then, apply controlled-Z gate to every edge, that is 
 	\begin{equation}
@@ -397,7 +416,7 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 % \begin{question}
 % \end{question}
 \begin{example}[graph states]
-	\nameref{exm:ghz} (star); complete graph, hypercube, Petersen graph; cluster state
+	line; \nameref{exm:ghz} (star); complete graph, hypercube, Petersen graph; cluster state
 	\begin{figure}[!ht]
 		\centering
 		\begin{subfigure}{0.3\textwidth}
@@ -465,6 +484,9 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 % \end{question}
 % \begin{problem}[Entanglement structure detection]
 % \end{problem}
+\begin{observation}
+	Any connected graph state is fully entangled m-particle state
+\end{observation}
 \begin{problem}[Certify entanglement]
 	Multipartite entanglement-structure detection
 	\begin{itemize}
@@ -526,7 +548,7 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 \end{theorem}
 \begin{definition}[fidelity]\label{def:fidelity}
 	Given a pair of states (target and prepared), 
-	fidelity $F(\rho,\rho') : = \Tr(\sqrt{\sqrt{\rho}\rho'\sqrt{\rho}})$
+	Uhlmann fidelity $F(\rho,\rho') : = \Tr(\sqrt{\sqrt{\rho}\rho'\sqrt{\rho}})$
 	% \begin{equation}
 	% 	F(\ket{\psi},\ket{\psi'}) :=
 	% \end{equation}
@@ -693,54 +715,6 @@ separability classifier by neural network \cite{luSeparabilityEntanglementClassi
 rigorous quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}.
 classical machine learning with \nameref{def:classical_shadow} \cite{huangProvablyEfficientMachine2021}.
 
-nonlinear boundary. map to a higher dimensional (feature) space, in which data is linearly separable.
-\begin{definition}[kernel]\label{def:kernel}
-	In general, the kernel function $\kernel:\mathcal{X}\times \mathcal{X} \to \realnumber$ measures the similarity between two input data points by an inner product
-	\begin{equation}
-		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
-	\end{equation}
-	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
-	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix.
-\end{definition}
-\begin{example}[kernels]
-	Some common kernels: 
-	the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map ...
-	the Gaussian kernel
-	$\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ 
-		% \begin{equation}
-		% 	\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
-		% \end{equation}
-	with an infinite dimensional feature map $\phi(\vbx)$.
-	An important feature of kernel method is that kernels can be computed efficiently without evaluating feature map (might be infinite dimension) explicitly.
-	% \begin{itemize}
-	% 	\item \emph{Gaussian kernel}; 
-	% 	\begin{equation}
-	% 		\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
-	% 	\end{equation}
-	% 	note that infinite dimensional feature map
-
-		% \item \emph{graph kernel} \cite{kriegeSurveyGraphKernels2020}: given a pair of graphs $(\graph,\graph')$
-		% \begin{equation}
-		% 	\kernel (\graph,\graph')  =
-		% \end{equation}
-		% quantum graph kernel $\kernel (\graph,\graph')  = \abs{\ip{\graph}{\graph'}}^2$ ??
-		% \cite{baiQuantumJensenShannon2015}
-
-		% \item quantum kernel (transition amplitude / quantum propagator);
-		% \begin{equation}
-		% 	k_Q(\rho,\rho') := \abs{\ip{\phi(x)}{\phi(x')}}^2 =\abs{\mel{0}{\U_{\phi(x)}^\dagger \U_{\phi(x')} }{0}}^2 = \Tr(\rho\rho')
-		% \end{equation}
-		% with quantum feature map $\phi(x): \mathcal{X}\to \op{\phi(x)}$
-
-		% \item \emph{shadow kernel}:
-		% given two density matrices $\rho$ and $\rho'$
-		% \begin{equation}
-		% 	k_{\shadow}(\rho,\rho') := 
-		% \end{equation}
-
-	% 	\item neural tagent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017}
-	% \end{itemize}
-\end{example}
 Graphs is another kind of data which is fundamentally different from a real value vector because of vertex-edge relation, graph isomorphism.
 So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
 \begin{definition}[graph kernel]\label{def:graph_kernel}
@@ -795,7 +769,8 @@ similarity measures? advantages? why? (isomorphism?)
 \end{definition}
 % \begin{figure}[!ht]
 % 	\centering
-% 	\includegraphics[width=.35\linewidth]{data.jpg}
+% 	\includegraphics[scale=.2]{data.png}
+% 	% \includegraphics[width=.35\linewidth]{data.jpg}
 % 	\caption{computational model powered by training data}
 % \end{figure}
 power of data - 
@@ -967,14 +942,64 @@ todo: experiment (generation, verification) \cite{luEntanglementStructureEntangl
 
 \section{Machine learning background}
 % In this work, we restrict ourself to supervised learning (mainly SVM), where we are given a set of labeled data for training to predict labels of new data.
-% \subsection{SVM}
+\subsection{SVM}\label{sec:svm}
 \begin{definition}[SVM]\label{def:svm}
 	support vector machine (SVM) is designed to
 	find a hyperplane (a linear function) such that maximize the margin ...
 \end{definition}
 \nameref{def:kernel}
+nonlinear boundary. map to a higher dimensional (feature) space, in which data is linearly separable.
+\begin{definition}[kernel]\label{def:kernel}
+	In general, the kernel function $\kernel:\mathcal{X}\times \mathcal{X} \to \realnumber$ measures the similarity between two input data points by an inner product
+	\begin{equation}
+		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
+	\end{equation}
+	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
+	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix.
+\end{definition}
+\begin{example}[kernels]
+	Some common kernels: 
+	the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map ...
+	the Gaussian kernel
+	$\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ 
+		% \begin{equation}
+		% 	\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
+		% \end{equation}
+	with an infinite dimensional feature map $\phi(\vbx)$.
+	An important feature of kernel method is that kernels can be computed efficiently without evaluating feature map (might be infinite dimension) explicitly.
+	% \begin{itemize}
+	% 	\item \emph{Gaussian kernel}; 
+	% 	\begin{equation}
+	% 		\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
+	% 	\end{equation}
+	% 	note that infinite dimensional feature map
+
+		% \item \emph{graph kernel} \cite{kriegeSurveyGraphKernels2020}: given a pair of graphs $(\graph,\graph')$
+		% \begin{equation}
+		% 	\kernel (\graph,\graph')  =
+		% \end{equation}
+		% quantum graph kernel $\kernel (\graph,\graph')  = \abs{\ip{\graph}{\graph'}}^2$ ??
+		% \cite{baiQuantumJensenShannon2015}
+
+		% \item quantum kernel (transition amplitude / quantum propagator);
+		% \begin{equation}
+		% 	k_Q(\rho,\rho') := \abs{\ip{\phi(x)}{\phi(x')}}^2 =\abs{\mel{0}{\U_{\phi(x)}^\dagger \U_{\phi(x')} }{0}}^2 = \Tr(\rho\rho')
+		% \end{equation}
+		% with quantum feature map $\phi(x): \mathcal{X}\to \op{\phi(x)}$
+
+		% \item \emph{shadow kernel}:
+		% given two density matrices $\rho$ and $\rho'$
+		% \begin{equation}
+		% 	k_{\shadow}(\rho,\rho') := 
+		% \end{equation}
+
+	% 	\item neural tagent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017}
+	% \end{itemize}
+\end{example}
+
 % \subsection{neural network}
 % \subsection{Unsupervised: PCA}
+
 \section{Hardness assumptions}
 \BQP,\BPP
 
