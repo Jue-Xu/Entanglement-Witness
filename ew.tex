@@ -99,6 +99,9 @@ floatfix,
 \newcommand{\kl}{D_\text{KL}}
 \newcommand{\shadow}{\text{shadow}}
 \newcommand{\noise}{\text{noise}}
+\newcommand{\qnn}{\textup{QNN}}
+\newcommand{\ntk}{\textup{NT}}
+\newcommand{\ppt}{\textup{PPT}}
 \newcommand{\ob}{\hat{O}}
 \newcommand{\separable}{S}
 
@@ -129,7 +132,7 @@ floatfix,
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%
-\title{Towards efficient entanglement structure detection}
+\title{Towards efficient and robust detection of entanglement structure}
 \author{Jue Xu}
 \email{juexu@cs.umd.edu}
 \author{Qi Zhao}
@@ -141,7 +144,7 @@ floatfix,
 \begin{abstract}
 	Verification (detection) of entanglement structure is an indispensable step for practical quantum computation (communication).
 	In this work, we compare complexity and performance of several recently-developed methods, including entanglement witness methods, shadow tomography, classical machine learning, and quantum algorithms (circuits).
-	illustrate the advantages and limitations of machine learning and quantum algorithms.
+	We illustrate the advantages and limitations of machine learning and quantum algorithms.
 \end{abstract}
 
 \maketitle
@@ -152,46 +155,51 @@ floatfix,
 %%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
 \section{Introduction}
 Entanglement \cite{horodeckiQuantumEntanglement2009} is the key ingredient of quantum computation \cite{}, quantum communication \cite{}, and quantum cryptography \cite{}.
-It is essential to benckmark (characterize) multipartite entanglement structures of target states.
-We review the recently developed methods: entanglement witness \cite{zhouDetectingMultipartiteEntanglement2019}, shadow tomography \cite{huangPredictingManyProperties2020}, classical machine learning \cite{huangPowerDataQuantum2021}, and quantum (variational/circuit) algorithms \cite{quekMultivariateTraceEstimation2022}.
+For practical purpose, it is essential to benckmark (characterize) multipartite entanglement structures of target states.
+We review the recently developed methods to entanglement detection: entanglement witness \cite{zhouDetectingMultipartiteEntanglement2019}, shadow tomography \cite{huangPredictingManyProperties2020}, classical machine learning \cite{huangPowerDataQuantum2021}, and quantum (variational/circuit) algorithms \cite{quekMultivariateTraceEstimation2022}.
 
 \section{Preliminaries}
 % \subsection{Related works}
 % \subsection{Notations}
-Notations:
-The (classical) training data (for supervised learning) is a set of $m$ data points $\qty{(\vbx^{(i)}, y^{(i)})}^{m}_{i=1}$ 
-where each data point is a pair $(\vbx,y)$.
-Normally, the input (e.g., an image) $\vbx:= (x_1,x_2,\dots,x_d) \in \realnumber^d$  is a vector where $d$ is the number of \emph{features}
-and its \emph{label} $y\in\Sigma$ is a scalar with some discrete set $\Sigma$ of alphabet/categories. 
-For simplicity and the purpose of this paper, we assume $\Sigma=\qty{-1,1}$ (binary classification).
 
-% Notations: 
-a graph $\graph=(V,E)$ is described by vertices $V$ and edges $E$.
-denote a group by $\group$ and a subgroup $\subgroup$. 
-The hats on the matrices such as $\hat{A}$, $\hamiltonian$, $\dm$ (omitted), $\ob$, $\ew$, emphasize that they play the roles of operators.
+
+Notations: 
+The hats on the matrices such as $\hat{A}$, $\hamiltonian$, $\dm$ (omitted), $\ob$, $\ew$, emphasize that they play the roles of operators (Hermitian matrices).
 Denote vector (matrix) $\vbx$, $\vb{K}$ by boldface font.
+A simle (undirected, unweighted) graph $\graph=(V,E)$ is described by vertices $V$ and edges $E$.
 
 For specific purpose, we use different basis (representations) for quantum states.
 One is the computational basis $\qty{\ket{z}}$ with $z\in \qty[2^n]$ where $n$ is the number of qubits,
-while another useful one is the binary representation of computational basis $\qty{\ket{\vbx}\equiv\ket{x_1,x_2,\dots,x_n}}$ with $x_j\in \qty{0,1}$. 
+while another useful one is the binary representation of computational basis $\qty{\ket{\vbx}\equiv\ket{x_1}\ket{x_2}\dots\ket{x_n}}$ with $x_j\in \qty{0,1}$. 
 For simplicity, we let $N \equiv 2^n$ and $\ket{\vb{0}}\equiv\ket{0^n} \equiv\ket{0}^{\otimes n}$ if no ambiguity.
-$\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $
+shorthand $\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$.
+Hadamard basis $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $.
 
 \subsection{Entanglement detection}
-Large scale entanglement is the (main) resource of quantum advantages in quantum computation and communication.
+
 \subsubsection{Bipartite entanglement}
-\begin{definition}[Entangled state]\label{def:entangled_state}
-	Consider a $n$-partite (subsystem) system $\hilbertspace=\bigotimes_i^n \hilbertspace_i$,
-	separable states or product states are i.e.,
-	\begin{equation}
-		\ket{\Psi} = \bigotimes_i \ket{\psi_i}
-	\end{equation}
-	entangled pure state is a quantum state that cannot be written as a (tensor) product state (inseparable). 
-	For (generalize) mixed states, a mixed entangled state is a convex combination of entangled pure state, that is
-	\begin{equation}
-		\rho = \sum_i p_i\op{\Psi_i},\forall i,p_i\ge 0, \sum_i p_i =1
-	\end{equation}
-		...
+Large scale entanglement is the (main) resource of quantum advantages in quantum computation and communication.
+Firstly, we consider the simplest entanglement structure: bipartite separable case.
+% \begin{definition}[Entangled state]\label{def:entangled_state}
+% 	Consider a $n$-partite (subsystem) system $\hilbertspace=\bigotimes_i^n \hilbertspace_i$,
+% 	separable states or product states are i.e.,
+% 	\begin{equation}
+% 		\ket{\Psi} = \bigotimes_i \ket{\psi_i}
+% 	\end{equation}
+% 	entangled pure state is a quantum state that cannot be written as a (tensor) product state (inseparable). 
+% 	For (generalize) mixed states, a mixed entangled state is a convex combination of entangled pure state???, that is
+% 	\begin{equation}
+% 		\rho = \sum_i p_i\op{\Psi_i},\forall i,p_i\ge 0, \sum_i p_i =1
+% 	\end{equation}
+% 	density matrix $\dm$ (trace one, Hermitian, PSD)	...
+% \end{definition}
+\begin{definition}[density matrix]\label{def:density_matrix}
+	pure state $\ket{\psi}$;
+	density matrix $\dm$ (trace one, Hermitian, PSD)	...
+\end{definition}
+\begin{definition}[partial trace]
+	partial trace;
+	reduced density matrix $\dm_A = \Tr_B(\dm_{AB})$
 \end{definition}
 % \begin{example}
 % 	Bell states
@@ -206,27 +214,23 @@ Many methods [...] have been developed to determine whether a state is separable
 	There is another restricted way for the extension to mixed states. 
 	A state is $\ppartition_2$-separable, if it is a mixing of pure separable states with a same partition $\ppartition_2$, 
 	and we denote the state set as $S_b^{\ppartition_2}$. 
+	entangled state?...
 \end{definition}
 % It is clear that $S_b^{\ppartition_2}\subset S_b$, and $S_b$ can be generated by the convex mixture of all possible $S_b^{\ppartition_2}$.
 
 % \subsubsection{entanglement measures}
-Instead of qualitatively determining entanglement, quantify entanglement
-\begin{definition}[Schmidt coefficient/rank/measure]
-	% Schmidt decomposition	
-	consider the following pure state on system AB, written in Schmidt form:
+Rather than qualitatively determining (bi)separability, there are measures to quantify entanglement
+\begin{definition}[Schmidt measure]\label{def:schmidt_measure}
+	Consider the following bipartite pure state, written in Schmidt form:
 	\begin{equation}
-		\ket{\psi} = \sum_i \sqrt{p_i} \ket{\phi_i^A}\otimes\ket{\phi_i^B}
+		\ket{\psi} = \sum_i^r \sqrt{p_i} \ket{\phi_i^A}\otimes\ket{\phi_i^B}
 	\end{equation}
-	where $\qty{\ket{\psi_1^A}}$ is a basis for $\hilbertspace_A$ and ...
+	where $\qty{\ket{\phi_i^A}}$ is a basis for $\hilbertspace_A$ and $\qty{\ket{\phi_i^A}}$ for $\hilbertspace_B$.
 	The strictly positive values $\sqrt{p_i}$ in the Schmidt decomposition are its \emph{Schmidt coefficients}. 
-	The number of Schmidt coefficients, counted with multiplicity, is called its \emph{Schmidt rank}, or Schmidt number.
-	Schmidt measure is minimum of log r where r is number of terms in an expansion of the state in product basis.
+	The number of Schmidt coefficients, counted with multiplicity, is called its \emph{Schmidt rank}, or Schmidt number. (Schmidt rank ?? $\text{SR}^A(\psi)=\rank(\rho_{\psi}^A)$)
+	Schmidt measure is minimum of $\log_2 r$ where $r$ is number of terms in an expansion of the state in product basis.
 \end{definition}
-\begin{example}
-	The Schmidt measure for any multi-partite \nameref{exm:ghz} states is 1, because there are just two terms.
-	... 1D, 2D, 3D-cluster state is $\floor{\frac{N}{2}}$.
-	.. of tree is the size of its minimal vertex cover.
-\end{example}
+
 % \begin{remark}
 % 	When a bipartite vector is written in the Schmidt basis, it is very easy to compute the partial trace of either subsystem	
 % 	\begin{equation}
@@ -234,10 +238,30 @@ Instead of qualitatively determining entanglement, quantify entanglement
 % 	\end{equation}
 % \end{remark}
 \begin{definition}[entropy]\label{def:entropy}
-	% entanglement entropy
 	In quantum mechanics (information), the von Neumann \emph{entropy} of a density matrix is $H_N(\dm): = -\Tr(\dm \log \dm)=-\sum_i\lambda_i\log(\lambda_i)$;
 	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
 	relative entropy (\nameref{def:divergence})
+\end{definition}
+\begin{remark}
+	(def partial trace ...)
+	a pure (bipartite) state is entangled $\iff$ the reduced state $\dm^A=\Tr_A(\dm)$ is mixed.
+	The mixedness of this reduced state allows one to quantify the amount of entanglement in this state.
+\end{remark}
+\begin{definition}[entanglement entropy]\label{def:entanglement_entropy}
+	The bipartite \emph{von Neumann entanglement entropy} $S$
+	is defined as the von Neumann entropy of either of
+	its reduced density matrix $\dm_A$.
+	For a pure state $\dm_{AB}=\op{\Psi}{\Psi}_{AB}$,
+	it is given by
+	\begin{equation}
+		E(\Psi_{AB}) 
+		= S(\dm_A)
+		= -\Tr(\dm_A \log \dm_A)
+		= -\Tr(\dm_B \log \dm_B)
+		= S(\dm_B)
+	\end{equation}
+	where $\dm_A= \Tr_B(\dm_{AB})$ and $\dm_B = \Tr_A(\dm_{AB})$ 
+	are the reduced density matrices for each partition.
 \end{definition}
 % \begin{definition}[partial trace]
 % 	partial trace
@@ -247,7 +271,8 @@ Instead of qualitatively determining entanglement, quantify entanglement
 	$\Tr_a(\op{\psi})=\frac{1}{2}$.
 \end{definition}
 
-\subsubsection{entanglement structures}
+
+\subsubsection{Multipartite entanglement structures}
 For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
 An identification of the entanglement structure may thus provide us with a hint about where imperfections in the setup may occur, as well as where we can identify groups of subsystems that can still exhibit strong quantum-informationprocessing capabilities.
 
@@ -256,8 +281,6 @@ In some specific systems, such as distributed quantum computing[] quantum networ
 % Moreover, for some systems, such as distributed quantum computing, multiple quantum processor, and quantum network, natural partition exists due to the system geometric configuration. 
 Therefore, it is practically interesting to study entanglement structure under partitions.
 
-GME is the strongest form of entanglement, that is, 
-all qubits in the system are indeed entangled with each other
 \begin{definition}[fully entangled]\label{def:fully_entangled}
 	An $n$-qubit quantum state $\dm$ is a \emph{fully entangled},
 	if it is outside of the separable state set $S_b^{\ppartition_2}$ for any partition,
@@ -267,7 +290,10 @@ all qubits in the system are indeed entangled with each other
 	% 	\forall \ppartition_2 = \qty{A,\bar{A}}
 	% \end{equation}
 \end{definition}
-\begin{definition}[genuine entangled]\label{def:genuinely_entangled}
+GME is the strongest form of entanglement, that is, 
+all qubits in the system are indeed entangled with each other.
+\begin{definition}[genuine multipartite entanglement]\label{def:gme}
+% \begin{definition}[genuine entangled]\label{def:genuinely_entangled}
 	A state possesses \emph{genuine multipartite entanglement} (GME) if it is outside of $S_2$, and is (fully) $n$-separable if it is in $S_n$.
 	A state possesses $\ppartition$-genuine entanglement if it is outside of $S_b^\ppartition$.
 	A state $\dm$ possesses $\ppartition$-genuine entanglement iff $\dm\notin S_b^\ppartition$.
@@ -283,13 +309,13 @@ all qubits in the system are indeed entangled with each other
 define fully- and biseparable states with respect to a \emph{specific partition} $\ppartition_m$
 \begin{definition}[fully separable]\label{def:fully_separable}
 	An $n$-qubit pure state $\ket{\psi_f}$ is \emph{fully separable} \iff .
-	An $n$-qubit pure state $\ket{\psi_f}$ is \emph{P-fully separable} \iff it can be written as 
+	An $n$-qubit pure state $\ket{\psi_f}$ is $\ppartition$-fully separable $\iff$ it can be written as 
 	$\ket{\psi_f}=\otimes_i^m \ket{\phi_{A_i}}$.
-	An $n$-qubit mixed state $\dm_f$ is P-fully separable $\iff$ it can be decomposed into a convex mixture of P-fully separable pure states 
-	% \begin{equation}
-	% 	\dm_f = \sum_i p_i \op{\psi_f^i}, (\forall i) ( p_i\ge 0, \sum_i p_i = 1) .
-	% \end{equation}
-	P-bi-separable... $\separable_f^P \subset S_b^P$
+	An $n$-qubit mixed state $\dm_f$ is $\ppartition$-fully separable $\iff$ it can be decomposed into a convex mixture of $\ppartition$-fully separable pure states.
+	\begin{equation}
+		\dm_f = \sum_i p_i \op{\psi_f^i}, (\forall i) ( p_i\ge 0, \sum_i p_i = 1) .
+	\end{equation}
+	P-bi-separable... $\separable_f^\ppartition \subset S_b^\ppartition$
 \end{definition}
 By going through all possible partitions, one can investigate higher level entanglement structures, such as entanglement intactness (non-separability), which quantifies how many pieces in the $n$-partite state are separated.
 
@@ -302,12 +328,16 @@ entanglement structure measures.
 To benchmark our technological progress towards the generation of largescale genuine multipartite entanglement, it is thus essential to determine the corresponding entanglement depth.
 \begin{definition}[Entanglement intactness, depth]
 	the entanglement intactness of a state $\dm$ to be $m$, \iff $\dm\notin S_{m+1}$ and $\dm\in S_m$.
-	$k$-producible
+	When the entanglement intactness is 1, the state possesses \nameref{def:gme}; and when the intactness is $n$, the state is \nameref{def:fully_separable}.
+	$k$-producible.
 \end{definition}
-
-% \begin{remark}
-	When the entanglement intactness is 1, the state is \nameref{def:genuinely_entangled}; and when the intactness is $n$, the state is \nameref{def:fully_separable}.
-% \end{remark}
+% \begin{observation}
+% \end{observation}
+\begin{example}
+	The \nameref{def:schmidt_measure} for any multi-partite \nameref{exm:ghz} states is 1, because there are just two terms.
+	Schmidt measure for 1D, 2D, 3D-cluster state is $\floor{\frac{N}{2}}$.
+	Schmidt measure of tree is the size of its minimal vertex cover[??].
+\end{example}
 \begin{example}[GHZ]\label{exm:ghz}
 	bipartite: Bell states;
 	nontrivial multipartite: tripartite.
@@ -325,71 +355,127 @@ To benchmark our technological progress towards the generation of largescale gen
 		\centering
 		\includegraphics[width=.9\linewidth]{gme.jpg}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.6\textwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{sep.jpg}
+		\includegraphics[width=.9\linewidth]{diagram.png}
 	\end{subfigure}
-	\begin{subfigure}{0.35\textwidth}
-		\centering
-		\includegraphics[width=.9\linewidth]{ppt.jpg}
-	\end{subfigure}
+	% \begin{subfigure}{0.3\textwidth}
+	% 	\centering
+	% 	\includegraphics[width=.8\linewidth]{sep.jpg}
+	% \end{subfigure}
+	% \begin{subfigure}{0.35\textwidth}
+	% 	\centering
+	% 	\includegraphics[width=.9\linewidth]{ppt.jpg}
+	% \end{subfigure}
 	\caption{(a) entanglement witness, PPT criteria, SVM (kernel)?. (c) convex hull... }
 	\label{fig:entangle}
 \end{figure}
 
 \subsubsection{Entanglement witness}\label{sec:entanglement_witness}
+Classically, 
 \begin{theorem}[\cite{gurvitsClassicalDeterministicComplexity2003}]
 	% The problem of determining whether a given quantum state is entangled lies at the heart of quantum information processing, which is an NP-hard problem in general.
-	The weak membership problem for the convex set of separable normalized bipartite density matrices is NP-Hard.
-	\textbf{Input}: ??
+	The weak membership problem for the convex set of separable normalized bipartite density matrices is \nameref{def:np}-Hard.
+	\textbf{Input}: unknown state?? formal definition of the problem
 	% \begin{itemize}
 	% 	\item \textbf{Input}: ??
 	% 	\item \textbf{Output}: ??
 	% \end{itemize}
 \end{theorem}
-\begin{question}
-	specific cases? approximately correct? quantum complexity? machine learning (data)?
-\end{question}
+% \begin{question}
+	However, we do not know 
+	% specific cases? 
+	approximately correct complexity? quantum complexity? machine learning (data)? for entanglement () problem
+% \end{question}
 
 \begin{theorem}[PPT criterion]
-	the positive partial transpose (PPT) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
+	the positive partial transpose (\ppt) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 \end{theorem}
-see \cref{fig:entangle}
+see \cref{fig:entangle} for relations.
+entanglement detection \cite{guhneEntanglementDetection2009}.
 \begin{definition}[entanglement witness]\label{def:entanglement_witness}
-	Given an (unknown) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
+	Given an (unknown? known target state) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
 	\begin{equation}
 		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
 		\Tr(\ew\dm) < 0 , \text{ for some entangled }
 	\end{equation}
 \end{definition}
-It is natural to ask nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  
-\nameref{def:kernel} ML
-\begin{proposition}
-	Given a state $\ket{\psi}$,
-	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness (\nameref{def:genuinely_entangled}) genuine multipartite entanglement near $\ket{\psi}$
-	% \nameref{def:genuinely_entangled}
+In a typical experiment one aims to prepare a pure state, $\ket{\psi}$, and would like to detect it as true multipartite entangled. 
+While the preparation is never perfect, it is still expected that the prepared mixed state is in the proximity of $\ket{\psi}$. The usual way to construct entanglement witnesses using the knowledge of this state is
+\begin{equation}
+	\ew_{\psi} = c\identity - \op{\psi} 
+	\label{eq:entanglement_witness}
+\end{equation}
+where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$
+\begin{remark}
+In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.
+\end{remark}
+\begin{example}[entanglement witness for GHZ]
+	three-qubit GHZ state 
+	\cite{tothDetectingGenuineMultipartite2005}
 	\begin{equation}
-		\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
+		\ew_{\ghz_3} := \frac{3}{2} \identity - \sx^{(1)}\sx^{(2)}\sx^{(3)}
+		- \frac{1}{2} \qty[
+			\sz^{(1)} \sz^{(2)} + 
+			\sz^{(2)} \sz^{(3)} + 
+			\sz^{(1)} \sz^{(3)} 
+		]
 	\end{equation}
-	with $\expval{\ew_{\psi}}\ge 0$ for any separable state in $S_b$.
+	This witness requires the measurement of the $\qty{\sx^{(1)},\sx^{(2)},\sx^{(3)}}$ and $\qty{\sz^{(1)},\sz^{(2)},\sz^{(3)}}$ settings.
+	The projector based witness $\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ requires four measurement settings.
+	detect genuine $n$-qubit entanglement close to $\ghz_n$
+	\begin{equation}
+		\ew_{\ghz_n} = (n-1) \identity - \sum_{k=1}^n S_k^{(\ghz_n)}
+	\end{equation}
+	$S_k$ is the stabilizer ...
+	Detecting Genuine Multipartite Entanglement with Two Local Measurements \cite{tothDetectingGenuineMultipartite2005}
+\end{example}
+
+It is natural to ask nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  and the \nameref{def:kernel} method in machine learning. 
+
+\begin{proposition}\label{thm:entanglement_witness_gme}
+	Given a state $\ket{\psi}$,
+	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness \nameref{def:gme}  near $\ket{\psi}$ with $c=5/8$ in \cref{eq:entanglement_witness}
+	% \nameref{def:genuinely_entangled}
+	% \begin{equation}
+	% 	\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
+	% \end{equation}
+	that is, $\expval{\ew_{\psi}}\ge 0$ for any separable state in $S_b$.
 \end{proposition}
 If the \nameref{def:fidelity} (quantum kernel?) of the prepared state $\dm_{\text{pre}}$ with the target state $\ket{\psi}$, i.e., $\Tr(\dm_{pre}\op{\psi})$, exceeds $5/8$, $\dm_{pre}$ possesses GME.
 It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by the direct projection on $\ket{\psi}$, as it is an entangled state.
 
+A usual approach for detecting entanglement is using Bell inequalities [??]
+\begin{definition}[Bell inequality]\label{def:bell_inequality}
+	CHSH inequality (game);
+	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$
+\end{definition}
+Another approach for detecting multipartite entanglement is using entanglement witnesses.
+Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
+These witnesses can be quite useful to detect entanglement in the vicinity of graph states.
 \begin{problem}[Entanglement witness with prior]
 	% \cite{zhouDetectingMultipartiteEntanglement2019}
 	with/out prior knowledge
 	\begin{itemize}
 		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
-		\item \textbf{Output}: separable or not ???
-		(decision problem?? find problem)
+		\item \textbf{Output}: separable or not ??? $\separable_f^\ppartition$ ? $\separable_b^\ppartition$ 
+		% (decision problem?? find problem)
+	\end{itemize}
+\end{problem}
+\begin{problem}[Certify entanglement]
+	Multipartite entanglement-structure detection
+	\begin{itemize}
+		\item \textbf{Input}: an (actual) state $\dm'$ from experiment that is close to a \textbf{known/target} (general multipartite) state $\ket{\psi}$,
+		certain partition?
+		\item \textbf{Output}: the certified lower-order entanglement among several subsystems could be still useful for some quantum information tasks.
+		entanglement structure
 	\end{itemize}
 \end{problem}
 
 \subsubsection{Graph state}
 graph state is an important (large?) class of multipartite states in quantum information.
-Typical graph states include cluster states, \nameref{exm:ghz} states, and the states involved in error correction (toric code?).
+Typical graph states include cluster (lattice) states, \nameref{exm:ghz} states, and the states involved in error correction (toric code?).
 % cluster state is the special case of graph state.
 It worth noting that 2D cluster state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
 \begin{definition}[graph state]\label{def:graph_state}
@@ -397,7 +483,7 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 	from the initial state $\ket{+}^{\otimes n}$ corresponding to $n$ vertices.
 	Then, apply controlled-Z gate to every edge, that is 
 	\begin{equation}
-		\ket{G}=\prod_{(i,j)\in E}\textsf{cZ}_{(i,j)} \ket{+}^{\otimes n}
+		\ket{G}:=\prod_{(i,j)\in E}\textsf{cZ}_{(i,j)} \ket{+}^{\otimes n}
 	\end{equation}
 	% \begin{itemize}
 	% 	\item vertices: $\ket{+}^{\otimes n}$
@@ -406,77 +492,91 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 	% \end{itemize}
 \end{definition}
 \begin{remark}
-	An $n$-partite graph state can also be uniquely determined by $n$ independent stabilizers, 
+	An $n$-partite(qubit) graph state can also be uniquely determined by $n$ independent stabilizers, 
 	$S_i:= X_i \bigotimes_{j\in n}Z_j$, 
 	which commute with each other and $\forall i,S_i\ket{G}=\ket{G}$.??
 	The graph state is the unique eigenstate wtih eignevalue of +1 for all the $n$ stabilizers.
-	As a result, a graph state can be writteb as a product of stailizer projectors, $\op{G}=\prod_{i=1}^n \frac{S_i +\identity}{2}$.
+	As a result, a graph state can be written as a product of stailizer projectors, $\op{G}=\prod_{i=1}^n \frac{S_i +\identity}{2}$.
 	stabilizer formalism?; 
 \end{remark}
 % \begin{question}
 % \end{question}
+\begin{figure}[!ht]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\begin{tikzpicture}[rotate=18]
+		\SetGraphUnit{2} 
+		\GraphInit[vstyle=Normal] 
+		% \renewcommand*{\VertexInnerSep}{8pt} \renewcommand*{\EdgeLineWidth}{3pt} \renewcommand*{\VertexBallColor}{blue!50} 
+		\Vertices{circle}{A,B,C,D,E} 
+		\Edges(A,B,C,D,E,A,C,E,B,D,A) 
+	\end{tikzpicture}
+	\caption{complete graph $K_5$}
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\begin{tikzpicture}[rotate=90] 
+		\GraphInit[vstyle=Hasse] 
+		% \Vertices[unit=2]{circle}{A,B,C,D} 
+		% \coordinate (Z) at (intersection of A--C and B--D); 
+		\Vertices[unit=2]{circle}{A,B,C,D,E,F,G,H} 
+		\coordinate (Z) at (intersection of A--E and B--F); 
+		\Vertex[Node]{Z}% voir option node
+		\Edges(A,Z)
+		\Edges(B,Z)
+		\Edges(C,Z)
+		\Edges(D,Z)
+		\Edges(E,Z)
+		\Edges(F,Z)
+		\Edges(G,Z)
+		\Edges(H,Z)
+		\AddVertexColor{red}{A,B,C,D,E,F,G,H} 
+		% \AddVertexColor{red}{A,B,C,D} 
+		\AddVertexColor{blue}{Z} 
+	\end{tikzpicture}
+	\caption{star graph (2-colorable) - GHZ}
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+	\centering
+	\begin{tikzpicture}[rotate=18,scale=1.0]
+		\SetGraphUnit{1} 
+		\GraphInit[vstyle=Welsh] 
+		% \renewcommand*{\VertexLineWidth}{2pt}
+		% \renewcommand*{\VertexInnerSep}{8pt} 
+		% \renewcommand*{\EdgeLineWidth}{3pt} 
+		% \renewcommand*{\VertexBallColor}{blue!50} 
+		\Vertices{circle}{A,B,C,D,E} 
+		\Edges(A,D,B,E,C,A) 
+		\SetGraphUnit{2} 
+		\Vertices{circle}{a,b,c,d,e} 
+		\Edges(a,b,c,d,e,a) 
+		\Edges(A,a)
+		\Edges(B,b)
+		\Edges(C,c)
+		\Edges(D,d)
+		\Edges(E,e)
+		\AddVertexColor{red}{b,d,A,E} 
+		\AddVertexColor{blue}{c,B,a}
+		\AddVertexColor{green}{C,D,e}
+	\end{tikzpicture}
+	% \caption{A 3-coloring of the Petersen graph}
+	\caption{Petersen graph}
+	\end{subfigure}
+	\caption{graph states}
+	\label{fig:graph_state}
+\end{figure}
 \begin{example}[graph states]
-	line; \nameref{exm:ghz} (star); complete graph, hypercube, Petersen graph; cluster state
-	\begin{figure}[!ht]
-		\centering
-		\begin{subfigure}{0.3\textwidth}
-		\centering
-		\begin{tikzpicture}[rotate=18]
-			\SetGraphUnit{2} 
-			\GraphInit[vstyle=Normal] 
-			% \renewcommand*{\VertexInnerSep}{8pt} \renewcommand*{\EdgeLineWidth}{3pt} \renewcommand*{\VertexBallColor}{blue!50} 
-			\Vertices{circle}{A,B,C,D,E} 
-			\Edges(A,B,C,D,E,A,C,E,B,D,A) 
-		\end{tikzpicture}
-		\caption{complete graph $K_5$}
-		\end{subfigure}
-		\begin{subfigure}{0.3\textwidth}
-		\centering
-		\begin{tikzpicture}[rotate=18,scale=1.0]
-			\SetGraphUnit{1} 
-			\GraphInit[vstyle=Welsh] 
-			% \renewcommand*{\VertexLineWidth}{2pt}
-			% \renewcommand*{\VertexInnerSep}{8pt} 
-			% \renewcommand*{\EdgeLineWidth}{3pt} 
-			% \renewcommand*{\VertexBallColor}{blue!50} 
-			\Vertices{circle}{A,B,C,D,E} 
-			\Edges(A,D,B,E,C,A) 
-			\SetGraphUnit{2} 
-			\Vertices{circle}{a,b,c,d,e} 
-			\Edges(a,b,c,d,e,a) 
-			\Edges(A,a)
-			\Edges(B,b)
-			\Edges(C,c)
-			\Edges(D,d)
-			\Edges(E,e)
-			\AddVertexColor{red}{b,d,A,E} 
-			\AddVertexColor{blue}{c,B,a}
-			\AddVertexColor{green}{C,D,e}
-		\end{tikzpicture}
-		% \caption{A 3-coloring of the Petersen graph}
-		\caption{Petersen graph}
-		\end{subfigure}
-		\begin{subfigure}{0.3\textwidth}
-		\centering
-		\begin{tikzpicture}[rotate=90] 
-			\GraphInit[vstyle=Hasse] 
-			\Vertices[unit=2]{circle}{A,B,C,D,E,F,G,H} 
-			\coordinate (Z) at (intersection of A--E and B--F); 
-			\Vertex[Node]{Z}% voir option node
-			\Edges(A,Z)
-			\Edges(B,Z)
-			\Edges(C,Z)
-			\Edges(D,Z)
-			\Edges(E,Z)
-			\Edges(F,Z)
-			\Edges(G,Z)
-			\Edges(H,Z)
-			\AddVertexColor{red}{A,B,C,D,E,F,G,H} 
-			\AddVertexColor{blue}{Z} 
-		\end{tikzpicture}
-		\caption{star - GHZ}
-		\end{subfigure}
-	\end{figure}
+	Any connected graph state is \nameref{def:fully_entangled} state.
+	The \nameref{exm:ghz} state corresponds to the star graph and the complete gtaph (\cref{fig:graph_state}). 
+	This is easily seen by applying Hadamard unitaries $\U_\hdm^{V\backslash a}$ to all but one qubit $a$ in the GHZ-state, 
+	which yields the star graph state with $a$ as the central qubit.
+	(line, ring; 
+	hypercube, Petersen graph; 
+	cluster state in two dimensinos, which corresponds to a rectangular lattice.)
+	The Petersen graph is not LC-equivalent to its isomorphism (exchanging the labels at each ed of the five "spokes"). However, the lists of Schmidt ranks (or, equivalently, the connectivity functions) of these graphs coincide.
+	The class of CSS (error correction) states corresponds to the class of 2-\nameref{exm:colorable} graphs.
+	\cite{heinEntanglementGraphStates2006}
 \end{example}
 % \begin{question}
 % 	efficient? meaningful encoding of graph data/input??
@@ -484,20 +584,14 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 % \end{question}
 % \begin{problem}[Entanglement structure detection]
 % \end{problem}
-\begin{observation}
-	Any connected graph state is fully entangled m-particle state
-\end{observation}
-\begin{problem}[Certify entanglement]
-	Multipartite entanglement-structure detection
-	\begin{itemize}
-		\item \textbf{Input}: Given a state close to a \textbf{known} (general multipartite) state $\ket{\psi}$,
-		certain partition?
-		\item \textbf{Output}: the certified lower-order entanglement among several subsystems could be still useful for some quantum information tasks.
-		entanglement structure
-	\end{itemize}
-\end{problem}
-\begin{remark}
+% \begin{observation}
+% 	Any connected graph state is fully entangled m-particle state
+% \end{observation}
+
+\begin{remark}[??]
 	The entanglement \nameref{def:entropy} $S( \dm_A )$ equals the rank of the adjacency matrix of the underlying bipartite graph, which can be efficiently calculated.
+	For graph states, the reduced density matrices can be represented efficiently in terms of their stabilizer elements or their adjacency matrix.
+	% \cite{heimQuantumClassicalAnnealing2015}
 \end{remark}
 \begin{proposition}[\cite{zhouDetectingMultipartiteEntanglement2019}]
 	Given a graph state $\ket{G}$ and a partition $\mathcal{P}=\qty{A_i}$, the \nameref{def:fidelity} between $\ket{G}$ and any \nameref{def:fully_separable} is upper bounded by
@@ -506,28 +600,49 @@ It worth noting that 2D cluster state is the universal resource for the measurem
 	\end{equation}
 	where $S(\dm_A)$ is the von Neumann \nameref{def:entropy} of the reduced density matrix $\dm_A=\Tr_{\bar{A}}(\op{G})$.
 \end{proposition}
-\begin{theorem}
-	k local measurements. Here, k is the chromatic number of the corresponding graph, typically, a small constant independent of the number of qubits.
-\end{theorem}
+\begin{remark}
+	LU, LC equivalence, local operations and classical communication (LOCC)
+\end{remark}
+the entanglement in a graph state is related to the topology of its underlying graph.
 \begin{proposition}[Entanglement of graph state]
 	\cite{heinEntanglementGraphStates2006}.
-	witness; bounds; graph property? vertex cover?
-	Hamiltona cycle of a graph state? 
+	witness; bounds; \nameref{def:graph_property}? vertex cover?
+	Hamiltonian cycle of a graph state? 
 \end{proposition}
 generalize \cite{zhangEfficientEntanglementGeneration2021}
 stabilizer state, neural network state \cite{gaoEfficientRepresentationQuantum2017}?
 \begin{proposition}[Entanglement witness for graph state]
-\end{proposition}
-\begin{proposition}[Bounds to the Schmidt measure of graph states]
-	For any graph state $\ket{G}$, the Schmidt measure $E_A$ is bounded from below by the maximal Schmidt rank $SR_{\max}$ and from above by the Pauli persistency PP or the minimal vertex cover, i.e.
+	\nameref{def:bell_inequality}
 	\begin{equation}
-		SR_{\max} (G) \le E_S(\ket{G}) \le PP(G) \le VC(G).
+		\ew = \frac{C}{2^N} \identity_V - \op{G}
+	\end{equation}
+	Let $\ket{G}$ be a graph state corresponding to a connected graph. Then
+	\begin{equation}
+		\ew_1^{ab} = \identity_V - K_a - K_b
+	\end{equation}
+	is an entanglement witness for the $\ket{G}$ that detects entanglement in the reduced state $\dm_G^A (A=N_a\cup N_b \cup \qty{a,b})$ with only two measurement settings and thus can rule out full separability of the total graph state???. 
+	The entanglement witness 
+	\begin{equation}
+		\ew_2 = (N-1)\identity_V - \sum_{a\in V} K_a
+	\end{equation}
+	detects \nameref{def:gme}. 
+\end{proposition}
+\begin{question}
+	for which case, $C$ is hard to compute? non-stabilizer state? SWAP?
+\end{question}
+\begin{theorem}
+	k local measurements. Here, k is the chromatic number (minimal \nameref{exm:colorable}) of the corresponding graph, typically, a small constant independent of the number of qubits.
+\end{theorem}
+\begin{proposition}[Bounds to the Schmidt measure of graph states]
+	For any graph state $\ket{G}$, the \nameref{def:schmidt_measure} $E_A$ is bounded from below by the maximal Schmidt rank $\textup{SR}_{\max}$ and from above by the Pauli persistency PP or the minimal vertex cover, i.e.
+	\begin{equation}
+		\textup{SR}_{\max} (G) \le E_S(\ket{G}) \le \textup{PP}(G) \le \textup{VC}(G).
 	\end{equation}
 	???
 \end{proposition}
 
 
-\subsection{Shadow tomography}
+\subsection{Tomography and trace estimation}
 % \label{sec:shadow_tomography}
 Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} that extract (recover) all information about a state requires exponential copies (samples/measurements).
 \begin{problem}[full tomography]\label{prm:full_tomography}
@@ -540,6 +655,7 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 			\dm = \frac{1}{2^n} \sum_{i_1,i_2,\dots,i_n=0}^3
 			S_{i_1,i_2,\dots,i_n} 
 			\hat{\sigma}_{i_1} \otimes \hat{\sigma}_{i_2} \otimes \dots \otimes \hat{\sigma}_{i_n} 
+			\label{eq:stokes_tomography}
 		\end{equation}
 	\end{itemize}
 \end{problem}
@@ -547,8 +663,8 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 	Known fundamental lower bounds [66, 73] state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace \nameref{def:distance}.
 \end{theorem}
 \begin{definition}[fidelity]\label{def:fidelity}
-	Given a pair of states (target and prepared), 
-	Uhlmann fidelity $F(\rho,\rho') : = \Tr(\sqrt{\sqrt{\rho}\rho'\sqrt{\rho}})$
+	Given a pair of states (target $\dm$ and prepared $\dm'$), 
+	Uhlmann fidelity $F(\dm,\dm') : = \Tr(\sqrt{\sqrt{\dm}\dm'\sqrt{\dm}})$
 	% \begin{equation}
 	% 	F(\ket{\psi},\ket{\psi'}) :=
 	% \end{equation}
@@ -557,7 +673,7 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 	% \end{equation}
 \end{definition}
 \begin{definition}[distance]\label{def:distance}
-	trace distance $d_{\tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1$
+	trace distance $d_{\tr}(\dm,\dm') : = \frac{1}{2} \norm{\dm-\dm'}_1$
 	% \begin{equation}
 	% 	d_{tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1
 	% \end{equation}
@@ -581,16 +697,30 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 % 		\item \textbf{Output}: \nameref{def:fidelity} with error $\epsilon$
 % 	\end{itemize}
 % \end{problem}
+In quantum mechanics, interesting properties are often linear functions of the underlying density matrix $\dm$.
+For example, the fidelity with a pure target state, entanglement witnesses fit this framework.
 \begin{problem}[trace estimation]\label{prm:trace_estimation}
 	related problems defined as follows
 	\begin{itemize}
-		\item \textbf{Input}: Given an observable (Hermitian) $\ob$ and (copies of) a mixed state $\dm$ ($\dm',\dots,\dm_m$) in (trace one, Hermitian, PSD), 
-		\item \textbf{Output}: the expectation value $\expval{\ob}=\Tr(\ob \dm) $ with error $\epsilon$ in trace \nameref{def:distance}. \nameref{def:entanglement_witness}, linear function
-		\item \textbf{Output}: \nameref{def:fidelity} $F(\dm,\dm')$, \nameref{def:distance}
-		\item \textbf{Output}: quantum \nameref{def:kernel} $\Tr(\dm\dm')$
-		\item \textbf{Output}: multivariate $\Tr(\dm_1 \cdots \dm_m)$, nonlinear function
-		\item \textbf{Output}: shadow tomography $\Tr(E_M\dm) = \expectation[E_M] = \probability[E_i \text{ accept } \dm]$??
-		\item \textbf{Output}: \nameref{prm:full_tomography}
+		\item \textbf{Input}: Given an observable (Hermitian) $\ob$ and (copies of) a mixed state $\dm$ ($\dm',\dots,\dm_m$), 
+		\item \textbf{Output}: with $\epsilon$ in trace \nameref{def:distance}
+		\begin{itemize}
+			\item linear function:
+			the expectation value $\expval{\ob}=\Tr(\ob \dm) $; 
+			\nameref{def:entanglement_witness} $\Tr(\ew\dm)$;
+			\nameref{prm:shadow_tomography} $\Tr(E_M\dm) = \expectation[E_M] = \probability[E_i \text{ accept } \dm]$??;
+			\nameref{prm:full_tomography};
+			two-point correlation $\expval{O_iO_j}$
+
+			\item nonlinear function:
+			\nameref{def:entropy} (non-linear); 
+			\nameref{def:fidelity} $F(\dm,\dm')$, \nameref{def:distance}??;
+
+			\item multivariate: 
+			% (quantum kernel, multivariate ??...)
+			\nameref{def:quantum_kernel} $\Tr(\dm\dm')$;
+			multivariate $\Tr(\dm_1 \cdots \dm_m)$, nonlinear function?? linear;
+		\end{itemize}
 	\end{itemize}
 	% The task of estimating quantities like 
 	% \begin{equation}
@@ -599,9 +729,10 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 	% \end{equation}
 	% given access to copies of the quantum states $\rho_1$  through $\rho_m$.
 \end{problem}
-Nevertheless, we usually only need specific properties of a target state rather than all information about the state.
-This enables the possibility to .
-Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum2018}, Huang et. al \cite{huangPredictingManyProperties2020}
+A nonlinear function of $\dm$ such as \nameref{def:entanglement_entropy}, may also be of interest.
+
+Nevertheless, we usually only need specific properties of a target state rather than full classical descriptions about the state.
+This enables the possibility to shadow tomography.
 \begin{problem}[shadow tomography]\label{prm:shadow_tomography}
 	\emph{shadow tomography}
 	\begin{itemize}
@@ -613,11 +744,70 @@ Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum20
 	It is possible to do \nameref{prm:shadow_tomography} using $\tilde{\bigO}(\frac{\log^4 M\cdot \log N}{\epsilon^4})$ copies. [no construction algorithm?]
 	sample complexity lower bound $\Omega(\log (M) \cdot \epsilon^{-2})$, 
 \end{theorem}
-\begin{equation}
-	\qty{x_l\to\sigma_T(\dm(x_l))}_{l=1}^N
-\end{equation}
-$\sigma_T(\dm(x_l))$ is the classical shadow representation of $\dm(x_l)$, 
-a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random Pauli measurements.
+more details in \cref{sec:classical_shadow}
+\begin{remark}[\cite{huangPredictingManyProperties2020}]
+	While very efficient in terms of samples, Aaronson's procedure is very demanding in terms of quantum hardware — a concrete implementation of the proposed protocol requires exponentially long quantum circuits that act collectively on all the copies of the unknown state stored in a quantum memory.??
+\end{remark}
+
+\section{Classical, data-powered, and quantum algorithms}
+We consider the problem, entanglement structure dectection for graph states 
+\begin{problem}[?data]
+	problem without training data
+	\begin{itemize}
+		\item \textbf{Input}: a graph $\graph$ encoding in a graph state $\ket{\graph}$;
+		adjacency matrix $A$?
+		\item \textbf{Output}: entanglement structure
+	\end{itemize}
+\end{problem}
+with training data: 
+\textbf{features}: classical shadow? raw data? quantum data, label: entangled?
+% \begin{itemize}
+% 	\item \textbf{features}: classical shadow?
+% 	\item label: 
+% \end{itemize}
+
+% \begin{remark}
+	input encoding (model): 
+	\begin{itemize}
+		% \item qubit (basic) encoding?: given a vector $\vb{z}\in\integer^d$, 
+		% $\ket{\vb{z}}=\bigotimes_i^d \ket{\vbx_i}$ where $\vbx_i$ is the binary representation of $z_i$,
+		% need $\bigO(d\cdot \log(\max(z_i)))$ (not space efficient)
+
+		% \item phase encoding?
+
+		\item amplitude encoding: given a normalized vector $\vbx\in\realnumber^d$, the quantum state $\ket{\vbx}=\sum_z^d x_z\ket{z}$. 
+		need $\log(d) $ qubits for a data point; dequantization \cite{tangQuantumPrincipalComponent2021}. qubit (basic) encoding (inefficient? space)
+
+		\item unitary encoding: quantum simulation (Hamiltonian); quantum random walk (adjacency matrix); oracle (controlled) unitary, quantum phase estimation;
+		\nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
+
+		\item quantum data $\ket{\psi}$ or $\dm$: quantum state from real-world experiments or quantum circuits $\U$.
+		no input problem? more efficient?
+
+		% \item graph state encoding: \nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
+
+		% \item (quantum) oracle: $\oracle \ket{i,a}=\ket{i,a+x_i}$; quantum oracle: unitary and controlled unitary
+	\end{itemize}
+% \end{remark}
+\begin{definition}[graph property]\label{def:graph_property}
+	monotone
+\end{definition}
+\begin{example}[colorable]\label{exm:colorable}
+	$k$-colorable is a graph property, i.e., allow for a coloring of the vertices with $k$ colors such that no two adjacent vertices have the same color.
+	bipartite graph $\iff$ 2-colorable
+\end{example}
+\begin{problem}[graph property test]\label{prm:graph_property_test}
+\end{problem}
+quantum algorithms (bounds) for graph properties \cite{ben-davidSymmetriesGraphProperties2020}
+
+\subsection{Classical shadow and machine learning}
+separability classifier by neural network \cite{luSeparabilityEntanglementClassifierMachine2018}.
+rigorous quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}.
+classical machine learning with \nameref{def:classical_shadow} \cite{huangProvablyEfficientMachine2021}.
+
+\subsubsection{Classical shadow}\label{sec:classical_shadow}
+Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum2018}, Huang et. al \cite{huangPredictingManyProperties2020} introduce classical shadow.
+The classical shadow attempts to approximate this expectation value by an empirical average over $T$ independent samples, much like Monte Carlo sampling approximates an integral.
 \begin{definition}[classical shadow]\label{def:classical_shadow}
 	classical shadow
 	\begin{equation}
@@ -630,7 +820,11 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
 		\expectation[o] =\Tr(O_i \dm)
 	\end{equation}
 \end{definition}
-The classical shadow attempts to approximate this expectation value by an empirical average over $T$ independent samples, much like Monte Carlo sampling approximates an integral.
+$\sigma_T(\dm(x_l))$ is the classical shadow representation of $\dm(x_l)$, 
+a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random Pauli measurements.
+\begin{equation}
+	\qty{x_l\to\sigma_T(\dm(x_l))}_{l=1}^N
+\end{equation}
 % \begin{remark}
 The classical shadow size required to accurately approximate all reduced $r$-body density matrices scales exponentially in subsystem size $r$, but is independent of the total number of qubits $n$.
 % \end{remark}
@@ -639,13 +833,14 @@ The classical shadow size required to accurately approximate all reduced $r$-bod
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{a density matrix $\dm$, ..}
-    \Output{classical shadow}
+    \Input{a density matrix $\dm$ (many copies), observables $\ob$...}
+    \Output{\nameref{def:classical_shadow} $\dm_{cs}$}
     \BlankLine
     \For{ $i = 1,2, \ldots, m$} {
         random Pauli measurements \tcp*{a comment}
+		...
         % \tcc{comment in a new line}
-    {\Return "?"}
+    {\Return ?}
     }
     \Return ?
     \caption{Classical Shadow (tomography)}
@@ -667,54 +862,11 @@ sample complexity
 \end{equation}
 \begin{theorem}[Pauli/Clifford measurements]\label{thm:classical_shadow}
 	additive error $\epsilon$, $M$ arbitrary $k$-local linear function $\Tr(\ob_i\dm)$,
-	% lower bound
+	lower bound
 	$\Omega(\log(M) 3^k/\epsilon^2)$ copies of the state $\dm$.
 \end{theorem}
 
-\section{Classical, data-powered, and quantum algorithms}
-We consider the problem, entanglement structure dectection for graph states 
-\begin{problem}[?data]
-	problem without training data
-	\begin{itemize}
-		\item \textbf{Input}: a graph $\graph$ encoding in a graph state $\ket{\graph}$;
-		adjacency matrix?
-		\item \textbf{Output}: entanglement structure
-	\end{itemize}
-\end{problem}
-with training data: 
-\textbf{features}: classical shadow? raw data? quantum data, label: entangled?
-% \begin{itemize}
-% 	\item \textbf{features}: classical shadow?
-% 	\item label: 
-% \end{itemize}
-
-% \begin{remark}
-	input encoding (model): 
-	\begin{itemize}
-		% \item qubit (basic) encoding?: given a vector $\vb{z}\in\integer^d$, 
-		% $\ket{\vb{z}}=\bigotimes_i^d \ket{\vbx_i}$ where $\vbx_i$ is the binary representation of $z_i$,
-		% need $\bigO(d\cdot \log(\max(z_i)))$ (not space efficient)
-
-		% \item phase encoding?
-
-		\item amplitude encoding: given a normalized vector $\vbx\in\realnumber^d$, the quantum state $\ket{\vbx}=\sum_z^d x_z\ket{z}$. 
-		need $\log(d) $ qubits for a data point; dequantization \cite{tangQuantumPrincipalComponent2021}
-
-		\item quantum data $\ket{\psi}$ or $\dm$: quantum state from real-world experiments or quantum circuits $\U$.
-		no input problem? more efficient?
-
-		\item graph state encoding: \nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
-
-		% \item (quantum) oracle: $\oracle \ket{i,a}=\ket{i,a+x_i}$; quantum oracle: unitary and controlled unitary
-	\end{itemize}
-% \end{remark}
-
-\subsection{Classical algorithms}
-\subsubsection{Classical shadow and kernel methods}\label{sec:classical_machine_learning}
-separability classifier by neural network \cite{luSeparabilityEntanglementClassifierMachine2018}.
-rigorous quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}.
-classical machine learning with \nameref{def:classical_shadow} \cite{huangProvablyEfficientMachine2021}.
-
+\subsubsection{training data and classical kernel methods}
 Graphs is another kind of data which is fundamentally different from a real value vector because of vertex-edge relation, graph isomorphism.
 So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
 \begin{definition}[graph kernel]\label{def:graph_kernel}
@@ -725,15 +877,7 @@ So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
 	quantum graph kernel $\kernel (\graph,\graph')  = \abs{\ip{\graph}{\graph'}}^2$ ??
 	\cite{baiQuantumJensenShannon2015}	
 \end{definition}
-\begin{definition}[quantum kernel]\label{def:quantum_kernel}
-	quantum kernel 
-	with quantum feature map $\phi(\vbx): \mathcal{X}\to \op{\phi(\vbx)}$
-	\begin{equation}
-		k_Q(\rho,\rho') := \abs{\ip{\phi(\vbx)}{\phi(\vbx')}}^2 =\abs{\mel{0}{\U_{\phi(\vbx)}^\dagger \U_{\phi(\vbx')} }{0}}^2 = \Tr(\rho\rho')
-	\end{equation}
-	where $\U_{\phi(\vbx)}$ is a quantum circuit or physics process that encoding an input $\vbx$.
-	In quantum physics, quantum kernel is also known as transition amplitude (quantum propagator);
-\end{definition}
+
 \begin{definition}[shadow kernel]
 	given two density matrices (quantum states) $\rho$ and $\rho'$,
 	\emph{shadow kernel} \cite{huangPredictingManyProperties2020} is 
@@ -742,20 +886,10 @@ So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
 		\exp(\sum\exp(\sum))
 	\end{equation}	
 \end{definition}
-\begin{definition}[neural tagent kernel]
-	neural tagent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017} in the limit ...
-	\begin{equation}
-		k_{\text{NTK}} \qty(S_T(\dm_l),\tilde{S}_T(\dm_{l'}))
-		=
-		\expval{
-			\phi^{(NTK)}(S_T(\dm_l)),
-			\phi^{(NTK)}(\tilde{S}_T(\dm_l))
-		}
-	\end{equation}
-\end{definition}
+
 similarity measures? advantages? why? (isomorphism?)
 \begin{definition}[divergence]\label{def:divergence}
-	KL divergence (relative entropy): measure the distance (similarity) between two probability distributions:
+	KL divergence (relative \nameref{def:entropy}): measure the distance (similarity) between two probability distributions:
 	\begin{equation}
 		\kl (P || Q) := \sum P(x) \log (P(x)/Q(x))
 	\end{equation}
@@ -765,7 +899,7 @@ similarity measures? advantages? why? (isomorphism?)
 		\equiv H_S(M)-\frac{1}{2} (H_S(P) - H_S(P') ) 
 	\end{equation}
 	where $M=(P+P')/2$ and Shannon \nameref{def:entropy} $H_S$.
-	Analogously, quantum Jensen-Shannon divergence $D_{\text{QJS}}$
+	Analogously, quantum Jensen-Shannon divergence $D_{\text{QJS}}$ can be defined...
 \end{definition}
 % \begin{figure}[!ht]
 % 	\centering
@@ -773,32 +907,79 @@ similarity measures? advantages? why? (isomorphism?)
 % 	% \includegraphics[width=.35\linewidth]{data.jpg}
 % 	\caption{computational model powered by training data}
 % \end{figure}
+
 power of data - 
-\begin{theorem}[informal \cite{huangPowerDataQuantum2021}]
-	data learning
-	\begin{itemize}
-		\item machine learning (strictly) more powerful than BPP
-		\item exist quantum advantage in machine learning (not significant, practical)
-	\end{itemize}
-\end{theorem}
+\begin{proposition}[\cite{huangPowerDataQuantum2021}]
+	If a classical algorithm without training data can compute $f(x)=\mel{x}{\U_{\textup{QNN}}^\dagger \ob U_{\textup{QNN}}}{x}$ (amplitude encoding) efficiently (poly time in ...) for any $\U_{\textup{QNN}}$ and $\ob$, then $\nameref{def:bpp}=\nameref{def:bqp}$ (which is believed unlikely).
+\end{proposition}
+\begin{proposition}[\cite{huangPowerDataQuantum2021}]
+	Training an arbitrarily deep quantum neural network $\U_{\qnn}$ with a trainable observable $\ob$ is equivalent to training a \nameref{def:quantum_kernel} method with kernel $k_{Q}(\vbx,\vbx')=\Tr(\dm(\vbx)\dm'(\vbx'))$
+\end{proposition}
+\begin{proposition}[\cite{huangPowerDataQuantum2021}]
+	exist quantum advantage in machine learning (not significant, practical)	...
+	discrete log, factoring...
+\end{proposition}
+% \begin{theorem}[informal \cite{huangPowerDataQuantum2021}]
+% 	data learning
+% 	\begin{itemize}
+% 		\item machine learning (strictly) more powerful than BPP
+% 		\item exist quantum advantage in machine learning (not significant, practical)
+% 	\end{itemize}
+% \end{theorem}
 \begin{algorithm}[H]
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{labeled features (data), \nameref{def:classical_shadow}?}
+    \Input{\nameref{def:classical_shadow}? (features) with label (training data)}
     \Output{entanglement structure? decision}
     \BlankLine
     \For{ $i = 1,2, \ldots, m$} {
-        kernel estimation \tcp*{a comment}
+        kernel estimation \tcp*{classical kernel}
+        SVM \tcp*{SVM}
         % \tcc{comment in a new line}
     {\Return "?"}
     }
-    \Return ?
-    \caption{Classical learning (SVM) + classical shadow}
+    \Return $\vb{w}$ \tcp*{parameters of the separating hyperplane in the feature space}
+    \caption{Classical learning (\nameref{def:svm}) + classical shadow}
     \label{alg:classical_learning}
 \end{algorithm}
 
+
 \subsection{Quantum trace (kernel) estimation}
+\subsubsection{Entanglement witness}
+% \nameref{prm:trace_estimation}
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{(copies of) density matrix (graph state?) $\dm$, an entanglement witness (observable) $\ew$}
+    \Output{determine entangled structure??}
+    \BlankLine
+    \For{ $i = 1,2, \ldots, m$} {
+        $\ew_i$  \tcp*{estimate entanglement witness by quantum circuit}
+        % \tcc{comment in a new line}
+    {\Return $\Tr(\ew\dm)$ }
+    }
+    \Return entangled ? GME ? separable with certain partition?
+    \caption{\nameref{def:entanglement_witness} by ... quantum trace estimation}
+    \label{alg:entanglement_witness}
+\end{algorithm}
+
+\subsubsection{Quantum kernel SVM}
+\cite{glickCovariantQuantumKernels2021}
+\cite{liuRigorousRobustQuantum2021}
+\cite{havlicekSupervisedLearningQuantum2019}
+\cite{schuldQuantumMachineLearning2019}
+\begin{definition}[quantum kernel]\label{def:quantum_kernel}
+	quantum kernel 
+	with quantum feature map $\phi(\vbx): \mathcal{X}\to \op{\phi(\vbx)}$
+	\begin{equation}
+		k_Q(\rho,\rho') := \abs{\ip{\phi(\vbx)}{\phi(\vbx')}}^2 =\abs{\mel{0}{\U_{\phi(\vbx)}^\dagger \U_{\phi(\vbx')} }{0}}^2 = \Tr(\rho\rho')
+	\end{equation}
+	where $\U_{\phi(\vbx)}$ is a quantum circuit or physics process that encoding an input $\vbx$.
+	In quantum physics, quantum kernel is also known as transition amplitude (quantum propagator);
+\end{definition}
 % \begin{definition}[multivariate trace estimation]\label{def:multivariate_trace_estimation}
 % 	The task of estimating quantities like 
 % 	\begin{equation}
@@ -808,40 +989,24 @@ power of data -
 % 	given access to copies of the quantum states $\rho_1$  through $\rho_m$.
 % \end{definition}
 % is a fundamental building block in quantum information science
-\begin{theorem}[\cite{quekMultivariateTraceEstimation2022}]
+\begin{theorem}[\cite{quekMultivariateTraceEstimation2022}]\label{thm:multivariate_trace}
 	multivariate \nameref{prm:trace_estimation} can be implemented in constant quantum depth, with only linearly-many controlled two-qubit gates and a linear amount of classical pre-processing	
 \end{theorem}
 
+% \subsubsection{Variational quantum kernel estimation (hybrid)}
+
 \subsection{Variational (hybrid) quantum algorithms}
-\subsubsection{Variational quantum kernel estimation (hybrid)}
-an ansatz for \nameref{def:entanglement_witness}
+\subsubsection{Variational entanglement witness (ansatz)}
+an ansatz for \nameref{def:entanglement_witness} (graph state entanglement)
 \begin{equation}
-	\ew_{a} := \sum_{\qty{i\dots}}  a_{..} \bigotimes_i^n \hat{\sigma}^{(i)}
+	\ew_{a} := \sum_{\qty{i\dots}}  w_{..} \bigotimes_i^n \hat{\sigma}^{(i)}
 	,\quad \hat{\sigma} \in \qty{\sx,\sy,\sz,\identity_{2\times 2}}
 \end{equation}
-\begin{algorithm}[H]
-    \DontPrintSemicolon
-    \SetKwInOut{Input}{input}
-    \SetKwInOut{Output}{output}
-    \Input{(copies of) density matrix $\dm$}
-    \Output{determine entangled structure??}
-    \BlankLine
-    \For{ $i = 1,2, \ldots, m$} {
-        $\ew_i$  \tcp*{this is a comment}
-        % \tcc{comment in a new line}
-    {\Return "separable?"}
-    }
-    \Return entangled ?
-    \caption{Entanglement witness by ...}
-    \label{alg:entanglement_witness}
-\end{algorithm}
+c.f. \nameref{prm:full_tomography} (Stokes parameters) \cref{eq:stokes_tomography}
+
 
 \subsubsection{Variational trace estimate (direct)}
 find optimal entanglement witness (qunatum circuit?)
-\cite{glickCovariantQuantumKernels2021}
-% \cite{liuRigorousRobustQuantum2021}
-\cite{havlicekSupervisedLearningQuantum2019}
-\cite{schuldQuantumMachineLearning2019}
 
 \subsection{Theoretic upper bounds and lower bounds}
 \cite{huangPowerDataQuantum2021}
@@ -849,11 +1014,7 @@ find optimal entanglement witness (qunatum circuit?)
 \cite{aaronsonShadowTomographyQuantum2018}
 \cite{huangInformationtheoreticBoundsQuantum2021}
 \cite{liuRigorousRobustQuantum2021}
-\begin{definition}[graph property]\label{def:graph_property}
-	monotone
-\end{definition}
-\begin{problem}[graph property test]\label{prm:graph_property_test}
-\end{problem}
+
 \begin{table}[!ht]
 \centering
 \begin{tabular}{c|c|c|c|c}
@@ -863,18 +1024,18 @@ find optimal entanglement witness (qunatum circuit?)
 	\nameref{prm:shadow_tomography} & & \cref{thm:shadow_tomography,thm:classical_shadow} & N/A & \\  
 	indirect? direct (no prior), promise & & & & \\  
 	% promise (low-rank?), partial, decision? & & & & \\  
-	entanglement witness (\cref{sec:entanglement_witness}) & & constant & convex?& \\  
-	classical ML + SC (\cref{sec:classical_machine_learning})  & & & & \\  
-	quantum (variational) circuits & c-depth? & & & \\  
+	\nameref{def:entanglement_witness} & &  \cref{thm:entanglement_witness_gme} (constant?) & convex?& \\  
+	classical ML + \nameref{def:classical_shadow}  & ?? & & & \\  
+	quantum (variational) circuits &  \cref{thm:multivariate_trace} (c-depth?) & & & \\  
 	\hline
 \end{tabular}
 \caption{complexity measures of different methods}
 \end{table}
 
-\subsubsection{Separations}
+\subsubsection{Separations (complexity)}
 contrived problem (engineered dataset)? for exponential speedup
 
-\subsubsection{Obstacles}
+\subsubsection{Obstacles (practical)}
 % quantum advantages:
 % \begin{itemize}
 % 	\item no input encoding problem? \cite{tangQuantumPrincipalComponent2021} in most quantum machine learning algorithm.
@@ -887,12 +1048,18 @@ contrived problem (engineered dataset)? for exponential speedup
 \subsection{Classification accuracy}
 \subsubsection{Data preparation}
 multi-partite entangled state: generate synthetic (engineered) data from (random graph?).
-separable state from randomly 
+separable state from randomly ...
 
-We consider a set of different regularization parameters,
+\subsubsection{Hyperparameters and settings}
+We consider a set of different regularization parameters,...
 
 \subsubsection{Results}
 performance of different methods: 
+\begin{figure}[!ht]
+	\centering
+	% \includegraphics[width=1\linewidth]{.pdf}
+	\caption{comparison of }
+\end{figure}
 % \begin{itemize}
 % 	\item shadow tomography: 
 % 	\item entanglement witness (no machine learning); 
@@ -906,15 +1073,19 @@ tradeoff between (white noise) tolerance (robustness) and efficiency (number of 
 	\dm_{\noise}' = (1-p_{\noise}) \op{G} + p_{\noise} \frac{\identity}{2^n}
 \end{equation}
 $p_{\noise}$ indicates the robustness of the algorithm (witness).
-\begin{remark}
-	the largest noise tolerance $p_{\text{limit}}$ just related to the \textbf{chromatic number} of the graph.[??]
-	\nameref{def:graph_property}
+\begin{remark}[\cite{zhouDetectingMultipartiteEntanglement2019}]
+	the largest noise tolerance $p_{\text{limit}}$ just related to the \textbf{chromatic number} (\nameref{def:graph_property}) of the graph.
 \end{remark}
+\begin{figure}[!ht]
+	\centering
+	% \includegraphics[width=1\linewidth]{.pdf}
+	\caption{robustness }
+\end{figure}
 % \input{complexity.tex}
 % \input{optimization.tex}
 
 \section{Conclusion and discussion}
-todo: experiment (generation, verification) \cite{luEntanglementStructureEntanglement2018}
+future: experimental implementation with a few qubits (generation, verification) \cite{luEntanglementStructureEntanglement2018}
 % \begin{itemize}
 % 	\item experiment (generation, verification) \cite{luEntanglementStructureEntanglement2018}
 % 	\item error correction? not benchmark
@@ -942,13 +1113,27 @@ todo: experiment (generation, verification) \cite{luEntanglementStructureEntangl
 
 \section{Machine learning background}
 % In this work, we restrict ourself to supervised learning (mainly SVM), where we are given a set of labeled data for training to predict labels of new data.
-\subsection{SVM}\label{sec:svm}
+
+Notations:
+The (classical) training data (for supervised learning) is a set of $m$ data points $\qty{(\vbx^{(i)}, y^{(i)})}^{m}_{i=1}$ 
+where each data point is a pair $(\vbx,y)$.
+Normally, the input (e.g., an image) $\vbx:= (x_1,x_2,\dots,x_d) \in \realnumber^d$  is a vector where $d$ is the number of \emph{features}
+and its \emph{label} $y\in\Sigma$ is a scalar with some discrete set $\Sigma$ of alphabet/categories. 
+For simplicity and the purpose of this paper, we assume $\Sigma=\qty{-1,1}$ (binary classification).
+
+\subsection{Support vector machine}\label{sec:svm}
 \begin{definition}[SVM]\label{def:svm}
+	Given a set of (binary) labeled data,
 	support vector machine (SVM) is designed to
-	find a hyperplane (a linear function) such that maximize the margin ...
+	find a hyperplane (a linear function) such that maximize the margin between two partitions...
+	\begin{equation}
+		\max_{\vb{w}} 
+	\end{equation}
 \end{definition}
-\nameref{def:kernel}
+
+\subsubsection{kernel method}
 nonlinear boundary. map to a higher dimensional (feature) space, in which data is linearly separable.
+\nameref{def:kernel}
 \begin{definition}[kernel]\label{def:kernel}
 	In general, the kernel function $\kernel:\mathcal{X}\times \mathcal{X} \to \realnumber$ measures the similarity between two input data points by an inner product
 	\begin{equation}
@@ -959,8 +1144,8 @@ nonlinear boundary. map to a higher dimensional (feature) space, in which data i
 \end{definition}
 \begin{example}[kernels]
 	Some common kernels: 
-	the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map ...
-	the Gaussian kernel
+	the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map $\phi(\vbx)$ ...
+	The Gaussian kernel
 	$\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ 
 		% \begin{equation}
 		% 	\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
@@ -997,11 +1182,48 @@ nonlinear boundary. map to a higher dimensional (feature) space, in which data i
 	% \end{itemize}
 \end{example}
 
-% \subsection{neural network}
+\subsection{Neural network}\label{sec:neural_network}
+\subsubsection{neural network and kernel}
+\begin{definition}[neural tagent kernel]\label{def:neural_tangent_kernel}
+	neural tangent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017} in the limit ...
+	\begin{equation}
+		k_{\ntk} \qty(S_T(\dm_l),\tilde{S}_T(\dm_{l'}))
+		=
+		\expval{
+			\phi^{(\ntk)}(S_T(\dm_l)),
+			\phi^{(\ntk)}(\tilde{S}_T(\dm_l))
+		}
+	\end{equation}
+\end{definition}
+
+\subsubsection{Stabilizer formalism}\label{sec:stabilizer_formalism}
+denote a group by $\group$ and a subgroup $\subgroup$. 
+\begin{definition}[Pauli group]
+\end{definition}
+\begin{definition}[Clifford group]\label{def:clifford}
+\end{definition}
+\begin{definition}[Stabilizer]
+\end{definition}
+
+\subsubsection{quantum neural network}\label{sec:quantum_neural_network}
 % \subsection{Unsupervised: PCA}
 
 \section{Hardness assumptions}
-\BQP,\BPP
+\begin{definition}[\NP]\label{def:np}
+	\NP, \NP-hard, \NP-complete
+\end{definition}
+\begin{definition}[\sharpP]\label{def:sharpp}
+	\sharpP
+\end{definition}
+\begin{definition}[QMA]\label{def:qma}
+	QMA
+\end{definition}
+\begin{definition}[\BPP]\label{def:bpp}
+	\BPP
+\end{definition}
+\begin{definition}[\BQP]\label{def:bqp}
+	\BQP
+\end{definition}
 
 %\end{widetext}
 
