@@ -103,6 +103,9 @@ floatfix,
 \newcommand{\qnn}{\textup{QNN}}
 \newcommand{\ntk}{\textup{NT}}
 \newcommand{\ppt}{\textup{PPT}}
+\newcommand{\bells}{\textup{BELL}}
+\newcommand{\chsh}{\textup{CHSH}}
+\newcommand{\ml}{\textup{ml}}
 \newcommand{\stbz}{\hat{S}}
 \newcommand{\ob}{\hat{O}}
 \newcommand{\separable}{S}
@@ -134,7 +137,7 @@ floatfix,
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%
-\title{Towards efficient and robust (universal) detection of entanglement structure}
+\title{Towards efficient and universal  entanglement detection}
 \author{Jue Xu}
 \email{juexu@cs.umd.edu}
 \author{Qi Zhao}
@@ -174,7 +177,7 @@ For specific purpose, we use different basis (representations) for quantum state
 One is the computational basis $\qty{\ket{z}}$ with $z\in \qty[2^n]$ where $n$ is the number of qubits,
 while another useful one is the binary representation of computational basis $\qty{\ket{\vbx}\equiv\ket{x_1}\ket{x_2}\dots\ket{x_n}}$ with $x_j\in \qty{0,1}$. 
 For simplicity, we let $N \equiv 2^n$ and $\ket{\vb{0}}\equiv\ket{0^n} \equiv\ket{0}^{\otimes n}$ if no ambiguity.
-shorthand $\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$.
+shorthand $\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$ (we omitted the tensor product for readability).
 Hadamard basis $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $.
 
 \subsection{Entanglement detection}
@@ -302,11 +305,24 @@ Classically, the hardness of determining the bipartite separability.
 	approximately correct complexity? quantum complexity? machine learning (data)? for entanglement () problem? multipartite?
 % \end{question}
 
+\begin{definition}[partial transpose]\label{def:partial_transpose}
+	The partial transpose (PT) operation - acting on subsystem $A$ - is defined as
+	\begin{equation}
+		\op{k_A,k_B}{l_A,l_B}^{\T_A}
+		:= \op{l_A,k_B}{k_A,l_B}
+	\end{equation}
+	where $\qty{\ket{k_A,k_B}}$ is a product basis of the joint system AB.
+\end{definition}
+The well-known PPT condition checks if the partially transposed (PT) density matrix $\dm_{AB}^{\T_A}$ is \nameref{def:psd}.
+If the PPT condition is violated - i.e. $\dm_{AB}^{\T_A}$ does have negative eigenvalues - $A$ and $B$ must be entangled.
 \begin{theorem}[PPT criterion]\label{thm:ppt}
 	the positive partial transpose (\ppt) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 	Another widely used one is the k-symmetric extension hierarchy [15, 16], which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
 \end{theorem}
+Similar to the PPT condition, the $p_3$-PPT condition applies to mixed states and is completely independent of the state in question. This is a key distinction from entanglement witnesses, which can be more powerful, but which \textbf{usually require detailed prior information about the state}.
+From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_AB$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
+c.f. \nameref{thm:multivariate_trace}, \nameref{def:entanglement_spectroscopy}
 
 \subsubsection{Multipartite entanglement structures}
 For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
@@ -469,9 +485,19 @@ It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by 
 
 A usual approach for detecting entanglement is using Bell inequalities [??]
 \begin{definition}[Bell inequality]\label{def:bell_inequality}
-	CHSH inequality (game) ...;
+	$\chsh$ inequality (game) ...;
 	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
 \end{definition}
+\begin{example}[inequality]
+	\cite{maTransformingBellInequalities2018}
+	First, there exist entangled states not violating the Bell inequalities. 
+	To be more speciﬁc, the maximally-entangled state, such as $\ket{\psi_0} = ( \ket{00} - \ket{11} ) / \sqrt{2}$ for a pair of qubits, can maximally violate the CHSH inequality. 
+	However, this tool fails under the circumstances of noise, in the form of a quantum channel. After passing through a depolarizing channel, the resulting state,	
+	\begin{equation}
+		\dm = p \op{\psi_-} + (1 - p) \frac{\identity}{4}
+	\end{equation}
+	where $0 \le p \le 1$, violates the CHSH inequality only if $p > 1/ \sqrt{2}$. However, the state is entangled when $p > 1/3$.
+\end{example}
 Another approach for detecting multipartite entanglement is using entanglement witnesses.
 Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
 These witnesses can be quite useful to detect entanglement in the vicinity of graph states.
@@ -483,7 +509,7 @@ These witnesses can be quite useful to detect entanglement in the vicinity of gr
 	Entanglement witness	
 		\begin{itemize}
 		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
-		\item \textbf{Output}: separable or not ??? $\separable_f^\ppartition$ ? $\separable_b^\ppartition$ 
+		\item \textbf{Output}: \textsf{separable} or not \textsc{entangled} ??? $\separable_f^\ppartition$ ? $\separable_b^\ppartition$ 
 		% (decision problem?? find problem)
 	\end{itemize}
 	\textbf{difficulty}: multi($n$)-partite, high-dimensional (qudit) \cite{sciaraUniversalPartiteLevel2019}, pure/mixed state, with/out prior knowledge, universal?, non-stabilizer \cite{tothEntanglementDetectionStabilizer2005}, certain partition
@@ -665,6 +691,18 @@ stabilizer state, neural network state \cite{gaoEfficientRepresentationQuantum20
 \end{question}
 \begin{theorem}
 	k local measurements. Here, k is the chromatic number (minimal \nameref{exm:colorable}) of the corresponding graph, typically, a small constant independent of the number of qubits.
+\end{theorem}
+\begin{theorem}
+	\cite{degoisUncertaintyRelationsGraph2022}
+	\begin{equation}
+		\max_{\dm\in \text{SEP}} \sum_{i=1}^n \expval{A_i \otimes B_i}
+		\le \sqrt{\theta(\bar{G}_A) \theta(\bar{G}_B)} = : \theta_{AB}
+	\end{equation}
+	where $\theta(\bar{G}_A)$ is the Lovasz number of the anticommutativity graph of $\qty{A_i}$ and similarly for $\theta(\bar{G}_B)$.
+	This separability criterion naturally leads to entanglement witnesses of the form 
+	\begin{equation}
+		\ew_{\mathbb{E}} = \theta_{AB} \identity - \sum_i A_i \otimes B_i
+	\end{equation}
 \end{theorem}
 \begin{proposition}[Bounds to the Schmidt measure of graph states]
 	For any graph state $\ket{G}$, the \nameref{def:schmidt_measure} $E_A$ is bounded from below by the maximal Schmidt rank $\textup{SR}_{\max}$ and from above by the Pauli persistency PP or the minimal vertex cover, i.e.
@@ -878,6 +916,10 @@ related works
 	The idea is to feed the classifier by a large amount of sampled trial states (feature: synthetic density matrix with noise flatten as a real vector $\vbx\in\realnumber^{d_A^2d_B^2-1}$) as well as their corresponding class labels (separable or entangled by \nameref{thm:ppt}, CHA), and then train the classifier to predict the class labels of new states that it has not encountered before.
 	Previous methods \textbf{only detect a limited part of the state space}, e.g. different entangled states often require different \nameref{def:entanglement_witness}. In contrast, this classifier can handle a variety?? of input states once properly trained \cref{fig:entangle}.
 
+	\item Bell inequlaity and NN \cite{maTransformingBellInequalities2018}
+
+	\item SVM, (universal), 4 qubit \cite{vintskevichClassificationFourqubitEntangled2022}
+
 	\item \nameref{def:classical_shadow} \cite{huangPredictingManyProperties2020}: estimate entanglment witness (fixed but unknown target state, e.g., tripartite GHZ)
 	Entanglement verification. Fidelities with pure target states can also serve as (bipartite) entanglement witnesses. For every (bipartite) entangled state $\dm$, there exists a constant $\alpha$ and an observable $\ob = \op{\psi}$ such that $\Tr(\ob \dm ) > \alpha \ge \Tr(\ob \dm_s )$, for all (bipartite) separable states $\dm_s$. Establishing $\Tr(\ob \dm ) > \alpha$ verifies the existence of entanglement in the state $\dm$. Any $\ob = \op{\psi}$ that satisfies the above condition is known as an entanglement witness for the state $\dm$. 
 	\textbf{Classical shadows (Clifford measurements) of logarithmic size allow for checking a large number of potential entanglement witnesses simultaneously}.
@@ -925,7 +967,7 @@ The classical shadow size required to accurately approximate all reduced $r$-bod
     \For{ $i = 1,2, \ldots, N$} {
         $\dm\mapsto \U\dm \U^\dagger$ \tcp*{apply a random unitary to rotate the state}
 		$\mapsto \ket{b}$... \tcp*{perform a computational-basis measurement}
-		$\dm_{cs}=\mathcal{M}^{-1}\qty(U^\dagger \op{b}) U$ \tcp*{measurement outcome $\ket{b}\in \qty{0,1}^n $, $\mathcal{M}$ quantum channel}
+		$\dm_{cs}=\mathcal{M}^{-1}\qty(\U^\dagger \op{b} \U)$ \tcp*{measurement outcome $\ket{b}\in \qty{0,1}^n $, $\mathcal{M}$ quantum channel}
         % \tcc{comment in a new line}
     % {\Return ?}
     }
@@ -994,6 +1036,8 @@ for any state $\dm_s$ with only bipartite entanglement, $\Tr(\ob \dm_s)\le 0.5$,
 while for any state $\dm_s$ with at most $W$-type entanglement, $\Tr(\ob \dm_s)\le 0.75$.
 Therefore verifying that $\Tr(\ob \dm)\ge 0.5$ certifies that $\dm$ has tripartite entanglement, while $\Tr(\ob \dm)> 0.75$ certifies that $\dm$ has $\ghz$-type entanglement.
 
+\subsubsection{Derandomization}
+Derandomization can and should be viewed as a refinement of the original classical shadows idea. \cite{huangEfficientEstimationPauli2021} \cite{elbenMixedstateEntanglementLocal2020}
 
 \subsubsection{training data and classical kernel methods}
 
@@ -1350,7 +1394,9 @@ nonlinear boundary. map to a higher dimensional (feature) space, in which data i
 		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
 	\end{equation}
 	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
-	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix.
+\end{definition}
+\begin{definition}[positive, semidefinite]\label{def:psd}
+	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix, i.e. all eigenvalues are non-negative
 \end{definition}
 \begin{example}[kernels]
 	Some common kernels: 
