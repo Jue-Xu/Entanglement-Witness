@@ -306,6 +306,7 @@ Classically, the hardness of determining the bipartite separability.
 % \end{question}
 
 \begin{definition}[partial transpose]\label{def:partial_transpose}
+	\cite{horodeckiSeparabilityMixedStates1996}
 	The partial transpose (PT) operation - acting on subsystem $A$ - is defined as
 	\begin{equation}
 		\op{k_A,k_B}{l_A,l_B}^{\T_A}
@@ -442,6 +443,11 @@ While the preparation is never perfect, it is still expected that the prepared m
 	\label{eq:entanglement_witness}
 \end{equation}
 where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$
+\begin{proposition}[Section 6.3 of \cite{heinosaariMathematicalLanguageQuantum2011}]
+	A state $\dm$ is separable iff $\forall \ew,\Tr[\dm \ew]\ge 0$. 
+	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
+	There is no entanglement witness that detects all entangled states.
+\end{proposition}
 \begin{remark}
 In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
 \end{remark}
@@ -485,8 +491,19 @@ It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by 
 
 A usual approach for detecting entanglement is using Bell inequalities [??]
 \begin{definition}[Bell inequality]\label{def:bell_inequality}
-	$\chsh$ inequality (game) ...;
+	\begin{equation}
+		a_0 = \sz, a_0' = \sx, 
+		b_0 = (\sx-\sz)/\sqrt{2},
+		b_0 = (\sx+\sz)/\sqrt{2},
+		\vb{w} = \qty{\pm 2, 1, -1, 1, 1}
+	\end{equation}
 	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
+\end{definition}
+\begin{definition}[CHSH inequality]\label{def:chsh_inequality}
+	$\chsh$ inequality (game) ...;
+	\begin{equation}
+		\qty{a_0 b_0, a_0 b_0',a_0' b_0, a_0' b_0' }
+	\end{equation}
 \end{definition}
 \begin{example}[inequality]
 	\cite{maTransformingBellInequalities2018}
@@ -496,7 +513,7 @@ A usual approach for detecting entanglement is using Bell inequalities [??]
 	\begin{equation}
 		\dm = p \op{\psi_-} + (1 - p) \frac{\identity}{4}
 	\end{equation}
-	where $0 \le p \le 1$, violates the CHSH inequality only if $p > 1/ \sqrt{2}$. However, the state is entangled when $p > 1/3$.
+	where $0 \le p \le 1$, violates the \nameref{def:chsh_inequality} only if $p > 1/ \sqrt{2}$. However, the state is entangled when $p > 1/3$.
 \end{example}
 Another approach for detecting multipartite entanglement is using entanglement witnesses.
 Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
@@ -1083,16 +1100,20 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{\nameref{def:classical_shadow}? (features) with label (training data)}
-    \Output{entanglement structure? decision; classify phase}
+    \Input{\nameref{def:classical_shadow}? (features) with label (training data); ansatz $\ew_{\ml}=\vb{w}\cdot \vec{\sigma}$}
+    \Output{entanglement structure? decision \textsf{separble}; classify phase}
     \BlankLine
+
+	\tcp*{---------------------------------------------- training phase ------------------------------------------------}
     \For{ $i = 1,2, \ldots, m$} {
         kernel estimation \tcp*{classical kernel}
         SVM \tcp*{SVM}
         % \tcc{comment in a new line}
-    {\Return "?"}
+    {\Return $\vb{w}$} \tcp*{parameters of the separating hyperplane in the feature space}
     }
-    \Return $\vb{w}$ \tcp*{parameters of the separating hyperplane in the feature space}
+	\tcp*{---------------------------------------------- testing phase -------------------------------------------------}
+
+    \Return $ \vb{w}\cdot \vec{\sigma}<0 $: \textsf{separable} \tcp*{predict}
     \caption{Classical learning (\nameref{def:svm}) + classical shadow}
     \label{alg:classical_learning}
 \end{algorithm}
@@ -1219,8 +1240,10 @@ related works:
 \subsubsection{Variational entanglement witness (ansatz)}
 an ansatz for \nameref{def:entanglement_witness} \cite{zhuMachineLearningDerivedEntanglement2021} (graph state entanglement)
 \begin{equation}
-	\ew_{ansatz} := \sum_{k_1,k_2,\dots,k_n}  w_{k_1,k_2,\dots,k_n} \bigotimes_i^n \hat{\sigma}^{(k_i)}
-	,\quad \hat{\sigma} \in \qty{\sx,\sy,\sz,\identity_{2\times 2}}
+	\ew_{ansatz} := 
+	% \sum_{k_1,k_2,\dots,k_n}  w_{k_1,k_2,\dots,k_n} \bigotimes_i^n \hat{\sigma}^{(k_i)}
+	% ,\quad \hat{\sigma} \in \qty{\sx,\sy,\sz,\identity_{2\times 2}}
+	\sum_{\vb{p}\in \qty{I,X,Y,Z}^n} w_{\vb{p}}  \bigotimes_i^n \hat{\sigma}^{(\vb{p}_i)}
 \end{equation}
 c.f. \nameref{prm:full_tomography} (Stokes parameters) \cref{eq:stokes_tomography}
 
@@ -1228,7 +1251,7 @@ c.f. \nameref{prm:full_tomography} (Stokes parameters) \cref{eq:stokes_tomograph
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{(copies of) $\dm$, an entanglement witness (observable) ansatz $\ew_a$}
+    \Input{(copies of) $\dm$, an entanglement witness (observable); ansatz $\ew_{\ml}=\vb{w}\cdot \vec{\sigma}$}
     \Output{classifier $\vb{w}$}
     \BlankLine
     \For{ $i = 1,2, \ldots, m$} {
@@ -1243,11 +1266,11 @@ c.f. \nameref{prm:full_tomography} (Stokes parameters) \cref{eq:stokes_tomograph
 \end{algorithm}
 
 
-\subsubsection{Variational trace estimate (direct)}
-Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
-\cite{chenVariationalQuantumAlgorithms2022}
+% \subsubsection{Variational trace estimate (direct)}
 \begin{theorem}
 	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
+	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
+\cite{chenVariationalQuantumAlgorithms2022}
 \end{theorem}
 
 \subsection{Theoretic upper bounds and lower bounds}
@@ -1276,6 +1299,47 @@ Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
 	\hline
 \end{tabular}
 \caption{complexity (different measures) of different methods}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{c|c|c}
+		& circuits & number of copies (measurements) \\
+		\hline
+		classical shadow & & \\  
+		derandomized & & \\  
+		quantum circuit & & \\  
+		\hline
+	\end{tabular}
+	\caption{trace estimation}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{c|c|c}
+		& observables & weights \\
+		\hline
+		entanglement witness & & \\  
+		Bell (CHSH) inequality & & \\  
+		**spectrum?? & & \\  
+		\hline
+	\end{tabular}
+	\caption{ansatz}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{c|c|c}
+		& accuracy & complexity \\
+		\hline
+		linear SVM & & \\  
+		kernel SVM & & \\  
+		Neural network & & \\  
+		neural kernel & & \\  
+		quantum kernel & & \\  
+		\hline
+	\end{tabular}
+	\caption{machine learning methods}
 \end{table}
 
 \subsubsection{Separations (complexity)}
