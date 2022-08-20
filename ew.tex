@@ -165,8 +165,7 @@ We review the recently developed methods to entanglement detection: entanglement
 
 \section{Preliminaries}
 % \subsection{Related works}
-% \subsection{Notations}
-
+\subsection{Notations}
 
 Notations: 
 The hats on the matrices such as $\hat{A}$, $\hamiltonian$, $\dm$ (omitted), $\ob$, $\ew$, emphasize that they play the roles of operators (Hermitian matrices).
@@ -179,8 +178,68 @@ while another useful one is the binary representation of computational basis $\q
 For simplicity, we let $N \equiv 2^n$ and $\ket{\vb{0}}\equiv\ket{0^n} \equiv\ket{0}^{\otimes n}$ if no ambiguity.
 shorthand $\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$ (we omitted the tensor product for readability).
 Hadamard basis $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $.
+\begin{definition}[density matrix]\label{def:density_matrix}
+	pure state $\ket{\psi}$;
+	A quantum state $\dm$ is defined to be a positive operator $ \dm \in \text{End}(V )$ with $\Tr( \dm ) = 1$.
+	density matrix $\dm$ (trace one, Hermitian, PSD)...
+\end{definition}
+\begin{definition}[POVM]\label{def:povm}
+	A positive-operator valued measurement (POVM) $M$ consists of a set of positive operators that sum to the identity operator $\identity$. 
+	When a measurement $M = \qty{ E_1 , \dots , E_k }$ is applied to a quantum state $\dm$, the outcome is $i \in [k]$ with probability $p_i = \tr( \dm E_i )$.
+	observables ... $\expectation[x]\equiv\expval{\ob_x}:=\tr(\ob_x\dm)$
+\end{definition}
+\begin{definition}[positive, semidefinite]\label{def:psd}
+	denoted $X \preceq Y $ provided $Y-X $ is positive
+\end{definition}
+\begin{definition}[partial trace]\label{def:partial_trace}
+	% partial trace;
+	reduced density matrix $\dm_A = \Tr_B(\dm_{AB})$
+\end{definition}
 
-\subsection{Entanglement detection}
+\subsubsection{Distance measures}
+\begin{definition}[fidelity]\label{def:fidelity}
+	Given a pair of states (target $\dm$ and prepared $\dm'$), 
+	Uhlmann fidelity $F(\dm,\dm') : = \Tr(\sqrt{\sqrt{\dm}\dm'\sqrt{\dm}})\equiv\norm{\sqrt{\dm}\sqrt{\dm'}}_1$, where $\sqrt{\dm}$ dentoes the positive semidefinite square root of the operator $\dm$. (infidelity $1-F(\dm,\dm')$)
+	For any mixed state $\rho$ and pure state $\ket{\psi}$, $F(\dm,\op{\psi})=\sqrt{\mel{\psi}{\dm}{\psi}}\equiv \sqrt{\Tr(\dm\op{\psi})}$ which can be obtained by the Swap-test[?].
+	linear fidelity or overlap $F(\dm,\dm'):=\tr(\dm\dm')$.
+	% \begin{equation}
+	% 	F(\ket{\psi},\ket{\psi'}) :=
+	% \end{equation}
+	% \begin{equation}
+	% 	F(\rho,\rho') : = \Tr \sqrt{\sqrt{\rho}\rho'\sqrt{\rho}}
+	% \end{equation}
+\end{definition}
+different distance measures \cite{badescuQuantumStateCertification2017}
+\begin{definition}[norm]\label{def:norm}
+	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
+	Euclidean norm $l_2$ norm;
+	Spectral (operator) norm $\norm{\vbx}_{\infty}$;
+	Trace norm $\norm{A}_{\Tr}\equiv\norm{A}_{1}:=\Tr(\abs{A})\equiv\Tr(\sqrt{A^\dagger A})$, $\abs{A}:=\sqrt{A^\dagger A}$, $p=1$;
+	Frobenius norm $\norm{A}_{F}:=\sqrt{\Tr(A^\dagger A)}$, $p=2$;
+	Hilbert-Schmidt norm $\norm{A}_{HS}:=\sqrt{\sum_{i,j} A_{ij}^2 }=?\sum_{i\in I}\norm{Ae_i}_H^2$;
+	Hilbert-Schmidt inner product $\expval{A,B}_{\textup{HS}}:=\Tr(A^\dagger B)$,
+	Frobenius inner product $\expval{A,B}_{\textup{F}}:=\Tr(A^\dagger B)$?
+	(in finite-dimensionala Euclidean space, the HS norm is identical to the Frobenius norm)
+	Although the Hilbert-Schmidt distance is arguably not too meaningful, operationally, one can use Cauchy-Schwarz to relate it to the very natural trace distance.
+\end{definition}
+\begin{definition}[distance]\label{def:distance}
+	For mixed states, trace distance $d_{\tr}(\dm,\dm') : = \frac{1}{2} \norm{\dm-\dm'}_1$.
+	For pure states, $d_{\tr}(\ket{\psi},\ket{\psi'}) : = \frac{1}{2}\norm{\op{\psi} -\op{\psi'}}_1 = \sqrt{1-\abs{\ip{\psi}{\psi'}}^2}$.
+	% \begin{equation}
+	% 	d_{tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1
+	% \end{equation}
+	fidelity and trace distance are related by the inequalities
+	\begin{equation}
+		1-F\le D_{\tr}(\dm,\dm') \le \sqrt{1-F^2}
+	\end{equation}
+	variation distance of two distribution $d_{var}(p,p') : = \frac{1}{2} \sum_i \abs{p_i-p_i'} = \frac{1}{2} \norm{p-p'}_1$.
+	% It also has an operational meaning: it is the greatest probability with which one can discriminate a draw from p and a draw from q.
+	$l_2$ distance ... Hellinger distance ... HS distance $D_{\text{HS}}(\dm,\dm'): = \norm{\dm-\dm'}_{\text{HS}}=\sqrt{\Tr((\dm-\dm')^2)}$
+	% As a probability metric, the $l_2$ distance is somewhat unnatural. For example, it does not satisfy the “data processing inequality”, meaning that there is a stochastic operation that increases $l_2$ distance. However it is by far the easiest distance to calculate, as it is a simple polynomial in p and q; further, it can be related to the total variation distance
+\end{definition}
+
+\subsection{Entanglement structures}
+% \subsection{Entanglement detection}
 
 \subsubsection{Bipartite entanglement}
 Large scale entanglement is the (main) resource of quantum advantages in quantum computation and communication.
@@ -198,10 +257,7 @@ Firstly, we consider the simplest entanglement structure: bipartite separable ca
 % 	\end{equation}
 % 	density matrix $\dm$ (trace one, Hermitian, PSD)	...
 % \end{definition}
-\begin{definition}[density matrix]\label{def:density_matrix}
-	pure state $\ket{\psi}$;
-	density matrix $\dm$ (trace one, Hermitian, PSD)	...
-\end{definition}
+
 % \begin{example}
 % 	Bell states
 % \end{example}
@@ -210,7 +266,7 @@ Many methods [...] have been developed to determine whether a state is separable
 	A pure state is (bi-)separable if it is in a tensor product form $\ket{\psi_b}=\ket{\phi_A}\otimes\ket{\phi_{\bar{A}}}$, 
 	where $\ppartition_2 = \qty{ A, \bar{A} }$ is a bipartition of the qubits in the system.
 	Note that the state $\ket{\phi_A}$ may be entangled, thus the state $\ket{\psi}$ is not necessarily \nameref{def:fully_separable}.
-	A mixed state is separable iff it can be written as a convex combination of pure biseparable states $\dm=\sum_i p_i \op{\psi_i}$ where $\ket{\psi_i}$ may be biseparable with respect to different partitions.
+	A mixed state is separable iff it can be written as a convex combination of pure biseparable states $\dm=\sum_i p_i \op{\psi_i}$ where $\ket{\psi_i}$ may be biseparable with respect to different partitions (otherwise \nameref{def:gme}).
 	The simple statement “The state is entangled” would still allow that only two of the qubits are entangled while the rest is in a product state.
 
 	Consider a bipartite system $AB$ with the Hilbert space $\hilbertspace_A \otimes \hilbertspace_B$, where $\hilbertspace_A$ has dimension $d_A$ and $\hilbertspace_B$ has dimensional $d_B$, respectively.
@@ -250,10 +306,7 @@ Rather than qualitatively determining (bi)separability, there are measures to qu
 	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
 	relative entropy (\nameref{def:divergence})
 \end{definition}
-\begin{definition}[partial trace]\label{def:partial_trace}
-	% partial trace;
-	reduced density matrix $\dm_A = \Tr_B(\dm_{AB})$
-\end{definition}
+
 \begin{remark}
 	% (def partial trace ...)
 	a pure (bipartite) state is entangled $\iff$ the reduced state $\dm^A=\Tr_A(\dm)$ is mixed.
@@ -317,17 +370,18 @@ Classically, the hardness of determining the bipartite separability.
 The well-known PPT condition checks if the partially transposed (PT) density matrix $\dm_{AB}^{\T_A}$ is \nameref{def:psd}.
 If the PPT condition is violated - i.e. $\dm_{AB}^{\T_A}$ does have negative eigenvalues - $A$ and $B$ must be entangled.
 \begin{theorem}[PPT criterion]\label{thm:ppt}
+	\cite{horodeckiSeparabilityMixedStates1996}
 	the positive partial transpose (\ppt) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 	Another widely used one is the k-symmetric extension hierarchy [15, 16], which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
 \end{theorem}
 Similar to the PPT condition, the $p_3$-PPT condition applies to mixed states and is completely independent of the state in question. This is a key distinction from entanglement witnesses, which can be more powerful, but which \textbf{usually require detailed prior information about the state}.
-From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_AB$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
+From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_{AB}$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
 c.f. \nameref{thm:multivariate_trace}, \nameref{def:entanglement_spectroscopy}
 
 \subsubsection{Multipartite entanglement structures}
 For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
-An identification of the entanglement structure may thus provide us with a hint about where imperfections in the setup may occur, as well as where we can identify groups of subsystems that can still exhibit strong quantum-informationprocessing capabilities.
+An identification of the entanglement structure may thus provide us with a hint about where imperfections in the setup may occur, as well as where we can identify groups of subsystems that can still exhibit strong quantum-information processing capabilities.
 
 Given a $n$-qubit quantum system and its partition into $m$ subsystems, the \emph{entanglement structure} indicates how the subsystems are entangled with each other.
 In some specific systems, such as distributed quantum computing[] quantum networks[] or atoms in a lattice, the geometric configuration can naturally determine the system partition.
@@ -345,6 +399,7 @@ Therefore, it is practically interesting to study entanglement structure under p
 \end{definition}
 GME is the strongest form of entanglement, that is, 
 all qubits in the system are indeed entangled with each other.
+The size of the genuinely entangled quantum system becomes a figure of merit for assessing the advancement of quantum devices in the competition among various realizations.
 \begin{definition}[genuine multipartite entanglement]\label{def:gme}
 % \begin{definition}[genuine entangled]\label{def:genuinely_entangled}
 	A state possesses \emph{genuine multipartite entanglement} (GME) if it is outside of $S_2$, and is (fully) $n$-separable if it is in $S_n$.
@@ -394,7 +449,7 @@ To benchmark our technological progress towards the generation of largescale gen
 \begin{example}[GHZ]\label{exm:ghz}
 	bipartite: Bell states;
 	nontrivial multipartite: tripartite.
-	GHZ state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$ (eight-photon) produce the five different entangled states (one from each entanglement structure/partition?): 
+	Greenberger-Horne-Zeilinger (GHZ) state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$ (eight-photon) produce the five different entangled states (one from each entanglement structure/partition?): 
 	\begin{equation*}
 		\ket{\ghz_8},\ket{\ghz_{62}},\ket{\ghz_{44}},\ket{\ghz_{422}},\ket{\ghz_{2222}}.
 	\end{equation*}
@@ -424,131 +479,7 @@ To benchmark our technological progress towards the generation of largescale gen
 	\label{fig:entangle}
 \end{figure}
 
-\subsubsection{Entanglement witness}\label{sec:entanglement_witness}
-
-see \cref{fig:entangle} for relations.
-entanglement detection \cite{guhneEntanglementDetection2009}.
-\begin{definition}[entanglement witness]\label{def:entanglement_witness}
-	Given an (unknown? known target state) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
-	\begin{equation}
-		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
-		\Tr(\ew\dm) < 0 , \text{ for some entangled }
-	\end{equation}
-	\cite{terhalBellInequalitiesSeparability2000}, see \cref{fig:entangle}
-\end{definition}
-In a typical experiment one aims to prepare a pure state, $\ket{\psi}$, and would like to detect it as true multipartite entangled. 
-While the preparation is never perfect, it is still expected that the prepared mixed state is in the proximity of $\ket{\psi}$. The usual way to construct entanglement witnesses using the knowledge of this state is
-\begin{equation}
-	\ew_{\psi} = c\identity - \op{\psi} 
-	\label{eq:entanglement_witness}
-\end{equation}
-where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$
-\begin{proposition}[Section 6.3 of \cite{heinosaariMathematicalLanguageQuantum2011}]
-	A state $\dm$ is separable iff $\forall \ew,\Tr[\dm \ew]\ge 0$. 
-	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
-	There is no entanglement witness that detects all entangled states.
-\end{proposition}
-\begin{remark}
-In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
-\end{remark}
-\begin{example}[entanglement witness for GHZ]
-	three-qubit GHZ state 
-	\cite{tothDetectingGenuineMultipartite2005}
-	\begin{equation}
-		\ew_{\ghz_3} := \frac{3}{2} \identity - \sx^{(1)}\sx^{(2)}\sx^{(3)}
-		- \frac{1}{2} \qty[
-			\sz^{(1)} \sz^{(2)} + 
-			\sz^{(2)} \sz^{(3)} + 
-			\sz^{(1)} \sz^{(3)} 
-		]
-	\end{equation}
-	This witness requires the measurement of the $\qty{\sx^{(1)},\sx^{(2)},\sx^{(3)}}$ and $\qty{\sz^{(1)},\sz^{(2)},\sz^{(3)}}$ settings.
-	The projector based witness $\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ requires four measurement settings.
-	detect genuine $n$-qubit entanglement close to $\ghz_n$
-	\begin{equation}
-		\ew_{\ghz_n} = (n-1) \identity - \sum_{k=1}^n S_k^{(\ghz_n)}
-	\end{equation}
-	$\stbz_k$ is the \nameref{def:stabilizer} ... \cite{tothEntanglementDetectionStabilizer2005}
-	Detecting Genuine Multipartite Entanglement with Two Local Measurements \cite{tothDetectingGenuineMultipartite2005}
-\end{example}
-\begin{question}
-	how far/close to the target state (entanglement witness), noise limit?
-\end{question}
-
-It is natural to ask how nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  and the \nameref{def:kernel} method (nonlinear boundary) in machine learning can be applied. 
-
-\begin{proposition}\label{thm:entanglement_witness_gme}
-	Given a state $\ket{\psi}$,
-	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness \nameref{def:gme}  near $\ket{\psi}$ with $c=5/8$ in \cref{eq:entanglement_witness}
-	% \nameref{def:genuinely_entangled}
-	% \begin{equation}
-	% 	\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
-	% \end{equation}
-	that is, $\expval{\ew_{\psi}}\ge 0$ for any separable state in $S_b$.
-\end{proposition}
-If the \nameref{def:fidelity} (quantum kernel?) of the prepared state $\dm_{\text{pre}}$ with the target state $\ket{\psi}$, i.e., $\Tr(\dm_{pre}\op{\psi})$, exceeds $5/8$, $\dm_{pre}$ possesses GME.
-It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by the direct projection on $\ket{\psi}$, as it is an entangled state.
-
-A usual approach for detecting entanglement is using Bell inequalities [??]
-\begin{definition}[Bell inequality]\label{def:bell_inequality}
-	\begin{equation}
-		a_0 = \sz, a_0' = \sx, 
-		b_0 = (\sx-\sz)/\sqrt{2},
-		b_0 = (\sx+\sz)/\sqrt{2},
-		\vb{w} = \qty{\pm 2, 1, -1, 1, 1}
-	\end{equation}
-	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
-\end{definition}
-\begin{definition}[CHSH inequality]\label{def:chsh_inequality}
-	$\chsh$ inequality (game) ...;
-	\begin{equation}
-		\qty{a_0 b_0, a_0 b_0',a_0' b_0, a_0' b_0' }
-	\end{equation}
-\end{definition}
-\begin{example}[inequality]
-	\cite{maTransformingBellInequalities2018}
-	First, there exist entangled states not violating the Bell inequalities. 
-	To be more speciﬁc, the maximally-entangled state, such as $\ket{\psi_0} = ( \ket{00} - \ket{11} ) / \sqrt{2}$ for a pair of qubits, can maximally violate the CHSH inequality. 
-	However, this tool fails under the circumstances of noise, in the form of a quantum channel. After passing through a depolarizing channel, the resulting state,	
-	\begin{equation}
-		\dm = p \op{\psi_-} + (1 - p) \frac{\identity}{4}
-	\end{equation}
-	where $0 \le p \le 1$, violates the \nameref{def:chsh_inequality} only if $p > 1/ \sqrt{2}$. However, the state is entangled when $p > 1/3$.
-\end{example}
-Another approach for detecting multipartite entanglement is using entanglement witnesses.
-Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
-These witnesses can be quite useful to detect entanglement in the vicinity of graph states.
-\begin{problem}[separability]\label{prm:separable}
-	given (input) an \textbf{unknown} state, to determine (output) separability.
-\end{problem}
-\begin{problem}[Entanglement witness with prior]
-	% \cite{zhouDetectingMultipartiteEntanglement2019}
-	Entanglement witness	
-		\begin{itemize}
-		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
-		\item \textbf{Output}: \textsf{separable} or not \textsc{entangled} ??? $\separable_f^\ppartition$ ? $\separable_b^\ppartition$ 
-		% (decision problem?? find problem)
-	\end{itemize}
-	\textbf{difficulty}: multi($n$)-partite, high-dimensional (qudit) \cite{sciaraUniversalPartiteLevel2019}, pure/mixed state, with/out prior knowledge, universal?, non-stabilizer \cite{tothEntanglementDetectionStabilizer2005}, certain partition
-\end{problem}
-\begin{remark}[universal entanglement witness]
-	\cite{sciaraUniversalPartiteLevel2019}
-	% Since the witness tests for a specif state, a successful measurement of the operator also provides information about the state structure and phase, rather than only conﬁrming the presence of entanglement. 
-	For example, a witness specifically designed for a four-qubit compact cluster state [16] conﬁrms, when its expectation value is negative, the presence of that particular state having a very speciﬁc density function, while a positive measured expectation value of that operator only provides information that the tested state is not a compact cluster state. Indeed, the same witness, if applied to a four-qubit linear cluster or Greenberger-Horne-Zeilinger (GHZ) [17] states, would result in a positive measured expectation value, even though these two states are both highly entangled [17, 18]. 
-	Hence, a witness is a threshold test that can only detect the presence of a speciﬁc state. 
-	In contrast to an entanglement monotone (e.g. the entanglement entropy [6]), which determines the amount of entanglement, a witness cannot be used to quantify entanglement.	
-\end{remark}
-\begin{problem}[Certify entanglement]
-	Multipartite entanglement-structure detection
-	\begin{itemize}
-		\item \textbf{Input}: an (actual) state $\dm'$ from experiment that is close to a \textbf{known/target} (general multipartite) state $\ket{\psi}$,
-		certain partition?
-		\item \textbf{Output}: the certified lower-order entanglement among several subsystems could be still useful for some quantum information tasks.
-		entanglement structure
-	\end{itemize}
-\end{problem}
-
-\subsubsection{Graph state}
+\subsubsection{Graph state}\label{sec:graph_state}
 graph state is an important (large?) class of multipartite states in quantum information.
 Typical graph states include cluster (lattice) states, \nameref{exm:ghz} states, and the states involved in error correction (toric code?).
 % cluster state is the special case of graph state.
@@ -730,6 +661,140 @@ stabilizer state, neural network state \cite{gaoEfficientRepresentationQuantum20
 \end{proposition}
 
 
+\subsection{Entanglement detection}
+\nameref{thm:ppt}
+\subsubsection{Entanglement witness}\label{sec:entanglement_witness}
+
+see \cref{fig:entangle} for relations.
+entanglement detection \cite{guhneEntanglementDetection2009}.
+\begin{definition}[entanglement witness]\label{def:entanglement_witness}
+	Given an (unknown? known target state) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
+	\begin{equation}
+		\expectation_{\dm}[\ew]\equiv\expval{\ew}\equiv
+		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
+		\Tr(\ew\dm) < 0 , \text{ for some entangled }
+	\end{equation}
+	\cite{terhalBellInequalitiesSeparability2000}, see \cref{fig:entangle}
+\end{definition}
+
+\subsubsection{Fidelity, projector-based witness}
+In a typical experiment one aims to prepare a pure state, $\ket{\psi}$, and would like to detect it as true multipartite entangled. 
+While the preparation is never perfect, it is still expected that the prepared mixed state is in the proximity of $\ket{\psi}$. The usual way to construct entanglement witnesses using the knowledge of this state is
+\begin{equation}
+	\ew_{\psi} = c\identity - \op{\psi} 
+	\label{eq:entanglement_witness}
+\end{equation}
+where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$
+\begin{proposition}[Section 6.3 of \cite{heinosaariMathematicalLanguageQuantum2011}]
+	A state $\dm$ is separable iff $\forall \ew,\Tr[\dm \ew]\ge 0$. 
+	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
+	There is no entanglement witness that detects all entangled states.
+\end{proposition}
+\begin{remark}
+In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
+\end{remark}
+\begin{example}[entanglement witness for GHZ]
+	three-qubit GHZ state 
+	\cite{tothDetectingGenuineMultipartite2005}
+	\begin{equation}
+		\ew_{\ghz_3} := \frac{3}{2} \identity - \sx^{(1)}\sx^{(2)}\sx^{(3)}
+		- \frac{1}{2} \qty[
+			\sz^{(1)} \sz^{(2)} + 
+			\sz^{(2)} \sz^{(3)} + 
+			\sz^{(1)} \sz^{(3)} 
+		]
+	\end{equation}
+	This witness requires the measurement of the $\qty{\sx^{(1)},\sx^{(2)},\sx^{(3)}}$ and $\qty{\sz^{(1)},\sz^{(2)},\sz^{(3)}}$ settings.
+	The projector based witness $\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ requires four measurement settings.
+	detect genuine $n$-qubit entanglement close to $\ghz_n$
+	\begin{equation}
+		\ew_{\ghz_n} = (n-1) \identity - \sum_{k=1}^n S_k^{(\ghz_n)}
+	\end{equation}
+	$\stbz_k$ is the \nameref{def:stabilizer} ... \cite{tothEntanglementDetectionStabilizer2005}
+	Detecting Genuine Multipartite Entanglement with Two Local Measurements \cite{tothDetectingGenuineMultipartite2005}
+\end{example}
+\begin{question}
+	how far/close to the target state (entanglement witness), noise limit?
+\end{question}
+
+It is natural to ask how nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  and the \nameref{def:kernel} method (nonlinear boundary) in machine learning can be applied. 
+
+\begin{proposition}\label{thm:entanglement_witness_gme}
+	Given a state $\ket{\psi}$,
+	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness \nameref{def:gme}  near $\ket{\psi}$ with $c=5/8$ in \cref{eq:entanglement_witness}
+	% \nameref{def:genuinely_entangled}
+	% \begin{equation}
+	% 	\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
+	% \end{equation}
+	that is, $\expval{\ew_{\psi}}\ge 0$ for any separable state in $S_b$.
+\end{proposition}
+If the \nameref{def:fidelity} (quantum kernel?) of the prepared state $\dm_{\text{pre}}$ with the target state $\ket{\psi}$, i.e., $\Tr(\dm_{pre}\op{\psi})$, exceeds $5/8$, $\dm_{pre}$ possesses GME.
+It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by the direct projection on $\ket{\psi}$, as it is an entangled state.
+
+For non-stabilizer case, \cite{zhangEfficientEntanglementGeneration2021} \cite{zhuMachineLearningDerivedEntanglement2021}
+
+\subsubsection{Bell inequality witness}
+A usual approach for detecting entanglement is using Bell inequalities [??]
+\begin{definition}[Bell inequality]\label{def:bell_inequality}
+	\begin{equation}
+		a_0 = \sz, a_0' = \sx, 
+		b_0 = (\sx-\sz)/\sqrt{2},
+		b_0 = (\sx+\sz)/\sqrt{2},
+		\vb{w} = \qty{\pm 2, 1, -1, 1, 1}
+	\end{equation}
+	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
+\end{definition}
+\begin{definition}[CHSH inequality]\label{def:chsh_inequality}
+	$\chsh$ inequality (game) ...;
+	\begin{equation}
+		\qty{a_0 b_0, a_0 b_0',a_0' b_0, a_0' b_0' }
+	\end{equation}
+\end{definition}
+\begin{example}[inequality]
+	\cite{maTransformingBellInequalities2018}
+	First, there exist entangled states not violating the Bell inequalities. 
+	To be more speciﬁc, the maximally-entangled state, such as $\ket{\psi_0} = ( \ket{00} - \ket{11} ) / \sqrt{2}$ for a pair of qubits, can maximally violate the CHSH inequality. 
+	However, this tool fails under the circumstances of noise, in the form of a quantum channel. After passing through a depolarizing channel, the resulting state,	
+	\begin{equation}
+		\dm = p \op{\psi_-} + (1 - p) \frac{\identity}{4}
+	\end{equation}
+	where $0 \le p \le 1$, violates the \nameref{def:chsh_inequality} only if $p > 1/ \sqrt{2}$. However, the state is entangled when $p > 1/3$.
+\end{example}
+Another approach for detecting multipartite entanglement is using entanglement witnesses.
+Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
+These witnesses can be quite useful to detect entanglement in the vicinity of graph states.
+\begin{problem}[separability]\label{prm:separable}
+	given (input) an \textbf{unknown} state, to determine (output) separability.
+\end{problem}
+\begin{problem}[Entanglement witness with prior]
+	% \cite{zhouDetectingMultipartiteEntanglement2019}
+	Entanglement witness	
+		\begin{itemize}
+		\item \textbf{Input}: a \textbf{known} state $\ket{\psi}$, with noise
+		\item \textbf{Output}: \textsf{separable} or not \textsc{entangled} ??? $\separable_f^\ppartition$ ? $\separable_b^\ppartition$ 
+		% (decision problem?? find problem)
+	\end{itemize}
+	\textbf{difficulty}: multi($n$)-partite, high-dimensional (qudit) \cite{sciaraUniversalPartiteLevel2019}, pure/mixed state, with/out prior knowledge, universal?, non-stabilizer \cite{tothEntanglementDetectionStabilizer2005}, certain partition
+\end{problem}
+\begin{remark}[universal entanglement witness]
+	\cite{sciaraUniversalPartiteLevel2019}
+	% Since the witness tests for a specif state, a successful measurement of the operator also provides information about the state structure and phase, rather than only conﬁrming the presence of entanglement. 
+	For example, a witness specifically designed for a four-qubit compact cluster state [16] conﬁrms, when its expectation value is negative, the presence of that particular state having a very speciﬁc density function, while a positive measured expectation value of that operator only provides information that the tested state is not a compact cluster state. 
+	Indeed, the same witness, if applied to a four-qubit linear cluster or GHZ [17] states, would result in a positive measured expectation value, even though these two states are both highly entangled [17, 18]. 
+	Hence, a witness is a threshold test that can only detect the presence of a speciﬁc state. 
+	In contrast to an entanglement monotone (e.g. the entanglement entropy [6]), which determines the amount of entanglement, a witness cannot be used to quantify entanglement.	
+\end{remark}
+\begin{problem}[Certify entanglement]
+	Multipartite entanglement-structure detection
+	\begin{itemize}
+		\item \textbf{Input}: an (actual) state $\dm'$ from experiment that is close to a \textbf{known/target} (general multipartite) state $\ket{\psi}$,
+		certain partition?
+		\item \textbf{Output}: the certified lower-order entanglement among several subsystems could be still useful for some quantum information tasks.
+		entanglement structure
+	\end{itemize}
+\end{problem}
+
+
 \subsection{Tomography and trace estimation}
 % \label{sec:shadow_tomography}
 The brute force approach is to fully characterize a system by performing quantum state tomography and calculating separability measures from the recovered density matrix.
@@ -752,39 +817,6 @@ However, tomography is experimentally and computationally demanding; for a state
 \begin{theorem}[lower bound of \nameref{prm:full_tomography}?\cite{haahSampleoptimalTomographyQuantum2017}]
 	Known fundamental lower bounds [66, 73] state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace \nameref{def:distance}.
 \end{theorem}
-\begin{definition}[fidelity]\label{def:fidelity}
-	Given a pair of states (target $\dm$ and prepared $\dm'$), 
-	Uhlmann fidelity $F(\dm,\dm') : = \Tr(\sqrt{\sqrt{\dm}\dm'\sqrt{\dm}})\equiv\norm{\sqrt{\dm}\sqrt{\dm'}}_1$, where $\sqrt{\dm}$ dentoes the positive semidefinite square root of the operator $\dm$.
-	For any mixed state $\rho$ and pure state $\ket{\psi}$, $F(\dm,\op{\psi})=\sqrt{\mel{\psi}{\dm}{\psi}}\equiv \sqrt{\Tr(\dm\op{\psi})}$ which can be obtained by the Swap-test[?].
-	% \begin{equation}
-	% 	F(\ket{\psi},\ket{\psi'}) :=
-	% \end{equation}
-	% \begin{equation}
-	% 	F(\rho,\rho') : = \Tr \sqrt{\sqrt{\rho}\rho'\sqrt{\rho}}
-	% \end{equation}
-\end{definition}
-\begin{definition}[distance]\label{def:distance}
-	For mixed states, trace distance $d_{\tr}(\dm,\dm') : = \frac{1}{2} \norm{\dm-\dm'}_1$.
-	For pure states, $d_{\tr}(\ket{\psi},\ket{\psi'}) : = \frac{1}{2}\norm{\op{\psi} -\op{\psi'}}_1 = \sqrt{1-\abs{\ip{\psi}{\psi'}}^2}$.
-	% \begin{equation}
-	% 	d_{tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1
-	% \end{equation}
-	fidelity and trace distance are related by the inequalities
-	\begin{equation}
-		1-F\le D_{\tr}(\dm,\dm') \le \sqrt{1-F^2}
-	\end{equation}
-\end{definition}
-\begin{definition}[norm]\label{def:norm}
-	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
-	Euclidean norm $l_2$ norm;
-	Spectral (operator) norm $\norm{\vbx}_{\infty}$;
-	Trace norm $\norm{A}_{\Tr}\equiv\norm{A}_{1}:=\Tr(\abs{A})\equiv\Tr(\sqrt{A^\dagger A})$, $\abs{A}:=\sqrt{A^\dagger A}$, $p=1$;
-	Frobenius norm $\norm{A}_{F}:=\sqrt{\Tr(A^\dagger A)}$, $p=2$;
-	Hilbert-Schmidt norm $\norm{A}_{HS}:=?\sqrt{\sum_{i,j} A_{ij}^2 }=?\sum_{i\in I}\norm{Ae_i}_H^2$;
-	Hilbert-Schmidt inner product $\expval{A,B}_{\textup{HS}}:=\Tr(A^\dagger B)$,
-	Frobenius inner product $\expval{A,B}_{\textup{F}}:=\Tr(A^\dagger B)$?
-	(in finite-dimensionala Euclidean space, the HS norm is identical to the Frobenius norm)
-\end{definition}
 % \begin{problem}[Fidelity estimate]
 % 	defined as follows
 % 	\begin{itemize}
@@ -977,7 +1009,7 @@ The classical shadow size required to accurately approximate all reduced $r$-bod
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{an (unknown) density matrix $\dm$ (many copies)}
+    \Input{an (unknown) density matrix $\dm$ (many copies, black-box access to a circuit preparing a state)}
 	% , observables $\ob$...
     \Output{\nameref{def:classical_shadow} $\dm_{cs}$}
     \BlankLine
@@ -1111,7 +1143,7 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
         % \tcc{comment in a new line}
     {\Return $\vb{w}$} \tcp*{parameters of the separating hyperplane in the feature space}
     }
-	\tcp*{---------------------------------------------- testing phase -------------------------------------------------}
+	\tcp*{============================================= testing phase =============================================== //}
 
     \Return $ \vb{w}\cdot \vec{\sigma}<0 $: \textsf{separable} \tcp*{predict}
     \caption{Classical learning (\nameref{def:svm}) + classical shadow}
@@ -1122,7 +1154,19 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
 \subsection{Quantum trace (kernel) estimation}
 \subsubsection{Entanglement spectroscopy via quantum trace estimation}
 % \nameref{prm:trace_estimation}
-For $\Tr(\dm_A^m)$, an important application of multivariate trace estimation \cite{quekMultivariateTraceEstimation2022} is to entanglement spectroscopy \cite{johriEntanglementSpectroscopyQuantum2017} - deducing the full set of eigenvalues of $\dm_A$. The smallest eigenvalue of diagnoses whether $\psi_{AB}$ is separable or entangled \cite{horodeckiDirectDetectionQuantum2002}. \textbf{constant depth}
+For $\Tr(\dm_A^m)$, an important application of multivariate trace estimation \cite{quekMultivariateTraceEstimation2022} is to entanglement spectroscopy \cite{johriEntanglementSpectroscopyQuantum2017} - deducing the full set of eigenvalues of $\dm_A$. The smallest eigenvalue of diagnoses whether $\psi_{AB}$ is separable or entangled \cite{horodeckiDirectDetectionQuantum2002}. 
+The well-known identity (related to the replica trick originating in spin glass theory)
+\begin{equation}
+	\Tr(\U^{\pi} (\dm_1 \otimes \cdots \otimes \dm_m) ) = 
+	\Tr(\dm_1\cdots \dm_m)
+\end{equation}
+where the RHS is the multivariate trace and $\U^{\pi}$ is a unitary representation of the cyclic shift permutation.
+While the left-hand-side is ...
+% \begin{equation}
+% 	\pi: = (1,2,\dots,m).
+% \end{equation}
+We can estimate the quantities $\Re [\Tr(\dm_1\cdots \dm_m)]$ and $\Im [\Tr(\dm_1\cdots \dm_m)]$ respectively.
+to generalize the estimation beyond single-qubit states, we can either increase the width or the depth of the circuit described above.
 \begin{remark}[\cite{horodeckiDirectDetectionQuantum2002}]
 	Direct entanglement detections, can be \textbf{employed as sub-routines in quantum computation}. For example, one may consider performing or not performing a quantum operation on a given quantum system conditioned on some part of quantum data being entangled or not. In fact direct entanglement detections can be viewed as quantum computations solving an inherently quantum decision problem: given as an input n copies of decide whether is entangled. Here the \textbf{input data is quantum} and such a decision problem cannot even be even formulated for classical computers. 
 	% Nonetheless the problem is perfectly well deﬁned for quantum computers.
@@ -1136,7 +1180,15 @@ For $\Tr(\dm_A^m)$, an important application of multivariate trace estimation \c
 \end{definition}
 
 \begin{theorem}[\cite{quekMultivariateTraceEstimation2022}]\label{thm:multivariate_trace}
-	multivariate \nameref{prm:trace_estimation} can be implemented in constant quantum depth, with only linearly-many controlled two-qubit gates and a linear amount of classical pre-processing	
+	multivariate \nameref{prm:trace_estimation} can be implemented in \textbf{constant depth}, with only linearly-many controlled two-qubit gates and a linear amount of classical pre-processing.
+	copies $\bigO(\epsilon^{-2}\log( \delta^{-1}))$ ...
+\end{theorem}
+\begin{theorem}
+	Let $\qty{\dm_1,\dots,\dm_m}$ be a set of $p$-qubit states, and fix $\epsilon > 0$ and $\delta \in (0,1)$.
+	There exists a random variable $\hat{T}_p$ that can be computed using $\bigO(\bigO(\epsilon^{-2}\log( \delta^{-1})))$ repetitions of a \textbf{constant-depth} quantum circuit consisting of $\bigO(mp)$ three-qubit gates, and satisfies 
+	\begin{equation}
+		\probability\qty(\abs{\hat{T}_p - \Tr(\dm_1\cdots\dm_m)}\le \epsilon) \ge 1 -\delta.
+	\end{equation}
 \end{theorem}
 % Multivariate trace estimation in constant quantum depth
 % \cite{quekMultivariateTraceEstimation2022}
@@ -1316,12 +1368,12 @@ c.f. \nameref{prm:full_tomography} (Stokes parameters) \cref{eq:stokes_tomograph
 
 \begin{table}[!ht]
 	\centering
-	\begin{tabular}{c|c|c}
-		& observables & weights \\
+	\begin{tabular}{c|c|c|c}
+		& observables & weights & input \\
 		\hline
-		entanglement witness & & \\  
-		Bell (CHSH) inequality & & \\  
-		**spectrum?? & & \\  
+		entanglement witness & & & known \\  
+		Bell (CHSH) inequality & & unknown \\  
+		entangle **spectrum?? & & unknown \\  
 		\hline
 	\end{tabular}
 	\caption{ansatz}
@@ -1429,6 +1481,8 @@ future: experimental (photonic) implementation with a few qubits (generation, ve
 \appendix
 
 \section{Machine learning background}
+% As these areas are extremely broad, we cannot completely review all known literature; we will simply give pointers to some of the best known and most relevant results.
+
 % In this work, we restrict ourself to supervised learning (mainly SVM), where we are given a set of labeled data for training to predict labels of new data.
 
 Notations:
@@ -1458,8 +1512,6 @@ nonlinear boundary. map to a higher dimensional (feature) space, in which data i
 		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
 	\end{equation}
 	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
-\end{definition}
-\begin{definition}[positive, semidefinite]\label{def:psd}
 	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix, i.e. all eigenvalues are non-negative
 \end{definition}
 \begin{example}[kernels]
@@ -1550,8 +1602,11 @@ denote a group by $\group$ and a subgroup $\subgroup$.
 \end{definition}
 \begin{definition}[Stabilizer]\label{def:stabilizer}
 	An observable $S_k$ is a stabilizing operator of an $n$-qubit state $\ket{\psi}$ if the state $\ket{\psi}$ is an eigenstate of $S_k$ with eigenvalue 1,
+
+	A stabilizer set $S = \qty{ S_1, \dots , S_n}$ consisting of n mutually commuting and independent stabilizer operators is called the set of stabilizer “generators”.
 \end{definition}
 Many highly entangled $n$-qubit states can be uniquely defined by $n$ stabilizing operators which are locally measurable, i.e., they are products of Pauli matrices.
+A stabilizer $S_i$ is an n-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
 
 \subsubsection{quantum neural network}\label{sec:quantum_neural_network}
 % \subsection{Unsupervised: PCA}
