@@ -347,6 +347,7 @@ Classically, the hardness of determining the bipartite separability.
 	% The problem of determining whether a given quantum state is entangled lies at the heart of quantum information processing, which is an NP-hard problem in general.
 	The weak membership problem for the convex set of separable normalized bipartite density matrices is \nameref{def:np}-Hard.
 	\textbf{Input}: unknown state?? formal definition of the problem
+	\cite{ioannouComputationalComplexityQuantum2007}
 	% \begin{itemize}
 	% 	\item \textbf{Input}: ??
 	% 	\item \textbf{Output}: ??
@@ -375,6 +376,7 @@ If the PPT condition is violated - i.e. $\dm_{AB}^{\T_A}$ does have negative eig
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 	Another widely used one is the k-symmetric extension hierarchy [15, 16], which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
 \end{theorem}
+However, up to now, no general solution for the separability problem is known.
 Similar to the PPT condition, the $p_3$-PPT condition applies to mixed states and is completely independent of the state in question. This is a key distinction from entanglement witnesses, which can be more powerful, but which \textbf{usually require detailed prior information about the state}.
 From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_{AB}$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
 c.f. \nameref{thm:multivariate_trace}, \nameref{def:entanglement_spectroscopy}
@@ -453,8 +455,10 @@ To benchmark our technological progress towards the generation of largescale gen
 	\begin{equation*}
 		\ket{\ghz_8},\ket{\ghz_{62}},\ket{\ghz_{44}},\ket{\ghz_{422}},\ket{\ghz_{2222}}.
 	\end{equation*}
+	The GHZ-state is generally considered as the state with the genuine 3partite entanglement, while the W-state has the peculiar property of having the maximal expected amount of two-partite entanglement if one party is traced out.
+
 	% W state
-	Schmidt rank, PPT criteria, entanglement witness
+	Schmidt rank, PPT criteria, entanglement witness...
 \end{example}
 
 \begin{figure}[!ht]
@@ -730,6 +734,18 @@ It is natural to ask how nonlinear entanglement witness \cite{guhneNonlinearEnta
 \end{proposition}
 If the \nameref{def:fidelity} (quantum kernel?) of the prepared state $\dm_{\text{pre}}$ with the target state $\ket{\psi}$, i.e., $\Tr(\dm_{pre}\op{\psi})$, exceeds $5/8$, $\dm_{pre}$ possesses GME.
 It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by the direct projection on $\ket{\psi}$, as it is an entangled state.
+\begin{table}[!ht]
+\centering
+\begin{tabular}{c|c|c|c|c|c|c|c|c}
+	 & $\ket{\ghz_3}$ & $\ket{W_3}$ & $\ket{CL_3}$ & $\ket{\psi_2}$ & $\ket{\D_{2,4}}$ & $\ket{\ghz_n}$ & $\ket{W_3}$ & $\ket{G_n}$ \\
+	\hline
+	$\alpha$ & $1/2$ & $2/3$ & $1/2$ & $3/4$ & $2/3$ & $1/2$ & $(n-1)/n$ & $1/2$ \\
+	maximal $p_{\noise}$ & 4/7 & 8/21 & 8/15 & 4/15 & 16/45 & $1/2 \cdot (1-1/2^n)^{-1}$ & & \\
+	local measurements & 4 & 5 & 9 & 15 & 21 & N+1 & $2N-1$ & depend on graphs \\
+	\hline
+\end{tabular}
+\caption{\cite{guhneEntanglementDetection2009}}
+\end{table}
 
 For non-stabilizer case, \cite{zhangEfficientEntanglementGeneration2021} \cite{zhuMachineLearningDerivedEntanglement2021}
 
@@ -750,6 +766,10 @@ A usual approach for detecting entanglement is using Bell inequalities [??]
 		\qty{a_0 b_0, a_0 b_0',a_0' b_0, a_0' b_0' }
 	\end{equation}
 \end{definition}
+\begin{remark}
+	However, even for two-qubit systems there exist entangled states which do not violate any Bell inequality.
+	Bell inequalities are not suited to this aim in general. Multiseparable and biseparable states violate known Bell inequalities less than npartite Greenberger-Horne-Zeilinger (GHZ) states. However, for n > 3 there exist even pure n-partite entangled states with a lower violation than biseparable states. \cite{bourennaneWitnessingMultipartiteEntanglement2004}
+\end{remark}
 \begin{example}[inequality]
 	\cite{maTransformingBellInequalities2018}
 	First, there exist entangled states not violating the Bell inequalities. 
@@ -776,6 +796,8 @@ These witnesses can be quite useful to detect entanglement in the vicinity of gr
 	\end{itemize}
 	\textbf{difficulty}: multi($n$)-partite, high-dimensional (qudit) \cite{sciaraUniversalPartiteLevel2019}, pure/mixed state, with/out prior knowledge, universal?, non-stabilizer \cite{tothEntanglementDetectionStabilizer2005}, certain partition
 \end{problem}
+
+% \subsubsection{universal?}
 \begin{remark}[universal entanglement witness]
 	\cite{sciaraUniversalPartiteLevel2019}
 	% Since the witness tests for a specif state, a successful measurement of the operator also provides information about the state structure and phase, rather than only conﬁrming the presence of entanglement. 
@@ -1154,7 +1176,7 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
 \subsection{Quantum trace (kernel) estimation}
 \subsubsection{Entanglement spectroscopy via quantum trace estimation}
 % \nameref{prm:trace_estimation}
-For $\Tr(\dm_A^m)$, an important application of multivariate trace estimation \cite{quekMultivariateTraceEstimation2022} is to entanglement spectroscopy \cite{johriEntanglementSpectroscopyQuantum2017} - deducing the full set of eigenvalues of $\dm_A$. The smallest eigenvalue of diagnoses whether $\psi_{AB}$ is separable or entangled \cite{horodeckiDirectDetectionQuantum2002}. 
+For $\Tr(\dm_A^m)$, an important application of multivariate trace estimation \cite{quekMultivariateTraceEstimation2022} is to entanglement spectroscopy \cite{ekertDirectEstimationsLinear2002} \cite{johriEntanglementSpectroscopyQuantum2017} \cite{elbenMixedstateEntanglementLocal2020} - deducing the full set of eigenvalues of $\dm_A$. The smallest eigenvalue of diagnoses whether $\psi_{AB}$ is separable or entangled \cite{horodeckiDirectDetectionQuantum2002}. 
 The well-known identity (related to the replica trick originating in spin glass theory)
 \begin{equation}
 	\Tr(\U^{\pi} (\dm_1 \otimes \cdots \otimes \dm_m) ) = 
@@ -1411,6 +1433,11 @@ contrived problem (engineered dataset)? for exponential speedup
 \subsubsection{Data preparation}
 multi-partite entangled state: generate synthetic (engineered) data from (random graph?).
 separable state from randomly ...
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=.4\linewidth]{noisy_bell.png}
+	\caption{Bell state with white noise }
+\end{figure}
 
 \subsubsection{Hyperparameters and settings}
 We consider a set of different regularization parameters,...
