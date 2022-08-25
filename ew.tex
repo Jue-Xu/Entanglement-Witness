@@ -99,6 +99,7 @@ floatfix,
 \newcommand{\qjs}{\text{QJS}}
 \newcommand{\kl}{D_\text{KL}}
 \newcommand{\shadow}{\textup{shadow}}
+\newcommand{\entangled}{\textsf{entangled}}
 \newcommand{\noise}{\text{noise}}
 \newcommand{\qnn}{\textup{QNN}}
 \newcommand{\ntk}{\textup{NT}}
@@ -137,7 +138,7 @@ floatfix,
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%
-\title{Towards efficient and universal  entanglement detection}
+\title{Towards efficient and generic entanglement detection}
 \author{Jue Xu}
 \email{juexu@cs.umd.edu}
 \author{Qi Zhao}
@@ -372,10 +373,19 @@ The well-known PPT condition checks if the partially transposed (PT) density mat
 If the PPT condition is violated - i.e. $\dm_{AB}^{\T_A}$ does have negative eigenvalues - $A$ and $B$ must be entangled.
 \begin{theorem}[PPT criterion]\label{thm:ppt}
 	\cite{horodeckiSeparabilityMixedStates1996}
-	the positive partial transpose (\ppt) criterion, saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
+	the positive partial transpose (\ppt) criterion (The state is entangled iff the smallest eigenvalue of partial transpose is negative.), saying that a separable state (\nameref{def:bipartite_separable}) must have PPT?.
 	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
 	Another widely used one is the k-symmetric extension hierarchy [15, 16], which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
 \end{theorem}
+For n-qubit general system, in order to apply the PPT criterion, the full density matrix must be available, in order to obtain the minimum eigenvalue of the partial-transposed density matrix. However, state tomography requires an exponential number of measurements.
+\begin{remark}
+	he minimal eigenvalue (the absolution of this value for entangled states is named as negativity) , can be obtained analytically \cite{maTransformingBellInequalities2018}
+	\begin{equation}
+		\lambda_{\min}\qty(\dm_{\theta,\phi}^{\T_B}) = 
+		(1-p)/4 - p \cos(\theta/2) \sin(\theta/2)
+	\end{equation}
+\end{remark}
+
 However, up to now, no general solution for the separability problem is known.
 Similar to the PPT condition, the $p_3$-PPT condition applies to mixed states and is completely independent of the state in question. This is a key distinction from entanglement witnesses, which can be more powerful, but which \textbf{usually require detailed prior information about the state}.
 From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_{AB}$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
@@ -694,6 +704,8 @@ where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew
 	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
 	There is no entanglement witness that detects all entangled states.
 \end{proposition}
+Tomography is necessary for universal entanglement detection with single-copy observables (non-adaptive schemes)
+\cite{luTomographyNecessaryUniversal2016}
 \begin{remark}
 In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
 \end{remark}
@@ -752,20 +764,26 @@ For non-stabilizer case, \cite{zhangEfficientEntanglementGeneration2021} \cite{z
 \subsubsection{Bell inequality witness}
 A usual approach for detecting entanglement is using Bell inequalities [??]
 \begin{definition}[Bell inequality]\label{def:bell_inequality}
+	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
+\end{definition}
+\begin{definition}[CHSH inequality]\label{def:chsh_inequality}
+	$\chsh$ inequality (game) ...; 
+	\begin{equation}
+		\qty{\expval{a_0 b_0}, \expval{a_0 b_0'}, \expval{a_0' b_0}, \expval{a_0' b_0'} }
+	\end{equation}
+	features as the input 
 	\begin{equation}
 		a_0 = \sz, a_0' = \sx, 
 		b_0 = (\sx-\sz)/\sqrt{2},
 		b_0 = (\sx+\sz)/\sqrt{2},
-		\vb{w} = \qty{\pm 2, 1, -1, 1, 1}
-	\end{equation}
-	Bell inequalities for graph states $\abs{\sum_{\sigma\in S} \expval{\sigma}}\le C?$...
-\end{definition}
-\begin{definition}[CHSH inequality]\label{def:chsh_inequality}
-	$\chsh$ inequality (game) ...;
-	\begin{equation}
-		\qty{a_0 b_0, a_0 b_0',a_0' b_0, a_0' b_0' }
 	\end{equation}
 \end{definition}
+a linear Bell-like predictor by generalizing the CHSH operator
+\begin{equation}
+	\ew_{ml} := w_0 + w_1 a_0 b_0 +  w_2 a_0 b_0' +  w_3 a_0' b_0 +  w_4 a_0' b_0'
+	\quad, \vb{w} = \qty{\pm 2, 1, -1, 1, 1}
+\end{equation}
+where the coefﬁcients (or weights) $\vb{w}$ are determined by machine learning.
 \begin{remark}
 	However, even for two-qubit systems there exist entangled states which do not violate any Bell inequality.
 	Bell inequalities are not suited to this aim in general. Multiseparable and biseparable states violate known Bell inequalities less than npartite Greenberger-Horne-Zeilinger (GHZ) states. However, for n > 3 there exist even pure n-partite entangled states with a lower violation than biseparable states. \cite{bourennaneWitnessingMultipartiteEntanglement2004}
@@ -936,6 +954,7 @@ with training data:
 
 		\item \textbf{quantum data}: quantum state $\ket{\psi}$ or $\dm$ from real-world experiments or designed quantum circuits $\U$.
 		no input problem? more efficient? for quantum algorithms
+		(composed coherently to collect quantum data)
 
 		% \item graph state encoding: \nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
 
@@ -987,7 +1006,12 @@ related works
 	The idea is to feed the classifier by a large amount of sampled trial states (feature: synthetic density matrix with noise flatten as a real vector $\vbx\in\realnumber^{d_A^2d_B^2-1}$) as well as their corresponding class labels (separable or entangled by \nameref{thm:ppt}, CHA), and then train the classifier to predict the class labels of new states that it has not encountered before.
 	Previous methods \textbf{only detect a limited part of the state space}, e.g. different entangled states often require different \nameref{def:entanglement_witness}. In contrast, this classifier can handle a variety?? of input states once properly trained \cref{fig:entangle}.
 
-	\item Bell inequlaity and NN \cite{maTransformingBellInequalities2018}
+	\item Bell inequlaity and NN \cite{maTransformingBellInequalities2018}. 
+	% However, the challenge is to ﬁnd a reliable way for labelling the quantum states in the training set.
+	Overall, for scaling up this method for detecting higher-dimensional quantum entanglement, the major challenge is related to a lack of reliable method for labeling the entanglement.
+	We have constructed such a universal state classiﬁer for a pair of qubits; we ﬁnd that the performance depends heavily on the testing sets; the major source of error comes from the data near the boundary between entangled and separable states.
+	Tomographic predictors make use of all information of a given quantum state and is used to benchmark the performance of Belllike predictors, which employs a subset of non-orthogonal measurements setting.
+	\cite{luSeparabilityEntanglementClassifierMachine2018} reported that they independently combined machine learning and semideﬁnite programming to train their predictors as quantum state classiﬁers. Using all information without any prior knowledge, the error of their predictor is always around 10\% on general 2-qubit system. However, our tomographic predictor performs below 2\% on the same ensembles with 3000 hidden neurons.
 
 	\item SVM, (universal), 4 qubit \cite{vintskevichClassificationFourqubitEntangled2022}
 
@@ -1239,6 +1263,8 @@ to generalize the estimation beyond single-qubit states, we can either increase 
 \end{remark}
 
 \subsubsection{Estimate entanglement witness by quantum machine learning}
+though, that while there is no large advantage in query complexity, a substantial quantum advantage in computational complexity is possible.
+
 The quantum ML algorithm accesses the quantum channel $\mathcal{E}_\dm$ multiple times to obtain multiple copies of the underlying quantum state $\dm$. Each access to $\mathcal{E}_\dm$ allows us to obtain one copy of $\dm$. Then, the quantum ML algorithm performs a sequence of measurements on the copies of $\dm$ to accurately predict $\Tr(P_x \dm ), \forall x \in \qty{ I, X, Y, Z }^n$.
 \begin{algorithm}[H]
     \DontPrintSemicolon
@@ -1311,6 +1337,11 @@ related works:
 % \subsubsection{Variational quantum kernel estimation (hybrid)}
 
 \subsection{Variational (hybrid) quantum algorithms}
+The quantum extension of this problem (classficiation/pattern recognition) is to replace the data points $\vbx_i$ with density matrices of quantum states $\dm_i$. 
+Specifically, a quantum state classifier outputs a “label” associated with the state, for example, $\entangled$ or ``unentangled".
+In actual experiments, we don't know entries of a density matrix.
+Instead, we need measurements or \nameref{def:classical_shadow} as features of machine learning algorithms.
+
 \subsubsection{Variational entanglement witness (ansatz)}
 an ansatz for \nameref{def:entanglement_witness} \cite{zhuMachineLearningDerivedEntanglement2021} (graph state entanglement)
 \begin{equation}
@@ -1453,9 +1484,22 @@ separable state from randomly ...
 QuTiP library \cite{johanssonQuTiPPythonFramework2013}
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=.5\linewidth]{three_qubit.png}
-	\caption{Compare different entanglement witnesses: GHZ, fully separable}
+	\begin{subfigure}{0.49\textwidth}
+	\centering
+		% \includegraphics[width=.9\linewidth]{.pdf}
+	\includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
+	\end{subfigure}
+	\begin{subfigure}{0.49\textwidth}
+	\centering
+	\includegraphics[width=.9\linewidth]{./notebook/two_qubit_PPT_hist.png}
+	\end{subfigure}
 \end{figure}
+% \begin{figure}[!ht]
+% 	\centering
+% 	\includegraphics[width=.5\linewidth]{./notebook/three_qubit_hist.png}
+% 	% \includegraphics[width=.5\linewidth]{three_qubit.png}
+% 	\caption{Compare different entanglement witnesses: GHZ, fully separable}
+% \end{figure}
 
 \subsubsection{Hyperparameters and settings}
 We consider a set of different regularization parameters,...
