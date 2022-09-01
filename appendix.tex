@@ -1,0 +1,366 @@
+% !TEX root = ./ew.tex
+
+
+\section{Definitions}\label{sec:definitions}
+\begin{definition}[density matrix]\label{def:density_matrix}
+	pure state $\ket{\psi}$;
+	A quantum state $\dm$ is defined to be a positive operator $ \dm \in \text{End}(V )$ with $\Tr( \dm ) = 1$.
+	density matrix $\dm$ (trace one, Hermitian, PSD)...
+\end{definition}
+\begin{definition}[POVM]\label{def:povm}
+	A positive-operator valued measurement (POVM) $M$ consists of a set of positive operators that sum to the identity operator $\identity$. 
+	When a measurement $M = \qty{ E_1 , \dots , E_k }$ is applied to a quantum state $\dm$, the outcome is $i \in [k]$ with probability $p_i = \tr( \dm E_i )$.
+	observables ... $\expectation[x]\equiv\expval{\ob_x}:=\tr(\ob_x\dm)$
+\end{definition}
+\begin{definition}[positive, semidefinite]\label{def:psd}
+	denoted $X \preceq Y $ provided $Y-X $ is positive
+\end{definition}
+\begin{definition}[partial trace]\label{def:partial_trace}
+	% partial trace;
+	reduced density matrix $\dm_A = \Tr_B(\dm_{AB})$
+\end{definition}
+% \begin{definition}[partial trace]
+% 	partial trace
+% \end{definition}
+\begin{definition}[partial transpose]\label{def:partial_transpose}
+	\cite{horodeckiSeparabilityMixedStates1996}
+	The partial transpose (PT) operation - acting on subsystem $A$ - is defined as
+	\begin{equation}
+		\op{k_A,k_B}{l_A,l_B}^{\T_A}
+		:= \op{l_A,k_B}{k_A,l_B}
+	\end{equation}
+	where $\qty{\ket{k_A,k_B}}$ is a product basis of the joint system AB.
+\end{definition}
+\begin{definition}[maximally entangled]
+	a state vector is \emph{maximually entangled} $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
+	$\Tr_A(\op{\psi})=\frac{1}{2}$.
+\end{definition}
+\begin{definition}[entropy]\label{def:entropy}
+	In quantum mechanics (information), the von Neumann \emph{entropy} of a density matrix is $H_N(\dm): = -\Tr(\dm \log \dm)=-\sum_i\lambda_i\log(\lambda_i)$;
+	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
+	relative entropy (\nameref{def:divergence})
+\end{definition}
+\begin{definition}[entanglement entropy]\label{def:entanglement_entropy}
+	The bipartite \emph{von Neumann entanglement entropy} $S$
+	is defined as the von Neumann entropy of either of
+	its reduced density matrix $\dm_A$.
+	For a pure state $\dm_{AB}=\op{\Psi}{\Psi}_{AB}$,
+	it is given by
+	\begin{equation}
+		E(\Psi_{AB}) 
+		= S(\dm_A)
+		= -\Tr(\dm_A \log \dm_A)
+		= -\Tr(\dm_B \log \dm_B)
+		= S(\dm_B)
+	\end{equation}
+	where $\dm_A= \Tr_B(\dm_{AB})$ and $\dm_B = \Tr_A(\dm_{AB})$ 
+	are the reduced density matrices for each partition.
+	With Schmidt decomposition (\cref{eq:schmidt_decomposition}), the entropy of entanglement is simply $-\sum_ip_i^2\log(p_i)$.
+	the $n$th Renyi entropy,
+	$S_n = \frac{1}{n-1} \log (R_n)$
+	% \begin{equation}
+	% 	S_n = \frac{1}{n-1} \log (R_n)
+	% \end{equation}
+	where $R_n = \Tr(\dm^n_A)$
+\end{definition}
+
+
+% \subsubsection{Distance measures}\label{sec:distance_measure}
+\begin{definition}[fidelity]\label{def:fidelity}
+	Given a pair of states (target $\dm$ and prepared $\dm'$), 
+	Uhlmann fidelity $F(\dm,\dm') : = \Tr(\sqrt{\sqrt{\dm}\dm'\sqrt{\dm}})\equiv\norm{\sqrt{\dm}\sqrt{\dm'}}_1$, where $\sqrt{\dm}$ dentoes the positive semidefinite square root of the operator $\dm$. (infidelity $1-F(\dm,\dm')$)
+	For any mixed state $\rho$ and pure state $\ket{\psi}$, $F(\dm,\op{\psi})=\sqrt{\mel{\psi}{\dm}{\psi}}\equiv \sqrt{\Tr(\dm\op{\psi})}$ which can be obtained by the Swap-test[?].
+	linear fidelity or overlap $F(\dm,\dm'):=\tr(\dm\dm')$.
+	% \begin{equation}
+	% 	F(\ket{\psi},\ket{\psi'}) :=
+	% \end{equation}
+	% \begin{equation}
+	% 	F(\rho,\rho') : = \Tr \sqrt{\sqrt{\rho}\rho'\sqrt{\rho}}
+	% \end{equation}
+\end{definition}
+different distance measures \cite{badescuQuantumStateCertification2017}
+\begin{definition}[norm]\label{def:norm}
+	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
+	Euclidean norm $l_2$ norm;
+	Spectral (operator) norm $\norm{\vbx}_{\infty}$;
+	Trace norm $\norm{A}_{\Tr}\equiv\norm{A}_{1}:=\Tr(\abs{A})\equiv\Tr(\sqrt{A^\dagger A})$, $\abs{A}:=\sqrt{A^\dagger A}$, $p=1$;
+	Frobenius norm $\norm{A}_{F}:=\sqrt{\Tr(A^\dagger A)}$, $p=2$;
+	Hilbert-Schmidt norm $\norm{A}_{HS}:=\sqrt{\sum_{i,j} A_{ij}^2 }=?\sum_{i\in I}\norm{Ae_i}_H^2$;
+	Hilbert-Schmidt inner product $\expval{A,B}_{\textup{HS}}:=\Tr(A^\dagger B)$,
+	Frobenius inner product $\expval{A,B}_{\textup{F}}:=\Tr(A^\dagger B)$?
+	(in finite-dimensionala Euclidean space, the HS norm is identical to the Frobenius norm)
+	Although the Hilbert-Schmidt distance is arguably not too meaningful, operationally, one can use Cauchy-Schwarz to relate it to the very natural trace distance.
+\end{definition}
+\begin{definition}[distance]\label{def:distance}
+	For mixed states, trace distance $d_{\tr}(\dm,\dm') : = \frac{1}{2} \norm{\dm-\dm'}_1$.
+	For pure states, $d_{\tr}(\ket{\psi},\ket{\psi'}) : = \frac{1}{2}\norm{\op{\psi} -\op{\psi'}}_1 = \sqrt{1-\abs{\ip{\psi}{\psi'}}^2}$.
+	% \begin{equation}
+	% 	d_{tr}(\rho,\rho') : = \frac{1}{2} \norm{\rho-\rho'}_1
+	% \end{equation}
+	fidelity and trace distance are related by the inequalities
+	\begin{equation}
+		1-F\le D_{\tr}(\dm,\dm') \le \sqrt{1-F^2}
+	\end{equation}
+	variation distance of two distribution $d_{var}(p,p') : = \frac{1}{2} \sum_i \abs{p_i-p_i'} = \frac{1}{2} \norm{p-p'}_1$.
+	% It also has an operational meaning: it is the greatest probability with which one can discriminate a draw from p and a draw from q.
+	$l_2$ distance ... Hellinger distance ... HS distance $D_{\text{HS}}(\dm,\dm'): = \norm{\dm-\dm'}_{\text{HS}}=\sqrt{\Tr((\dm-\dm')^2)}$
+	% As a probability metric, the $l_2$ distance is somewhat unnatural. For example, it does not satisfy the “data processing inequality”, meaning that there is a stochastic operation that increases $l_2$ distance. However it is by far the easiest distance to calculate, as it is a simple polynomial in p and q; further, it can be related to the total variation distance
+\end{definition}
+
+
+\begin{definition}[input model]\label{def:input_model}
+	several common input (encoding) models in quantum algorithms: 
+	\begin{itemize}
+		% \item qubit (basic) encoding?: given a vector $\vb{z}\in\integer^d$, 
+		% $\ket{\vb{z}}=\bigotimes_i^d \ket{\vbx_i}$ where $\vbx_i$ is the binary representation of $z_i$,
+		% need $\bigO(d\cdot \log(\max(z_i)))$ (not space efficient)
+
+		% \item phase encoding?
+
+		\item \textbf{amplitude encoding}: given a normalized vector $\vbx\in\realnumber^d$, the quantum state $\ket{\vbx}=\sum_z^d x_z\ket{z}$. 
+		need $\log(d) $ qubits for a data point; 
+		In general, it is hard to prepare such state. (subject to dequantization \cite{tangQuantumPrincipalComponent2021}). 
+		typical encoding method for quantum machine learning for classical problems (such as image classification).
+		% qubit (basic) encoding (inefficient? space)
+
+		\item \textbf{unitary encoding}: quantum simulation (Hamiltonian); quantum random walk (adjacency matrix); oracle (controlled) unitary, e.g., quantum phase estimation;
+		\nameref{def:graph_state} encoding (discrete, efficient in space/time?, isomorphism?)
+
+		\item \textbf{quantum data}: quantum state $\ket{\psi}$ or $\dm$ from real-world experiments or designed quantum circuits $\U$.
+		no input problem? more efficient? for quantum algorithms
+		(composed coherently to collect quantum data)
+
+		% \item graph state encoding: \nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
+
+		% \item (quantum) oracle: $\oracle \ket{i,a}=\ket{i,a+x_i}$; quantum oracle: unitary and controlled unitary
+	\end{itemize}
+\end{definition}
+
+
+% \subsection{Stabilizer formalism}\label{sec:stabilizer_formalism}
+denote a group by $\group$ and a subgroup $\subgroup$. 
+\begin{definition}[Pauli group]
+\end{definition}
+\begin{definition}[Clifford group]\label{def:clifford}
+\end{definition}
+\begin{definition}[Stabilizer]\label{def:stabilizer}
+	An observable $S_k$ is a stabilizing operator of an $n$-qubit state $\ket{\psi}$ if the state $\ket{\psi}$ is an eigenstate of $S_k$ with eigenvalue 1,
+
+	A stabilizer set $S = \qty{ S_1, \dots , S_n}$ consisting of n mutually commuting and independent stabilizer operators is called the set of stabilizer “generators”.
+\end{definition}
+Many highly entangled $n$-qubit states can be uniquely defined by $n$ stabilizing operators which are locally measurable, i.e., they are products of Pauli matrices.
+A stabilizer $S_i$ is an n-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
+
+\section{Machine learning background}
+% As these areas are extremely broad, we cannot completely review all known literature; we will simply give pointers to some of the best known and most relevant results.
+
+% In this work, we restrict ourself to supervised learning (mainly SVM), where we are given a set of labeled data for training to predict labels of new data.
+
+Notations:
+The (classical) training data (for supervised learning) is a set of $m$ data points $\qty{(\vbx^{(i)}, y^{(i)})}^{m}_{i=1}$ 
+where each data point is a pair $(\vbx,y)$.
+Normally, the input (e.g., an image) $\vbx:= (x_1,x_2,\dots,x_d) \in \realnumber^d$  is a vector where $d$ is the number of \emph{features}
+and its \emph{label} $y\in\Sigma$ is a scalar with some discrete set $\Sigma$ of alphabet/categories. 
+For simplicity and the purpose of this paper, we assume $\Sigma=\qty{-1,1}$ (binary classification).
+
+
+\subsection{Support vector machine}\label{sec:svm}
+SVM is a typical supervised learning algorithm for classification. Taking the example of classifying cat/dog images, supervised learning means we are given a dataset in which every image is labeled either a cat or a dog such that we can find a function classifying new images with high accuracy. More precisely,  the training dataset is a set of pairs of features X and their labels y. In the image classification case, features are obtained by transforming all pixels of an image into a vector. In SVM, we want to find a linear function, that is a hyperplane which separates cat data from dog data. So, the prediction label is given by the sign of the inner product (projection) of the hyperplane and the feature vector. We can observe that the problem setting of image classification by SVM is quite analogous to entanglement detection, where input data are quantum states now and the labels are either entangled or separable.
+
+
+\begin{definition}[SVM]\label{def:svm}
+	Given a set of (binary) labeled data,
+	support vector machine (SVM) is designed to
+	find a hyperplane (a linear function) such that maximize the margin between two partitions...
+	\begin{equation}
+		\max_{\vb{w}} 
+		....
+	\end{equation}
+\end{definition}
+
+\subsubsection{kernel method}
+However, note that SVM is only a linear classifier. while most real-world data, such as cat/dog images and entangled/separable quantum states are not linearly separable. For example, with this two dimension dataset, we are unable to find a hyperplane to separate red points from the purple points very well. Fortunately, there is a very useful tool called kernel method or kernel trick to remedy this drawback. The main idea is mapping the features to a higher dimensional space such that  they can be linearly separated in the high dimensional feature space. Just like this example, two dimensional data are mapped to the three dimensional space. Now, we can easily find the separating plane. With SVM and kernel methods, we expect to find a generic and flexible way for entanglement detection.
+\nameref{def:kernel}
+\begin{definition}[kernel]\label{def:kernel}
+	In general, the kernel function $\kernel:\mathcal{X}\times \mathcal{X} \to \realnumber$ measures the similarity between two input data points by an inner product
+	\begin{equation}
+		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
+	\end{equation}
+	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
+	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix, i.e. all eigenvalues are non-negative
+\end{definition}
+\begin{example}[kernels]
+	Some common kernels: 
+	the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map $\phi(\vbx)$ ...
+	The Gaussian kernel
+	$\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ 
+		% \begin{equation}
+		% 	\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
+		% \end{equation}
+	with an infinite dimensional feature map $\phi(\vbx)$.
+	An important feature of kernel method is that kernels can be computed efficiently without evaluating feature map (might be infinite dimension) explicitly.
+	% \begin{itemize}
+	% 	\item \emph{Gaussian kernel}; 
+	% 	\begin{equation}
+	% 		\kernel_{\text{gaus}}(\vbx,\vbx') := \exp(-\norm{\vbx-\vbx'}^2/(2\beta))
+	% 	\end{equation}
+	% 	note that infinite dimensional feature map
+
+		% \item \emph{graph kernel} \cite{kriegeSurveyGraphKernels2020}: given a pair of graphs $(\graph,\graph')$
+		% \begin{equation}
+		% 	\kernel (\graph,\graph')  =
+		% \end{equation}
+		% quantum graph kernel $\kernel (\graph,\graph')  = \abs{\ip{\graph}{\graph'}}^2$ ??
+		% \cite{baiQuantumJensenShannon2015}
+
+		% \item quantum kernel (transition amplitude / quantum propagator);
+		% \begin{equation}
+		% 	k_Q(\rho,\rho') := \abs{\ip{\phi(x)}{\phi(x')}}^2 =\abs{\mel{0}{\U_{\phi(x)}^\dagger \U_{\phi(x')} }{0}}^2 = \Tr(\rho\rho')
+		% \end{equation}
+		% with quantum feature map $\phi(x): \mathcal{X}\to \op{\phi(x)}$
+
+		% \item \emph{shadow kernel}:
+		% given two density matrices $\rho$ and $\rho'$
+		% \begin{equation}
+		% 	k_{\shadow}(\rho,\rho') := 
+		% \end{equation}
+
+	% 	\item neural tagent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017}
+	% \end{itemize}
+\end{example}
+
+similarity measures? advantages? why? (isomorphism?)
+\begin{definition}[divergence]\label{def:divergence}
+	KL divergence (relative \nameref{def:entropy}): measure the distance (similarity) between two probability distributions:
+	\begin{equation}
+		\kl (P || Q) := \sum P(x) \log (P(x)/Q(x))
+	\end{equation}
+	symmetric version: Jensen-Shannon divergence (machine learning)
+	\begin{equation}
+		\jsd (P || P') := \frac{1}{2} \qty(\kl(P|| M) + \kl(P'||M))
+		\equiv H_S(M)-\frac{1}{2} (H_S(P) - H_S(P') ) 
+	\end{equation}
+	where $M=(P+P')/2$ and Shannon \nameref{def:entropy} $H_S$.
+	Analogously, quantum Jensen-Shannon divergence $D_{\qjs}$ of two density matrices can be defined...
+	\begin{equation}
+		D_{\qjs}(\dm||\dm'):= 
+		H_V(\dm_M) - \frac{1}{2} (H_V(\dm) - H_V(\dm') ) 
+	\end{equation}
+	as a quantum graph kernel ($\dm$ induced by quantum random walk)
+\end{definition}
+\begin{definition}[geometric difference]\label{def:geometric_difference}
+	\begin{equation}
+		g(K^1|| k^2) = \sqrt{\norm{\sqrt{K^2} (K^1)^{-1}\sqrt{K^2}}_{\infty}}
+	\end{equation}
+	where $\norm{\cdot}_{\infty}$ is the spectral \nameref{def:norm}.
+\end{definition}
+
+\subsubsection{Graph kernel}
+\begin{definition}[graph property]\label{def:graph_property}
+	% The setting of graph property testing provides a natural class of partial graph properties.
+	monotone ...
+\end{definition}
+\begin{example}[colorable]\label{exm:colorable}
+	$k$-colorable is a graph property, i.e., allow for a coloring of the vertices with $k$ colors such that no two adjacent vertices have the same color.
+	A graph is bipartite $\iff$ 2-colorable.
+	other graph properties: isomorphism; vertex cover; Hamiltonian cycle ...
+\end{example}
+\begin{problem}[graph property test]\label{prm:graph_property_test}
+	\textbf{promise}: the input graph either has a property, or is $\epsilon$-far from having the property, meaning that we must change at least an $\epsilon$ fraction of the edges to make the property hold.
+\end{problem}
+\begin{theorem}[bounds for graph property test]
+\end{theorem}
+\begin{question}
+	\cite{montanaroSurveyQuantumProperty2018}
+	Is there any graph property which admits an exponential quantum speed-up?
+	\cite{ben-davidSymmetriesGraphProperties2020}
+	depends on input model (query adjacency matrix/list)
+	% quantum algorithms (bounds) for graph properties \cite{ben-davidSymmetriesGraphProperties2020}
+\end{question}
+Graphs is another kind of data which is fundamentally different from a real value vector because of vertex-edge relation and graph isomorphism.
+So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
+\begin{definition}[graph kernel]\label{def:graph_kernel}
+	given a pair of graphs $(\graph,\graph')$,
+	\emph{graph kernel} is $\kernel (\graph,\graph')  =$.
+	% \begin{equation}
+	% \end{equation}
+	quantum graph kernel $\kernel (\graph,\graph')  = \abs{\ip{\graph}{\graph'}}^2$ ??
+	\cite{baiQuantumJensenShannon2015}	
+\end{definition}
+
+\subsubsection{Quantum kernel}
+related works:
+\begin{itemize}
+	\item quantum kernel method: estimate kernels by quantum algorithms (circuits)	\cite{havlicekSupervisedLearningQuantum2019}
+	\cite{schuldQuantumMachineLearning2019}: for classical problem (data)
+
+	\item rigorous and robust quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}. group structured data \cite{glickCovariantQuantumKernels2021}
+
+	\item power of data in quantum machine learning \cite{huangPowerDataQuantum2021}: input??? projected quantum kernel
+\end{itemize}
+\begin{definition}[quantum kernel]\label{def:quantum_kernel}
+	quantum kernel 
+	with quantum feature map $\phi(\vbx): \mathcal{X}\to \op{\phi(\vbx)}$
+	\begin{equation}
+		k_Q(\rho,\rho') := \abs{\ip{\phi(\vbx)}{\phi(\vbx')}}^2 =\abs{\mel{0}{\U_{\phi(\vbx)}^\dagger \U_{\phi(\vbx')} }{0}}^2 =? \Tr(\rho\rho') \equiv \expval{\dm,\dm'}_{\textup{HS}}
+	\end{equation}
+	where $\U_{\phi(\vbx)}$ is a quantum circuit or physics process that encoding an input $\vbx$.
+	In quantum physics, quantum kernel is also known as transition amplitude (quantum propagator);
+\end{definition}
+% \begin{definition}[multivariate trace estimation]\label{def:multivariate_trace_estimation}
+% 	The task of estimating quantities like 
+% 	\begin{equation}
+% 		\Tr(\rho_1 \cdots \rho_m)
+% 		\tag{multivariate traces}
+% 	\end{equation}
+% 	given access to copies of the quantum states $\rho_1$  through $\rho_m$.
+% \end{definition}
+% is a fundamental building block in quantum information science
+
+% power of data - 
+\begin{proposition}[\cite{huangPowerDataQuantum2021}]
+	If a classical algorithm without training data can compute (label) $y=f(x)=\mel{x}{\U_{\textup{QNN}}^\dagger \ob U_{\textup{QNN}}}{x}$ (with amplitude encoding) efficiently (poly time in ...) for any $\U_{\textup{QNN}}$ and $\ob$, then $\nameref{def:bpp}=\nameref{def:bqp}$ (which is believed unlikely).
+\end{proposition}
+\begin{proposition}[\cite{huangPowerDataQuantum2021}]
+	Training an arbitrarily deep quantum neural network $\U_{\qnn}$ with a trainable observable $\ob$ is equivalent to training a \nameref{def:quantum_kernel} method with kernel $k_{Q}(\vbx,\vbx')=\Tr(\dm(\vbx)\dm'(\vbx'))$
+\end{proposition}
+\begin{definition}[projected quantum kernel]\label{def:projected_quantum_kernel}
+	....
+\end{definition}
+
+
+\subsection{Neural network}\label{sec:neural_network}
+\subsubsection{neural network and kernel}
+\begin{definition}[neural tagent kernel]\label{def:neural_tangent_kernel}
+	neural tangent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017} in the limit ...
+	\begin{equation}
+		k_{\ntk} \qty(S_T(\dm_l),\tilde{S}_T(\dm_{l'}))
+		=
+		\expval{
+			\phi^{(\ntk)}(S_T(\dm_l)),
+			\phi^{(\ntk)}(\tilde{S}_T(\dm_l))
+		}
+	\end{equation}
+\end{definition}
+
+
+
+\subsubsection{quantum neural network}\label{sec:quantum_neural_network}
+% \subsection{Unsupervised: PCA}
+
+\section{Hardness assumptions}
+\begin{definition}[\NP]\label{def:np}
+	\NP, \NP-hard, \NP-complete
+\end{definition}
+\begin{definition}[\sharpP]\label{def:sharpp}
+	\sharpP
+\end{definition}
+\begin{definition}[QMA]\label{def:qma}
+	QMA
+\end{definition}
+\begin{definition}[\BPP]\label{def:bpp}
+	\BPP
+\end{definition}
+\begin{definition}[\BQP]\label{def:bqp}
+	\BQP
+\end{definition}
