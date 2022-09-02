@@ -63,7 +63,11 @@
 	% \end{equation}
 	where $R_n = \Tr(\dm^n_A)$
 \end{definition}
-
+\begin{example}
+	The \nameref{def:schmidt_measure} for any multi-partite \nameref{exm:ghz} states is 1, because there are just two terms.
+	Schmidt measure for 1D, 2D, 3D-\nameref{def:cluster_state} is $\floor{\frac{N}{2}}$.
+	Schmidt measure of tree is the size of its minimal vertex cover[??].
+\end{example}
 
 % \subsubsection{Distance measures}\label{sec:distance_measure}
 \begin{definition}[fidelity]\label{def:fidelity}
@@ -105,35 +109,6 @@ different distance measures \cite{badescuQuantumStateCertification2017}
 	% It also has an operational meaning: it is the greatest probability with which one can discriminate a draw from p and a draw from q.
 	$l_2$ distance ... Hellinger distance ... HS distance $D_{\text{HS}}(\dm,\dm'): = \norm{\dm-\dm'}_{\text{HS}}=\sqrt{\Tr((\dm-\dm')^2)}$
 	% As a probability metric, the $l_2$ distance is somewhat unnatural. For example, it does not satisfy the “data processing inequality”, meaning that there is a stochastic operation that increases $l_2$ distance. However it is by far the easiest distance to calculate, as it is a simple polynomial in p and q; further, it can be related to the total variation distance
-\end{definition}
-
-
-\begin{definition}[input model]\label{def:input_model}
-	several common input (encoding) models in quantum algorithms: 
-	\begin{itemize}
-		% \item qubit (basic) encoding?: given a vector $\vb{z}\in\integer^d$, 
-		% $\ket{\vb{z}}=\bigotimes_i^d \ket{\vbx_i}$ where $\vbx_i$ is the binary representation of $z_i$,
-		% need $\bigO(d\cdot \log(\max(z_i)))$ (not space efficient)
-
-		% \item phase encoding?
-
-		\item \textbf{amplitude encoding}: given a normalized vector $\vbx\in\realnumber^d$, the quantum state $\ket{\vbx}=\sum_z^d x_z\ket{z}$. 
-		need $\log(d) $ qubits for a data point; 
-		In general, it is hard to prepare such state. (subject to dequantization \cite{tangQuantumPrincipalComponent2021}). 
-		typical encoding method for quantum machine learning for classical problems (such as image classification).
-		% qubit (basic) encoding (inefficient? space)
-
-		\item \textbf{unitary encoding}: quantum simulation (Hamiltonian); quantum random walk (adjacency matrix); oracle (controlled) unitary, e.g., quantum phase estimation;
-		\nameref{def:graph_state} encoding (discrete, efficient in space/time?, isomorphism?)
-
-		\item \textbf{quantum data}: quantum state $\ket{\psi}$ or $\dm$ from real-world experiments or designed quantum circuits $\U$.
-		no input problem? more efficient? for quantum algorithms
-		(composed coherently to collect quantum data)
-
-		% \item graph state encoding: \nameref{def:graph_state}, discrete, efficient? space (time), isomorphism?
-
-		% \item (quantum) oracle: $\oracle \ket{i,a}=\ket{i,a+x_i}$; quantum oracle: unitary and controlled unitary
-	\end{itemize}
 \end{definition}
 
 
