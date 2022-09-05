@@ -757,10 +757,13 @@ $C$ is hard to compute? non-stabilizer state? SWAP?
 % \begin{question}
 % \end{question}
 
-\cite{weilenmannEntanglementDetectionMeasuring2020,zhanDetectingEntanglementUnfaithful2021}
+\cite{weilenmannEntanglementDetectionMeasuring2020}
 \begin{definition}[unfaithful state]\label{def:unfaithful_state}
 \end{definition}
-
+\cite{zhanDetectingEntanglementUnfaithful2021}
+for $d \ge 3$ that almost all states in the Hilbert space are unfaithful. For d > 5, the authors find that all states they generated are entangled but at the same time unfaithful, regardless of what metric is used to sample them.
+Although there are nonlinear witnesses which also can detect entanglement in unfaithful states [], they usually require more measurements.
+Moreover, they can only be applied to bipartite systems, which means they cannot be generalized to detect genuine entanglement in multipartite states.
 
 
 \subsection{Tomography and trace estimation}
@@ -1387,7 +1390,7 @@ The goal of RFE is to eliminate non-essential features by recursively considerin
 % \end{figure}
 \begin{figure}[!ht]
 	\centering
-	% \includegraphics[width=1\linewidth]{.pdf}
+	\includegraphics[width=.4\linewidth]{./notebook/two_qubit_scores.png}
 	\caption{accuracies (variance) VS different data sizes}
 \end{figure}
 \begin{figure}[!ht]
@@ -1396,11 +1399,11 @@ The goal of RFE is to eliminate non-essential features by recursively considerin
 	\caption{number of features VS number of qubits (n). feature elimination}
 \end{figure}
 
-% \begin{figure}[!ht]
-% 	\centering
-% 	% \includegraphics[width=1\linewidth]{.pdf}
-% 	\caption{ VS noisy tolerence}
-% \end{figure}
+\begin{figure}[!ht]
+	\centering
+	% \includegraphics[width=1\linewidth]{.pdf}
+	\caption{unfaithfull; non-stabilizer}
+\end{figure}
 
 \subsubsection{Results}
 performance of different methods: 
