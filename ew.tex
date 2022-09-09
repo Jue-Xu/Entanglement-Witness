@@ -1409,11 +1409,25 @@ The goal of RFE is to eliminate non-essential features by recursively considerin
 
 \subsubsection{Results}
 performance of different methods: 
+% \begin{figure}[!ht]
+% 	\centering
+% 	\includegraphics[width=.9\linewidth]{./notebook/fidelity_witness_compare.png}
+% 	% \includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
+% 	\caption{compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state}
+% \end{figure}
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=.9\linewidth]{./notebook/fidelity_witness_compare.png}
-	% \includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
-	\caption{compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state}
+	\begin{subfigure}{0.49\textwidth}
+	\centering
+		% \includegraphics[width=.9\linewidth]{.pdf}
+		\includegraphics[width=.9\linewidth]{./notebook/fidelity_witness_compare.png}
+		% \includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
+		\caption{compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state}
+	\end{subfigure}
+	\begin{subfigure}{0.49\textwidth}
+	\centering
+		\includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist_.png}
+	\end{subfigure}
 \end{figure}
 % \begin{itemize}
 % 	\item shadow tomography: 
@@ -1447,6 +1461,9 @@ find optimal (robustness) entanglement witness by classical machine learning (qu
 future: experimental (photonic) implementation with a few qubits (generation, verification) \cite{luEntanglementStructureEntanglement2018}.
 fully entangled graph state (ring of 16 qubits) IBM by measuring negativity \cite{wang16qubitIBMUniversal2018}
 optical lattice \cite{zhouSchemeCreateVerify2022} (homogeneous measurement; detect GME, full entanglement).
+classical shadow \cite{zhangExperimentalQuantumState2021}
+\cite{elbenMixedstateEntanglementLocal2020}
+\cite{zhuFlexibleLearningQuantum2022}
 
 \section{Conclusion and discussion}
 % \begin{itemize}
