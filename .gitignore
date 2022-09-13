@@ -1,4 +1,8 @@
 .DS_Store
+.ipynb_checkpoints
+./__pycache__
+./.ipynb_checkpoints
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
