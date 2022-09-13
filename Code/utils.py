@@ -1,11 +1,16 @@
 # Various utility functions used by the scripts
 
 import functools
-import itertools
 import numbers
 import collections.abc
 import cvxpy as cp
+import itertools
 import numpy as np
+
+import matplotlib as mpl
+import math
+from cmath import cos, sin, exp, pi, sqrt
+import random
 
 # Caches the matrices used to compute swaps, partial traces and partial transposes
 # Switch to "True" to maximize speed, switch to "False" to minimize RAM usage
