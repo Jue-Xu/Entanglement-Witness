@@ -22,6 +22,11 @@
 % \begin{definition}[partial trace]
 % 	partial trace
 % \end{definition}
+\begin{remark}
+	% (def partial trace ...)
+	a pure (bipartite) state is entangled $\iff$ the reduced state $\dm^A=\Tr_A(\dm)$ is mixed.
+	The mixedness of this reduced state allows one to quantify the amount of entanglement in this state.
+\end{remark}
 \begin{definition}[partial transpose]\label{def:partial_transpose}
 	\cite{horodeckiSeparabilityMixedStates1996}
 	The partial transpose (PT) operation - acting on subsystem $A$ - is defined as
@@ -35,6 +40,23 @@
 	a state vector is \emph{maximually entangled} $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
 	$\Tr_A(\op{\psi})=\frac{1}{2}$.
 \end{definition}
+\begin{definition}[Schmidt measure]\label{def:schmidt_measure}
+	Consider the following bipartite pure state, written in Schmidt form:
+	\begin{equation}
+		\ket{\psi} = \sum_i^r \sqrt{\lambda_i} \ket{\phi_i^A}\otimes\ket{\phi_i^B}
+		\label{eq:schmidt_decomposition}
+	\end{equation}
+	where $\qty{\ket{\phi_i^A}}$ is a basis for $\hilbertspace_A$ and $\qty{\ket{\phi_i^A}}$ for $\hilbertspace_B$.
+	The strictly positive values $\sqrt{\lambda_i}$ in the Schmidt decomposition are its \emph{Schmidt coefficients}. 
+	The number of Schmidt coefficients, counted with multiplicity, is called its \emph{Schmidt rank}, or Schmidt number. (Schmidt rank ?? $\text{SR}^A(\psi)=\rank(\rho_{\psi}^A)$)
+	Schmidt measure is minimum of $\log_2 r$ where $r$ is number of terms in an expansion of the state in product basis.
+\end{definition}
+% \begin{remark}
+% 	When a bipartite vector is written in the Schmidt basis, it is very easy to compute the partial trace of either subsystem	
+% 	\begin{equation}
+% 		\Tr_B(\op{\psi}) = \sum_i p_i \op{\phi_i^A}
+% 	\end{equation}
+% \end{remark}
 \begin{definition}[entropy]\label{def:entropy}
 	In quantum mechanics (information), the von Neumann \emph{entropy} of a density matrix is $H_N(\dm): = -\Tr(\dm \log \dm)=-\sum_i\lambda_i\log(\lambda_i)$;
 	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
@@ -125,7 +147,74 @@ denote a group by $\group$ and a subgroup $\subgroup$.
 	A stabilizer set $S = \qty{ S_1, \dots , S_n}$ consisting of n mutually commuting and independent stabilizer operators is called the set of stabilizer “generators”.
 \end{definition}
 Many highly entangled $n$-qubit states can be uniquely defined by $n$ stabilizing operators which are locally measurable, i.e., they are products of Pauli matrices.
-A stabilizer $S_i$ is an n-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
+A stabilizer $S_i$ is an $n$-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
+% \begin{remark}
+	An $n$-partite(qubit) graph state can also be uniquely determined by $n$ independent stabilizers, 
+	$S_i:= X_i \bigotimes_{j\in n}Z_j$, 
+	which commute with each other and $\forall i,S_i\ket{G}=\ket{G}$.??
+	The graph state is the unique eigenstate wtih eignevalue of +1 for all the $n$ stabilizers.
+	As a result, a graph state can be written as a product of stailizer projectors, $\op{G}=\prod_{i=1}^n \frac{S_i +\identity}{2}$.
+	\nameref{def:stabilizer} formalism
+	% stabilizer formalism
+% \end{remark}
+\begin{example}[GHZ]\label{exm:ghz}
+	% Greenberger-Horne-Zeilinger (GHZ) 
+	For GHZ state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$,
+	the projector based witness 
+	% $\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ 
+	\begin{equation}
+		\ew_{\ghz_3}= \frac{1}{2} \identity - \op{\ghz}
+	\end{equation}
+	requires four measurement settings.
+	% (the direction projection is hard to evaluate because the state is entangled).
+	For three-qubit GHZ state 
+	\cite{tothDetectingGenuineMultipartite2005},
+	the local measurement witness
+	\begin{equation}
+		\ew_{\ghz_3} := \frac{3}{2} \identity - \px^{(1)}\px^{(2)}\px^{(3)}
+		- \frac{1}{2} \qty(
+			\pz^{(1)} \pz^{(2)} + 
+			\pz^{(2)} \pz^{(3)} + 
+			\pz^{(1)} \pz^{(3)} 
+		)
+	\end{equation}
+	This witness requires the measurement of the $\qty{\sx^{(1)},\sx^{(2)},\sx^{(3)}}$ and $\qty{\sz^{(1)},\sz^{(2)},\sz^{(3)}}$ settings.
+	For $n$-qubit case, detect genuine $n$-qubit entanglement close to $\ghz_n$
+	\begin{equation}
+		\ew_{\ghz_n} = (n-1) \identity - \sum_{k=1}^n S_k{(\ghz_n)}
+	\end{equation}
+	where $\stbz_k$ is the \nameref{def:stabilizer} ... \cite{tothEntanglementDetectionStabilizer2005}
+	Detecting Genuine Multipartite Entanglement with Two Local Measurements \cite{tothDetectingGenuineMultipartite2005}
+\end{example}
+% \begin{question}
+% 	how far/close to the target state (entanglement witness), noise limit?
+% \end{question}
+
+It is natural to ask how nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  and the \nameref{def:kernel} method (nonlinear boundary) in machine learning can be applied. 
+
+% \begin{proposition}\label{thm:entanglement_witness_gme}
+% 	Given a state $\ket{\psi}$,
+% 	the \nameref{def:entanglement_witness} operator $\ew_{\psi}$ can witness \nameref{def:gme}  near $\ket{\psi}$ with $c=5/8$ in \cref{eq:entanglement_witness}
+% 	% \nameref{def:genuinely_entangled}
+% 	% \begin{equation}
+% 	% 	\ew_{\psi} = \frac{5}{8}\identity - \op{\psi} 
+% 	% \end{equation}
+% 	that is, $\expval{\ew_{\psi}}\ge 0$ for any separable state in $S_b$.
+% \end{proposition}
+% If the \nameref{def:fidelity} (quantum kernel? similarity) of the prepared state $\dm_{\text{pre}}$ with the target state $\ket{\psi}$, i.e., $\Tr(\dm_{pre}\op{\psi})$, exceeds $5/8$, $\dm_{pre}$ possesses GME.
+% It is generally difficult to evaluate the quantity $\Tr(\dm_{pre}\op{\psi})$ by the direct projection on $\ket{\psi}$, as it is an entangled state.
+\begin{table}[!ht]
+\centering
+\begin{tabular}{c|c|c|c|c|c|c|c|c}
+	 & $\ket{\ghz_3}$ & $\ket{W_3}$ & $\ket{CL_3}$ & $\ket{\psi_2}$ & $\ket{\D_{2,4}}$ & $\ket{\ghz_n}$ & $\ket{W_3}$ & $\ket{G_n}$ \\
+	\hline
+	$\alpha$ & $1/2$ & $2/3$ & $1/2$ & $3/4$ & $2/3$ & $1/2$ & $(n-1)/n$ & $1/2$ \\
+	maximal $p_{\noise}$ & 4/7 & 8/21 & 8/15 & 4/15 & 16/45 & $1/2 \cdot (1-1/2^n)^{-1}$ & & \\
+	local measurements & 4 & 5 & 9 & 15 & 21 & $n+1$ & $2n-1$ & depend on graphs \\
+	\hline
+\end{tabular}
+\caption{\cite{guhneEntanglementDetection2009}}
+\end{table}
 
 \section{Machine learning background}
 % As these areas are extremely broad, we cannot completely review all known literature; we will simply give pointers to some of the best known and most relevant results.

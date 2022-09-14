@@ -15,11 +15,10 @@ M. Weilenmann, B. Dive, D. Trillo, E. A. Aguilar and M. Navascués
 ## Installation
 
 The contents of the package do not need any installation beyond the packages required below.
-The package can simply be downloaded and run directly. Not that the utils.py module must be in the
-same directory as the scripts when they are run.
+The package can simply be downloaded and run directly. 
+<!-- Note that the `quantum_state_utils.py` module must be in the same directory as the notebook `Entangle.ipynb` when they are run. -->
 
-### Packages
-Packages required: 
+### Packages required: 
 - anaconda
 - python, version > 3.8.8
 - numpy, version > 1.21.5
@@ -28,10 +27,10 @@ Packages required:
 - Scikit-learn, version > 1.1.2
 
 
-QuTiP:
+[QuTiP](https://qutip.org/):
 	Installation instructions available at (https://qutip.org/docs/latest/installation)
 
-Scikit-learn:
+[Scikit-learn](https://scikit-learn.org/stable/):
 	Installation instructions available at (https://scikit-learn.org/stable/install)
 
 
@@ -39,8 +38,9 @@ Scikit-learn:
 ## Usage
 
 The package is organised as follows. 
-utils.py contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
-The notebook ...
+`quantum_state_utils.py` contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
+The `Entangle.ipynb` notebook contains the scripts that generates a particular example or a figure.
+The `quantum_state_utils.py` module must be in the same directory as the notebook `Entangle.ipynb` when they are run.
 <!-- Each of the other files have the scripts that correspond to
 a particular example, figure, or table in the manuscript, and can be run independently. -->
 
