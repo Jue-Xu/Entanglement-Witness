@@ -359,7 +359,7 @@ To benchmark our technological progress towards the generation of largescale gen
 	% 	\centering
 	% 	\includegraphics[width=.9\linewidth]{ppt.jpg}
 	% \end{subfigure}
-	\caption{(a) \nameref{def:entanglement_witness}, \nameref{thm:ppt}, \nameref{def:svm} (kernel)?. convex hull... }
+	\caption{(a) \nameref{def:entanglement_witness}, \nameref{thm:ppt}, \nameref{def:svm} (kernel)?. convex hull... The witness is depicted by the line in state space $\Tr(\dm\ew)=0$}
 	\label{fig:entangle}
 \end{figure}
 
@@ -648,6 +648,7 @@ to generalize the estimation beyond single-qubit states, we can either increase 
 
 
 \subsubsection{Entanglement witness based on fidelity (projection, local, nonlinear, stabilizer)}\label{sec:entanglement_witness}
+While various methods for constructing an entanglement witness exist, one of the most common is based on the ﬁdelity of a state to a pure entangled state.
 Another approach for detecting multipartite entanglement is using entanglement witnesses.
 Different Bell inequalities can be regarded as entanglement witness for different types of entanglement in a multi-party entangled state.
 These witnesses can be quite useful to detect entanglement in the vicinity of graph states.
@@ -726,6 +727,7 @@ stabilizer state, neural network state \cite{gaoEfficientRepresentationQuantum20
 \end{theorem}
 
 \subsubsection{Beyond fidelity and stabilizer witness (robustness)}
+the authors coined the term faithful.
 % \begin{example}[inequality]
 	First, there exist entangled states not violating the Bell inequalities. 
 	\cite{maTransformingBellInequalities2018}
@@ -749,6 +751,8 @@ stabilizer state, neural network state \cite{gaoEfficientRepresentationQuantum20
 % \end{remark}
 
 Weilenmann et. al \cite{weilenmannEntanglementDetectionMeasuring2020} proposed the idea of unfaithful states which systematically analyze entangled state with noise cannot be detected by fidelity witness.
+\cite{guhneGeometryFaithfulEntanglement2021} \cite{riccardiExploringRelationshipFaithfulness2021}
+\cite{huOptimizedDetectionHighDimensional2021}
 \begin{definition}[unfaithful state]\label{def:unfaithful_state}
 \end{definition}
 They found that for $d \ge 3$ that almost all states in the Hilbert space are unfaithful. 
@@ -1081,7 +1085,7 @@ The quantum ML algorithm accesses the quantum channel $\mathcal{E}_\dm$ multiple
 	\caption{complexity (measures) of different trace estimation methods}
 \end{table}
 
-neural network \cite{zhuFlexibleLearningQuantum2022}
+generative neural network \cite{zhuFlexibleLearningQuantum2022}
 	
 % \subsection{Quantum trace (kernel) estimation by quantum circuits}
 
