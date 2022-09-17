@@ -105,7 +105,7 @@
 	% \end{equation}
 \end{definition}
 different distance measures \cite{badescuQuantumStateCertification2017}
-\begin{definition}[norm]\label{def:norm}
+\begin{notation}[norm]\label{def:norm}
 	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
 	Euclidean norm $l_2$ norm;
 	Spectral (operator) norm $\norm{\vbx}_{\infty}$;
@@ -117,7 +117,7 @@ different distance measures \cite{badescuQuantumStateCertification2017}
 	(in finite-dimensionala Euclidean space, the HS norm is identical to the Frobenius norm)
 	Although the Hilbert-Schmidt distance is arguably not too meaningful, operationally, one can use Cauchy-Schwarz to relate it to the very natural trace distance. 
 	shadow norm ...
-\end{definition}
+\end{notation}
 \begin{definition}[distance]\label{def:distance}
 	For mixed states, trace distance $d_{\tr}(\dm,\dm') : = \frac{1}{2} \norm{\dm-\dm'}_1$.
 	For pure states, $d_{\tr}(\ket{\psi},\ket{\psi'}) : = \frac{1}{2}\norm{\op{\psi} -\op{\psi'}}_1 = \sqrt{1-\abs{\ip{\psi}{\psi'}}^2}$.
@@ -238,10 +238,21 @@ SVM is a typical supervised learning algorithm for classification. Taking the ex
 	support vector machine (SVM) is designed to
 	find a hyperplane (a linear function) such that maximize the margin between two partitions...
 	\begin{equation}
-		\max_{\vb{w}} 
-		....
+		\max_{\vb{w}}
+		\norm{\vb{w}}^2
+		\text{ s.t. }
+		\forall i , y^{(i)}\cdot (\vb{w}\cdot\vb{x}+b)\ge 1.
 	\end{equation}
 \end{definition}
+Lagrange multipliers $\alpha$
+\begin{equation}
+	L = \frac{1}{2}\norm{\vbw}^2 - \sum_i^m \alpha^{(i)} \qty(\vbw\cdot \vbx^{(i)} + b) + \sum_i^m \alpha^{(i)}
+\end{equation}
+% dual probelm with $\vbw = \sum_m \alpha^{(m)} y^{(m)} \vbx^{m}$
+% \begin{equation}
+% 	L_D = \sum_i \alpha^{(i)} - \frac{1}{2} \sum_{ij} \alpha^{(i)} \alpha^{(j)} y^{(i)} y^{(i)}
+% 	\vbx^{(i)} \cdot \vbx^{(j)}
+% \end{equation}
 
 \subsubsection{kernel method}
 However, note that SVM is only a linear classifier. while most real-world data, such as cat/dog images and entangled/separable quantum states are not linearly separable. For example, with this two dimension dataset, we are unable to find a hyperplane to separate red points from the purple points very well. Fortunately, there is a very useful tool called kernel method or kernel trick to remedy this drawback. The main idea is mapping the features to a higher dimensional space such that  they can be linearly separated in the high dimensional feature space. Just like this example, two dimensional data are mapped to the three dimensional space. Now, we can easily find the separating plane. With SVM and kernel methods, we expect to find a generic and flexible way for entanglement detection.
