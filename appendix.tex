@@ -190,7 +190,31 @@ A stabilizer $S_i$ is an $n$-fold tensor product of $n$ operators chosen from th
 % 	how far/close to the target state (entanglement witness), noise limit?
 % \end{question}
 
-It is natural to ask how nonlinear entanglement witness \cite{guhneNonlinearEntanglementWitnesses2006}  and the \nameref{def:kernel} method (nonlinear boundary) in machine learning can be applied. 
+
+\begin{definition}[graph state]\label{def:graph_state}
+	Given a simple graph (undirected, unweighted, no loop and multiple edge) $G=(V,E)$, a graph state is constructed as 
+	from the initial state $\ket{+}^{\otimes n}$ corresponding to $n$ vertices.
+	Then, apply controlled-Z gate to every edge, that is 
+	$\ket{G}:=\prod_{(i,j)\in E}\textsf{cZ}_{(i,j)} \ket{+}^{\otimes n}$
+	with $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2}$.
+	% \begin{equation}
+	% 	\ket{G}:=\prod_{(i,j)\in E}\textsf{cZ}_{(i,j)} \ket{+}^{\otimes n}
+	% 	,\;\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} .
+	% \end{equation}
+	% \begin{itemize}
+	% 	\item vertices: $\ket{+}^{\otimes n}$
+	% 	\item edges: apply controlled-Z to every edge,
+	% 	that is $\ket{G}=\prod_{(i,j)\in E}\textsf{cZ}_{(i,j)} \ket{+}^{\otimes n}$
+	% \end{itemize}
+	% cluster states are defined on lattice (graphs).
+\end{definition}
+\begin{question}
+	how to relate graph state entanglement to \nameref{prm:graph_property_test}
+	..??. (graph kernel??)
+	\cite{heinEntanglementGraphStates2006}.
+	witness; bounds; \nameref{def:graph_property}? vertex cover?
+	Hamiltonian cycle of a graph state? 
+\end{question} 
 
 % \begin{proposition}\label{thm:entanglement_witness_gme}
 % 	Given a state $\ket{\psi}$,
@@ -374,6 +398,12 @@ related works:
 
 	\item power of data in quantum machine learning \cite{huangPowerDataQuantum2021}: input??? projected quantum kernel
 \end{itemize}
+% \begin{remark}[\cite{horodeckiDirectDetectionQuantum2002}]
+% 	Direct entanglement detections, can be \textbf{employed as sub-routines in quantum computation}. For example, one may consider performing or not performing a quantum operation on a given quantum system conditioned on some part of quantum data being entangled or not. In fact direct entanglement detections can be viewed as quantum computations solving an inherently quantum decision problem: given as an input n copies of decide whether is entangled. Here the \textbf{input data is quantum} and such a decision problem cannot even be even formulated for classical computers. 
+% 	% Nonetheless the problem is perfectly well deﬁned for quantum computers.
+
+% 	% For the sake of completeness we should also mention here that there are two-particle observables, called entanglement witnesses which can detect quantum entanglement is some special cases (see [20,8]). They have positive mean values on all separable states and negative on some entangled states. Therefore \textbf{any individual entanglement witness leaves many entangled states undetected}. When is unknown we need to check inﬁnitely many witnesses, which effectively reduces this approach to the quantum state estimation. However, let us point out any witness defines a positive map which can be used in our test.
+% \end{remark}
 \begin{definition}[quantum kernel]\label{def:quantum_kernel}
 	quantum kernel 
 	with quantum feature map $\phi(\vbx): \mathcal{X}\to \op{\phi(\vbx)}$
@@ -403,7 +433,6 @@ related works:
 \begin{definition}[projected quantum kernel]\label{def:projected_quantum_kernel}
 	....
 \end{definition}
-
 
 \subsection{Neural network}\label{sec:neural_network}
 \subsubsection{neural network and kernel}
