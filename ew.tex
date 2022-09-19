@@ -616,6 +616,7 @@ Direct entanglement detections, can be employed as sub-routines in quantum compu
 estimate the spectrum by quantum constant depth circuits, but this method only works for bipartite.
 (can we estimate concurrence by quantum circuit? quantum kernel SVM?)
 solve the quantum problem by quantum, without full tomography.
+unknown how to generalize to multipartite.
 % \begin{theorem}[\cite{quekMultivariateTraceEstimation2022}]\label{thm:multivariate_trace}
 % 	Let $\qty{\dm_1,\dots,\dm_m}$ be a set of $p$-qubit states, and fix $\epsilon > 0$ and $\delta \in (0,1)$.
 % 	There exists a random variable $\hat{T}_p$ that can be computed using $\bigO(\epsilon^{-2}\log( \delta^{-1}))$ repetitions (copies) of a \textbf{constant-depth} quantum circuit consisting of $\bigO(mp)$ three-qubit gates, and satisfies 
@@ -679,10 +680,11 @@ entanglement detection \cite{guhneEntanglementDetection2009}.
 In a typical experiment one aims to prepare a pure state, $\ket{\psi}$, and would like to detect it as true multipartite entangled. 
 While the preparation is never perfect, it is still expected that the prepared mixed state is in the proximity of $\ket{\psi}$. The usual way to construct entanglement witnesses using the knowledge of this state is
 \begin{equation}
-	\ew_{\psi} = c\identity - \op{\psi} 
+	\ew_{\psi} = \alpha\identity - \op{\psi} 
 	\label{eq:entanglement_witness}
 \end{equation}
-where $c$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$.
+where $\alpha$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$.
+projector-based witness \cite{bourennaneWitnessingMultipartiteEntanglement2004}.
 However, it is generally difficult to evaluate the quantity $\Tr(\dm_{\prepare} \op{\psi_{\target}})$ by the direct projection, as it is an entangled state.
 % \begin{remark}
 In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]

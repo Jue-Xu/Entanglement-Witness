@@ -137,7 +137,14 @@ def const_label(c, m):
 
 def ppt_criterion(rho):
     # Necessary and sufficient condition (2-qubit): Positive Partial Transpose (PPT)
-    rho_out = partial_transpose(rho, [0, 1])
+    if len(rho.dims[0]) == 2:
+        # print(rho.dims[0])
+        rho_out = partial_transpose(rho, [0, 1])
+    elif len(rho.dims[0]) == 3:
+        # print(rho.dims[0])
+        rho_out = partial_transpose(rho, [1, 1, 0])
+    else:
+        return len(rho.dims[0])
     smallest_eigenval = rho_out.eigenenergies(sort='low', eigvals=1)
     # print(rho_out.eigenenergies(sort='low',eigvals=1))
     # print(smallest_eigenval)
