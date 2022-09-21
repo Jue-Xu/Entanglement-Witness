@@ -117,11 +117,20 @@ floatfix,
 % \newcommand{\ml}{\textup{ml}}
 \newcommand{\stbz}{\hat{S}}
 \newcommand{\separable}{S}
+\newcommand{\si}{\hat{\sigma}_0}
+\newcommand{\sx}{\hat{\sigma}_x}
+\newcommand{\sy}{\hat{\sigma}_y}
+\newcommand{\sz}{\hat{\sigma}_z}
+\newcommand{\px}{X}
+\newcommand{\py}{Y}
+\newcommand{\pz}{Z}
+\newcommand{\pI}{I}
 
 \renewcommand{\llaplacian}{\hat{\mathfrak{L}}}
 %\newcommand{\zpartition}{\mathcal{Z}}
 \newcommand{\hamiltonian}{\hat{H}}
-\newcommand{\U}{\hat{U}}
+\newcommand{\U}{U}
+% \newcommand{\U}{\hat{U}}
 \newcommand{\subgroup}{\mathbb{H}}
 \newcommand{\ppartition}{\mathcal{P}}
 \newcommand{\dm}{\rho}
@@ -155,9 +164,12 @@ floatfix,
 %%%%%%%%%%%%%%%%%%%
 % \vspace{10mm}
 \begin{abstract}
-	Detection of entanglement structure is an indispensable step for practical quantum computation and communication.
-	In this work, we compare complexity and performance of several recently-developed methods, including entanglement witness methods, shadow tomography, classical machine learning, and quantum algorithms (circuits).
-	We illustrate the advantages and limitations of machine learning and quantum algorithms.
+	Detection of entanglement is an indispensable step for practical quantum computation and communication.
+	In this work, we propose an end-to-end, machine learning assisted entanglement detection protocol.
+	In this protocol, an entanglment witness for a generic entangled state is trained by classical SVM with synthetic data which consist of classical features of quantum state and their labels. 
+	In real experiments, classical features of a state, that is expectation values of a set of  Pauli measurements, are estimated by sample-efficient methods such as classical shadow.
+	% In this work, we compare complexity and performance of several recently-developed methods, including entanglement witness methods, shadow tomography, classical machine learning, and quantum algorithms (circuits).
+	% We illustrate the advantages and limitations of machine learning and quantum algorithms.
 \end{abstract}
 
 \maketitle
@@ -167,13 +179,18 @@ floatfix,
 
 %%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
 \section{Introduction}
-Entanglement \cite{horodeckiQuantumEntanglement2009} is the key ingredient of quantum computation \cite{}, quantum communication \cite{}, and quantum cryptography \cite{}.
-For practical purpose, it is essential to benckmark (characterize) multipartite entanglement structures of target states.
-We review the recently developed methods to entanglement detection: entanglement witness \cite{zhouDetectingMultipartiteEntanglement2019}, shadow tomography \cite{huangPredictingManyProperties2020}, classical machine learning \cite{huangPowerDataQuantum2021}, and quantum (variational/circuit) algorithms \cite{quekMultivariateTraceEstimation2022}.
-
+Entanglement \cite{horodeckiQuantumEntanglement2009} is the key ingredient of quantum computation \cite{briegelMeasurementbasedQuantumComputation2009}, quantum communication, and quantum cryptography \cite{xuSecureQuantumKey2020}.
 % Entanglement is the key property of quantum mechanics which makes it fundamentally different from the classical world. With entanglement, quantum computers can significantly outperform their classical counterparts. On the other hand, entanglement provides more secure communication and encryption schemes. 
-However, decoherence is inevitable in real-world, which means the interaction between a quantum system and classical environment would greatly affect entanglement quality and diminish quantum advantage. So, detecting or benchmarking entanglement is essential in actual experiments. Our goal is to find an efficient and generic way to do it. Roughly speaking, our solution is to make use of both machine learning techniques and some recently-developed quantum algorithms.
-Explicitly, our pipeline starts with a tomographic entanglement witness ansatz which is the linear combination of all possible n-qubit pauli operators. Next, we generate random density matrices with labels for training. Then, we need to estimate the expectation values of each pauli operator, which are features for training a classical SVM. Probably, we can eliminate unimportant features, which means we might not need all pauli operators in our generic witness. Finally, we test and make predictions with brand new samples. We would test our pipeline in actual experiments. 
+However, decoherence is inevitable in real-world, which means the interaction between a quantum system and classical environment would greatly affect entanglement quality and diminish quantum advantage. 
+So, for practical purpose, it is essential to benckmark (characterize) entanglement (structures) of certain target states in actual experiments.
+
+The goal of this paper is to find an efficient and generic way to do it. Roughly, our solution is to make use of both machine learning techniques and some recently-developed quantum algorithms.
+Explicitly, our pipeline starts with a tomographic entanglement witness ansatz which is the linear combination of all possible $n$-qubit pauli operators. 
+Next, we generate random density matrices with labels for training. 
+Then, we need to evaluate expectation values of each pauli operator, which are features for training a classical SVM. 
+Probably, we can eliminate unimportant features, which means we might not need all pauli operators in our generic witness. 
+Finally, we test and make predictions with brand new samples. 
+In experiments, we make use of classical shadow \cite{huangPredictingManyProperties2020} to estimate classical features of quantum states.
 
 \section{Preliminaries}
 % \subsection{Related works}
@@ -203,10 +220,8 @@ Explicitly, our pipeline starts with a tomographic entanglement witness ansatz w
 	% shorthand 
 	$\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$ 
 	% Hadamard basis $\ket{+}: = (\ket{0}+\ket{1})/\sqrt{2} $.
-	and $\px^{(1)}\pz^{(3)} \equiv \px \otimes \identity \otimes \pz$.
+	and $\px^{(1)}\pz^{(3)} \equiv \hat{X} \otimes \identity \otimes \hat{Z}$.
 \end{notation}
-
-
 
 \subsection{Entanglement structures}
 % \subsection{Entanglement detection}
@@ -247,33 +262,30 @@ Firstly, we consider the simplest entanglement structure: bipartite separable ca
 		\forall p_i > 0, \sum_i p_i = 1
 		\label{eq:mixed}
 	\end{equation}
-	where $\ket{\psi_i}$ may be biseparable with respect to different partitions (otherwise \nameref{def:gme}).
+	The separable state set is denoted as $S_b$.
 	Otherwise, $\dm_{AB}$ is entangled.
-
 	% A state $\dm_{AB}$ is \emph{separable} if it can be writen as a convex combination $\dm_{AB}= \sum_i \lambda_i \dm_{A,i} \otimes \dm_{B,i}$ with a probability distribution $\lambda_i\ge 0$ and $\sum_i \lambda_i = 1$. 
-
 \end{definition}
+	where $\ket{\psi_i}$ may be biseparable with respect to different partitions (otherwise \nameref{def:gme}).
 	Note that the state $\ket{\phi}_A$ may be entangled, thus the state $\ket{\psi}$ is not necessarily \nameref{def:fully_separable}.
 	The simple statement “The state is entangled” would still allow that only two of the qubits are entangled while the rest is in a product state.
 	Note that each separable state $\ket{\psi}_{bi}$ in the summation can have different bipartitions.
-	The separable state set is denoted as $S_b$.
 	There is another restricted way for the extension to mixed states. 
 	A state is $\ppartition_2$-separable, if it is a mixing of pure separable states with a same partition $\ppartition_2$, 
 	and we denote the state set as $S_b^{\ppartition_2}$. 
 	% entangled state?...
 % It is clear that $S_b^{\ppartition_2}\subset S_b$, and $S_b$ can be generated by the convex mixture of all possible $S_b^{\ppartition_2}$.
 Many methods \cite{tothEntanglementDetectionStabilizer2005} have been developed to determine whether a state is bi-separable.
-% \begin{problem}[separability]\label{prm:separable}
-% 	given (input) an \textbf{unknown} state, to determine (output) separability.
-% \end{problem}
+\begin{problem}[separability]\label{prm:separable}
+	given (input) an \textbf{unknown} state, to determine (output) (bi-)separability.
+\end{problem}
 \begin{theorem}[PPT criterion \cite{horodeckiSeparabilityMixedStates1996}]\label{thm:ppt}
-	The positive partial transpose (\ppt) criterion saying the state is entangled iff the smallest eigenvalue of partial transpose $\dm_{AB}^{\T_A}$ is negative. 
-	So, a separable state (\nameref{def:bipartite_separable}) must have PPT (the partially transposed (PT) density matrix $\dm_{AB}^{\T_A}$ is \nameref{def:psd}).
-	Note, it is only necessary and sufficient when $d_A d_B \le 6$.
-	PPT is necessary condition for bi-separable.
-	% Let $\dm$ be a bipartite separable state. Then $\dm$ is PPT.
+	% The positive partial transpose (\ppt) criterion states that 
+	If a state is \nameref{def:bipartite_separable}, then it must have positive partial transpose (PPT), 
+	that is, the partially transposed (PT) density matrix $\dm_{AB}^{\T_A}$ is \nameref{def:psd} \cite{peresSeparabilityCriterionDensity1996}.
+	Equivalently, if the smallest eigenvalue of partial transpose $\dm_{AB}^{\T_A}$ is negative, then the state is entangled.
+	Note that PPT is a necessary and sufficient condition for \nameref{prm:separable} when $d_A d_B \le 6$.
 \end{theorem}
-
 
 % \begin{remark}
 % the minimal eigenvalue (the absolution of this value for entangled states is named as negativity) , can be obtained analytically 
@@ -283,8 +295,6 @@ Many methods \cite{tothEntanglementDetectionStabilizer2005} have been developed 
 % \end{equation}
 % \cite{maTransformingBellInequalities2018}
 % \end{remark}
-
-
 
 % \subsubsection{Multipartite entanglement structures}
 For multipartite quantum systems, it is crucial to identify not only the presence of entanglement but also its detailed structure.
@@ -296,13 +306,13 @@ In some specific systems, such as distributed quantum computing[] quantum networ
 Therefore, it is practically interesting to study entanglement structure under partitions.
 \begin{definition}[fully separable]\label{def:fully_separable}
 	An $n$-qubit pure state $\ket{\psi_f}$ is \emph{fully separable} \iff (, and is (fully) $n$-separable if it is in $S_n$).
-	An $n$-qubit pure state $\ket{\psi_f}$ is $\ppartition$-fully separable $\iff$ it can be written as 
-	$\ket{\psi_f}=\otimes_i^m \ket{\phi_{A_i}}$.
-	Analoguous to \cref{eq:mixed}, an $n$-qubit mixed state $\dm_f$ is $\ppartition$-fully separable $\iff$ it can be decomposed into a convex mixture of $\ppartition$-fully separable pure states.
-	% \begin{equation}
-	% 	\dm_f = \sum_i p_i \op{\psi_f^i}, (\forall i) ( p_i\ge 0, \sum_i p_i = 1) .
-	% \end{equation}
-	P-bi-separable... $\separable_f^\ppartition \subset S_b^\ppartition$
+	% An $n$-qubit pure state $\ket{\psi_f}$ is $\ppartition$-fully separable $\iff$ it can be written as 
+	% $\ket{\psi_f}=\otimes_i^m \ket{\phi_{A_i}}$.
+	% Analoguous to \cref{eq:mixed}, an $n$-qubit mixed state $\dm_f$ is $\ppartition$-fully separable $\iff$ it can be decomposed into a convex mixture of $\ppartition$-fully separable pure states.
+	% % \begin{equation}
+	% % 	\dm_f = \sum_i p_i \op{\psi_f^i}, (\forall i) ( p_i\ge 0, \sum_i p_i = 1) .
+	% % \end{equation}
+	% P-bi-separable... $\separable_f^\ppartition \subset S_b^\ppartition$
 \end{definition}
 % \begin{definition}[Multipartite state]
 % 	denote the partition $\ppartition_m = \qty{A_i}$
@@ -398,6 +408,9 @@ It worth noting that 2D cluster (rectangular lattice graph) state is the univers
 % \end{example}
 \begin{remark}
 	LU, LC equivalence, local operations and classical communication (LOCC), local unitary/rotation
+	coherent noise \cite{zhouEntanglementDetectionCoherent2020}
+	Unconscious phase accumulation $\ket{\psi_\phi}=\frac{1}{\sqrt{2}}\qty(\ket{000}+e^{\ii \phi}\ket{111})$;
+	Rotation on the first control qubit $\ket{\psi_\phi^\theta}=\frac{1}{\sqrt{2}}\qty(\cos\theta\ket{000}+e^{\ii \phi}\sin\theta\ket{111})$
 \end{remark}
 % \begin{figure}[!ht]
 % 	\centering
@@ -485,20 +498,21 @@ It worth noting that 2D cluster (rectangular lattice graph) state is the univers
 \subsection{Entanglement detection}
 \nameref{thm:ppt}
 Classically, the hardness of determining the bipartite separability.
-Another widely used one is the k-symmetric extension hierarchy [15, 16], which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
+Another widely used one is the k-symmetric extension hierarchy \cite{navascuesPowerSymmetricExtensions2009}, which is presently one of the most powerful criteria, but hard to compute in practice due to its exponentially growing complexity with $k$.[??]
 % For n-qubit general system, 
 In order to apply the PPT criterion (the minimum eigenvalue of the partial-transposed density matrix), the full density matrix must be available. However, \nameref{prm:full_tomography} requires an exponential number of measurements.
 
 However, up to now, no general solution for the separability problem is known.
 Similar to the PPT condition, the $p_3$-PPT condition applies to mixed states and is completely independent of the state in question. This is a key distinction from entanglement witnesses, which can be more powerful, but which \textbf{usually require detailed prior information about the state}.
 From this data set, the PT-moments $p_n$ can be estimated without having to reconstruct the density matrix $\dm_{AB}$, and with a significantly smaller number of experimental runs $M$ than required for full quantum state tomography.
-c.f. \nameref{thm:multivariate_trace}, 
-\nameref{def:entanglement_spectroscopy}
+% c.f. \nameref{thm:multivariate_trace}, 
+% \nameref{def:entanglement_spectroscopy}
 \begin{theorem}[\cite{gurvitsClassicalDeterministicComplexity2003}]
 	% The problem of determining whether a given quantum state is entangled lies at the heart of quantum information processing, which is an NP-hard problem in general.
 	The weak membership problem for the convex set of separable normalized bipartite density matrices is \nameref{def:np}-Hard.
 	\textbf{Input}: unknown state?? formal definition of the problem
 	\cite{ioannouComputationalComplexityQuantum2007}
+	\cite{dohertyCompleteFamilySeparability2004}
 	% \begin{itemize}
 	% 	\item \textbf{Input}: ??
 	% 	\item \textbf{Output}: ??
@@ -510,7 +524,7 @@ c.f. \nameref{thm:multivariate_trace},
 	approximately correct complexity? quantum complexity? machine learning (data)? for entanglement () problem? multipartite?
 % \end{question}
 
-\begin{problem}[Entanglement detection]\label{prm:separable}
+\begin{problem}[Entanglement detection]\label{prm:entanglement_detection}
 	% \cite{zhouDetectingMultipartiteEntanglement2019}
 	% Entanglement witness	
 	Entanglement detection
@@ -547,12 +561,12 @@ Originally, Bell inequalities were designed to rule out local hidden variable (L
 	$\chsh$ inequality (game) ...; 
 	\begin{equation}
 		\hat{\vb{p}}=
-		\qty(\identity, a_0 b_0, a_0 b_0', a_0' b_0, a_0' b_0' )
+		\qty(\identity, a b, a b', a' b, a' b' )
 		% \qty{\expval{a_0 b_0}, \expval{a_0 b_0'}, \expval{a_0' b_0}, \expval{a_0' b_0'} }
 		,\quad
-		a_0 = \pz, a_0' = \px, 
-		b_0 = (\px-\pz)/\sqrt{2},
-		b_0 = (\px+\pz)/\sqrt{2},
+		a = \pz, a' = \px, 
+		b = (\px-\pz)/\sqrt{2},
+		b = (\px+\pz)/\sqrt{2},
 		\label{eq:chsh}
 	\end{equation}
 	features as the input.
@@ -666,13 +680,14 @@ These witnesses can be quite useful to detect entanglement in the vicinity of gr
 see \cref{fig:entangle} for relations.
 entanglement detection \cite{guhneEntanglementDetection2009}.
 \begin{definition}[entanglement witness]\label{def:entanglement_witness}
-	Given an (unknown? known target state) quantum state (density matrix) $\dm$, the \emph{entanglement witness} $\ew$ is an obseverable such that
+	Given a speific quantum state $\dm$ (density matrix), its \emph{entanglement witness} $\ew$ is an obseverable such that
 	\begin{equation}
-		\expectation_{\dm}[\ew]\equiv\expval{\ew}\equiv
+		\expectation_{\dm}[\ew]\equiv
+		\expval{\ew}\equiv
 		\Tr(\ew\dm) \ge 0 , \forall \text{ separable };\quad
-		\Tr(\ew\dm) < 0 , \text{ for some entangled }
+		\Tr(\ew\dm) < 0 , \text{ for some entangled including } \rho
 	\end{equation}
-	\cite{terhalBellInequalitiesSeparability2000}, see \cref{fig:entangle}
+	\cite{terhalBellInequalitiesSeparability2000}
 \end{definition}
 % Entanglement verification. Fidelities with pure target states can also serve as (bipartite) entanglement witnesses. For every (bipartite) entangled state $\dm$, there exists a constant $\alpha$ and an observable $\ob = \op{\psi}$ such that $\Tr(\ob \dm ) > \alpha \ge \Tr(\ob \dm_s )$, for all (bipartite) separable states $\dm_s$. Establishing $\Tr(\ob \dm ) > \alpha$ verifies the existence of entanglement in the state $\dm$. Any $\ob = \op{\psi}$ that satisfies the above condition is known as an entanglement witness for the state $\dm$. 
 
@@ -684,10 +699,11 @@ While the preparation is never perfect, it is still expected that the prepared m
 	\label{eq:entanglement_witness}
 \end{equation}
 where $\alpha$ is the smallest constant such that for every product state $\Tr(\dm\ew)\ge 0$.
-projector-based witness \cite{bourennaneWitnessingMultipartiteEntanglement2004}.
-However, it is generally difficult to evaluate the quantity $\Tr(\dm_{\prepare} \op{\psi_{\target}})$ by the direct projection, as it is an entangled state.
+This kind of witness is projector-based witness \cite{bourennaneWitnessingMultipartiteEntanglement2004}.
+However, it is generally difficult to evaluate the quantity $\Tr(\dm_{\prepare} \op{\psi_{\target}})$ by the direct projection, because the target state is an entangled state.
 % \begin{remark}
-In order to measure the witness in an experiment, it must be decomposed into a sum of locally measurable operators. The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
+In order to measure the witness in an experiment, it is supposed be decomposed into a sum of locally measurable operators. 
+The number of local measurements in these decompositions seems to increase exponentially with the number of qubits.[??]
 local measurements \cite{tothDetectingGenuineMultipartite2005}
 stabilizer \cite{tothEntanglementDetectionStabilizer2005}
 graph state \cite{zhouDetectingMultipartiteEntanglement2019}
@@ -922,10 +938,11 @@ Inspired by Aaronson's shadow tomography \cite{aaronsonShadowTomographyQuantum20
 A classical shadow is a succinct classical description of a quantum state, which can be extracted by performing reasonably simple single-copy measurements on a reasonably small number of copies of the state.
 The classical shadow attempts to approximate this expectation value by an empirical average over $T$ independent samples, much like Monte Carlo sampling approximates an integral.
 \begin{definition}[classical shadow]\label{def:classical_shadow}
-	classical shadow (snapshots) $\dm_{cs}$
+	Given a quantum state $\dm$, its classical shadow (snapshots) $\dm_{cs}$ is 
 	\begin{equation}
-		\dm_{cs} = \mathcal{M}^{-1} \qty(U^\dagger \op{\hat{b}} U)
+		\dm_{cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{\hat{b}} U)
 	\end{equation}
+	where $\ket{b}$ is ... $\U\dm\U^\dagger$
 	such that we can predict the linear function with classical shadows
 	\begin{equation}
 		o_i = \Tr(O_i \dm_{cs})
@@ -1067,10 +1084,10 @@ a $2^n\times 2^n$ matrix that reproduces $\dm(x_l)$ in expectation over random P
 % 	\caption{computational model powered by training data}
 % \end{figure}
 
-\begin{proposition}[\cite{huangPowerDataQuantum2021}]
-	exist quantum advantage in machine learning (not significant, practical)	...
-	discrete log, factoring...
-\end{proposition}
+% \begin{proposition}[\cite{huangPowerDataQuantum2021}]
+% 	exist quantum advantage in machine learning (not significant, practical)	...
+% 	discrete log, factoring...
+% \end{proposition}
 % \begin{theorem}[informal \cite{huangPowerDataQuantum2021}]
 % 	data learning
 % 	\begin{itemize}
@@ -1175,12 +1192,12 @@ Instead, we need measurements or \nameref{def:classical_shadow} as features of m
 		& \# observables & weights & input state \\
 		\hline
 		% entanglement witness & & & known \\  
-		\nameref{def:entanglement_witness} & constant? few local & fixed & known  \\  
+		fidelity \nameref{def:entanglement_witness} & constant? few local & fixed & known  \\  
 		% convex?\cite{chakrabartiQuantumAlgorithmsLower2020} 
 		Bell (CHSH) inequality & constant & fixed & unknown \\  
 		% entangle spectrum \cite{horodeckiDirectDetectionQuantum2002} & & & unknown \\  
-		tomographic witness & $4^n$ & trained & unknown \\  
-		ML & ?? & trained & partially known \\  
+		tomographic classifier \cite{maTransformingBellInequalities2018} & $4^n-1$ & trained & unknown \\  
+		SVM witness & ?? & trained & partially known \\  
 		\hline
 	\end{tabular}
 	\caption{ansatz}
@@ -1220,16 +1237,16 @@ We focus on kernel methods, as they not only provide provable guarantees, but ar
     \Return $ \vb{w}\cdot \vec{\sigma}<0 $: \textsf{separable} 
 	\tcc{predict}
 	\tcp*{============================================= testing phase =============================================== //}
-    \caption{ansatz + classical shadow (..) + Classical learning (\nameref{def:svm}) }
+    \caption{witness ansatz + classical shadow (..) + classical machine learning (\nameref{def:svm}) }
     \label{alg:classical_learning}
 \end{algorithm}
 
 % \subsubsection{Variational trace estimate (direct)}
-\begin{theorem}
-	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
-	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
-\cite{chenVariationalQuantumAlgorithms2022}
-\end{theorem}
+% \begin{theorem}
+% 	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
+% 	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
+% \cite{chenVariationalQuantumAlgorithms2022}
+% \end{theorem}
 
 % \subsection{Theoretic upper bounds and lower bounds}
 % \cite{huangPredictingManyProperties2020}
