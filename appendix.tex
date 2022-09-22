@@ -190,7 +190,28 @@ A stabilizer $S_i$ is an $n$-fold tensor product of $n$ operators chosen from th
 % 	how far/close to the target state (entanglement witness), noise limit?
 % \end{question}
 
-
+\nameref{def:graph_state} is an important large class of multipartite states in quantum information,
+because (connected) graph states represent a large class of genuine multipartite entangled states that have concise representations.
+Typical graph states include cluster states, \nameref{exm:ghz} states, and the states involved in error correction (toric code).
+	% Any connected graph state is \nameref{def:fully_entangled} state.
+It worth noting that 2D cluster (rectangular lattice graph) state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
+% cluster state is the special case of graph state.
+% \begin{definition}[cluster state]\label{def:cluster_state}
+% \end{definition}
+% \begin{example}[graph states]
+	% (line, ring; 
+	% hypercube, Petersen graph; 
+	% cluster state in two dimensinos, which corresponds to a rectangular lattice.)
+	% The \nameref{exm:ghz} state corresponds to the star graph and the complete gtaph (\cref{fig:graph_state}). 
+	% This is easily seen by applying Hadamard unitaries $\U_\hdm^{V\backslash a}$ to all but one qubit $a$ in the GHZ-state, 
+	% which yields the star graph state with $a$ as the central qubit.
+	% The Petersen graph is not LC-equivalent to its isomorphism (exchanging the labels at each ed of the five ``spokes"). However, the lists of Schmidt ranks (or, equivalently, the connectivity functions) of these graphs coincide.
+	% The class of CSS (error correction) states corresponds to the class of 2-\nameref{exm:colorable} graphs.
+	The entanglement in a graph state is related to the topology of its underlying graph \cite{heinEntanglementGraphStates2006}.
+% \end{example}
+\begin{remark}
+	LU, LC equivalence, local operations and classical communication (LOCC), 
+\end{remark}
 \begin{definition}[graph state]\label{def:graph_state}
 	Given a simple graph (undirected, unweighted, no loop and multiple edge) $G=(V,E)$, a graph state is constructed as 
 	from the initial state $\ket{+}^{\otimes n}$ corresponding to $n$ vertices.
