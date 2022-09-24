@@ -19,7 +19,11 @@ from sklearn.feature_selection import RFE
 ########################################
 """ PUBLIC FUNCTIONS USED IN NOTEBOOK """
 ########################################
+color_config = {'entangled': 'c', 'separable': 'm', 'unfaithful': 'y', 'ghz': 'r', 'w': 'g', 'cluster': 'b', 'bell': 'k'}
 color_dict = {0: 'c', 1: 'm', 2: 'y'}
+
+pauli_operators = [qeye(2), sigmax(),sigmay(),sigmaz()]
+pauli_str = ['I', 'X', 'Y', 'Z']
 
 """ Random states creation """
 def generate_rand_product_state(n, m, noise_limit=0, is_pure=True):
@@ -218,7 +222,7 @@ def construct_training_dataset(states_labels,operators,verbose=False):
 
 def plot_ranking(x_labels, ranking):
     fig_rank, ax_rank = plt.subplots(figsize=(6, 4))
-    barlist = ax_rank.bar(x_labels, ranking)
+    barlist = ax_rank.bar(x_labels, ranking, edgecolor="k")
     for index, item in enumerate(ranking):
         if item == max(ranking):
             barlist[index].set_color('gray')
@@ -357,7 +361,7 @@ def plot_score(size_list, train_score_list, test_score_list):
 def plot_expectation_hist(ax, expectation_list, legends, title=''):
     ax.axvline(0.0, ls="--", color="gray")
     for expectation in expectation_list:
-        ax.hist(expectation, alpha=0.8)
+        ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
     ax.legend(legends, loc='upper left', prop ={'size': 9})
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectations of different entanglement witness')

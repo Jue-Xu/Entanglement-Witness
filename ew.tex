@@ -910,30 +910,27 @@ We focus on kernel methods, as they not only provide provable guarantees, but ar
 \subsubsection{Data preparation and state generation}
 multi-partite entangled state: generate synthetic (engineered) data from (random graph?).
 separable state from randomly ...
-% \begin{figure}[!ht]
-% 	\centering
-% 	\includegraphics[width=.5\linewidth]{./notebook/dataset_sample.png}
-% 	\caption{(a) three-qubit W state, (b) GHZ state with white noise}
-% \end{figure}
+
 \begin{figure}[!ht]
 	\centering
-	\begin{subfigure}{0.45\textwidth}
-	\centering
-		\includegraphics[width=.9\linewidth]{./Code/dataset_sample.png}
-		% \caption{(a) three-qubit W state, (b) GHZ state with white noise}
-	\end{subfigure}
-	% \begin{subfigure}{0.3\textwidth}
-	% \centering
-	% 	\includegraphics[width=.9\linewidth]{./Code/two_qubit_PPT_hist.png}
-	% 	% \caption{PPT criterion (2-qubit random density matrix)}
-	% \end{subfigure}
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-			\includegraphics[width=.9\linewidth]{./Code/faithfulness_2_qubit.png}
-			% \caption{PPT criterion (2-qubit random density matrix)}
-		\end{subfigure}
-	\caption{data praparation: random states (a) three-qubit W state, (b) GHZ state with white noise (c) (d) (e) PPT}
+	\includegraphics[width=.9\linewidth]{./Code/faithfulness_2_qubit.png}
+	% \caption{PPT criterion (2-qubit random density matrix)}
+	\caption{}
 \end{figure}
+% \begin{figure}[!ht]
+% 	\centering
+% 	\begin{subfigure}{0.45\textwidth}
+% 	\centering
+% 		\includegraphics[width=.9\linewidth]{./Code/dataset_sample.png}
+% 		% \caption{(a) three-qubit W state, (b) GHZ state with white noise}
+% 	\end{subfigure}
+% 	\begin{subfigure}{0.3\textwidth}
+% 	\centering
+% 		\includegraphics[width=.9\linewidth]{./Code/two_qubit_PPT_hist.png}
+% 		% \caption{PPT criterion (2-qubit random density matrix)}
+% 	\end{subfigure}
+% 	\caption{data praparation: random states (a) three-qubit W state, (b) GHZ state with white noise (c) (d) (e) PPT}
+% \end{figure}
 QuTiP library \cite{johanssonQuTiPPythonFramework2013}; quantum circuit \cite{liPulselevelNoisyQuantum2022}
 
 entangled states generation: Bell, GHZ, W state, graph (cluster) state
@@ -1377,13 +1374,13 @@ Therefore verifying that $\Tr(\ob \dm)\ge 0.5$ certifies that $\dm$ has triparti
 	\begin{subfigure}{0.45\textwidth}
 	\centering
 		% \includegraphics[width=.9\linewidth]{.pdf}
-		\includegraphics[width=.98\linewidth]{./Code/fidelity_witness_compare.png}
+		\includegraphics[width=.9\linewidth]{./Code/fidelity_witness_compare.png}
 		% \includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
 		% \caption{compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state}
 	\end{subfigure}
-	\begin{subfigure}{0.52\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 	\centering
-		\includegraphics[width=.95\linewidth]{./Code/three_qubit_hist_.png}
+		\includegraphics[width=.9\linewidth]{./Code/three_qubit_hist_ML.png}
 		% \caption{ML witness, unfaithful}
 	\end{subfigure}
 	\caption{(a) compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state; (b) ML witness for unfaithful (large white noise), non-stabilizer (W) state}

@@ -196,8 +196,14 @@ Typical graph states include cluster states, \nameref{exm:ghz} states, and the s
 	% Any connected graph state is \nameref{def:fully_entangled} state.
 It worth noting that 2D cluster (rectangular lattice graph) state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
 % cluster state is the special case of graph state.
-% \begin{definition}[cluster state]\label{def:cluster_state}
-% \end{definition}
+\begin{definition}[cluster state]\label{def:cluster_state}
+	1D four qubits
+	\begin{equation}
+		\ket{\psi_4^{1D}} = \frac{1}{2} \qty(
+			\ket{+00+} + \ket{+01-} + \ket{-10+} - \ket{-11-}
+		)
+	\end{equation}
+\end{definition}
 % \begin{example}[graph states]
 	% (line, ring; 
 	% hypercube, Petersen graph; 
@@ -434,6 +440,7 @@ related works:
 	where $\U_{\phi(\vbx)}$ is a quantum circuit or physics process that encoding an input $\vbx$.
 	In quantum physics, quantum kernel is also known as transition amplitude (quantum propagator);
 \end{definition}
+classical graph data mapped to graph state, then fidelity represents a kernel function??.
 \begin{theorem}
 	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
 	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
