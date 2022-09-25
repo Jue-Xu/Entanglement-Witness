@@ -22,7 +22,7 @@ pra,
 % rmp,
 % prstab,
 % prstper,
-% floatfix,
+floatfix,
 %longbibliography
 ]{revtex4-2} 
 % \usepackage{revquantum}
@@ -722,7 +722,8 @@ Unconscious phase accumulation
 % $\ket{\psi_\phi}=\frac{1}{\sqrt{2}}\qty(\ket{000}+e^{\ii \phi}\ket{111})$;
 Rotation on the first control qubit 
 \begin{equation}
-	\ket{\psi_\phi^\theta}=\frac{1}{\sqrt{2}}\qty(\cos\theta\ket{000}+e^{\ii \phi}\sin\theta\ket{111})
+	\ket{\psi(\phi,\theta)}=
+	\cos\theta\ket{000}+e^{\ii \phi}\sin\theta\ket{111}
 	\label{eq:coherent_noise}
 \end{equation}
 
@@ -911,26 +912,26 @@ We focus on kernel methods, as they not only provide provable guarantees, but ar
 multi-partite entangled state: generate synthetic (engineered) data from (random graph?).
 separable state from randomly ...
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=.9\linewidth]{./Code/faithfulness_2_qubit.png}
-	% \caption{PPT criterion (2-qubit random density matrix)}
-	\caption{}
-\end{figure}
 % \begin{figure}[!ht]
 % 	\centering
-% 	\begin{subfigure}{0.45\textwidth}
-% 	\centering
-% 		\includegraphics[width=.9\linewidth]{./Code/dataset_sample.png}
-% 		% \caption{(a) three-qubit W state, (b) GHZ state with white noise}
-% 	\end{subfigure}
-% 	\begin{subfigure}{0.3\textwidth}
-% 	\centering
-% 		\includegraphics[width=.9\linewidth]{./Code/two_qubit_PPT_hist.png}
-% 		% \caption{PPT criterion (2-qubit random density matrix)}
-% 	\end{subfigure}
-% 	\caption{data praparation: random states (a) three-qubit W state, (b) GHZ state with white noise (c) (d) (e) PPT}
+% 	\includegraphics[width=.9\linewidth]{./Code/faithfulness_2_qubit.png}
+% 	% \caption{PPT criterion (2-qubit random density matrix)}
+% 	\caption{}
 % \end{figure}
+\begin{figure}[!ht]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+		\includegraphics[width=.9\linewidth]{./Code/dataset_sample_3x2.png}
+		% \caption{(a) three-qubit W state, (b) GHZ state with white noise}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+		\includegraphics[width=.9\linewidth]{./Code/faithfulness_2_qubit.png}
+		% \caption{PPT criterion (2-qubit random density matrix)}
+	\end{subfigure}
+	\caption{data praparation: random states (a) three-qubit W state, (b) GHZ state with white noise (c) (d) (e) PPT}
+\end{figure}
 QuTiP library \cite{johanssonQuTiPPythonFramework2013}; quantum circuit \cite{liPulselevelNoisyQuantum2022}
 
 entangled states generation: Bell, GHZ, W state, graph (cluster) state
@@ -1325,12 +1326,13 @@ The goal of RFE is to eliminate non-essential features by recursively considerin
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 	\centering
-		\includegraphics[width=.9\linewidth]{./Code/feature_space_2.png}
+		\includegraphics[width=.9\linewidth]{./Code/feature_space_2d.png}
 		% \caption{two-dimensional embedding: feature space, recursive feature elimination}
 	\end{subfigure}
 	\begin{subfigure}{0.49\textwidth}
 	\centering
-		\includegraphics[width=.9\linewidth]{./Code/feature_rank.png}
+		\includegraphics[width=.9\linewidth]{./Code/two_qubit_bell_ml.png}
+		% \includegraphics[width=.9\linewidth]{./Code/feature_rank.png}
 		% \caption{feature ranking}
 	\end{subfigure}
 	\caption{(a) two-dimensional embedding: feature space, recursive feature elimination; (b) feature ranking}

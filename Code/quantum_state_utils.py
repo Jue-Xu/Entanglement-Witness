@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import matplotlib as mpl
+from matplotlib.colors import ListedColormap
 import math
 from cmath import cos, sin, exp, pi, sqrt
 import random
@@ -19,13 +20,53 @@ from sklearn.feature_selection import RFE
 ########################################
 """ PUBLIC FUNCTIONS USED IN NOTEBOOK """
 ########################################
-color_config = {'entangled': 'c', 'separable': 'm', 'unfaithful': 'y', 'ghz': 'r', 'w': 'g', 'cluster': 'b', 'bell': 'k'}
-color_dict = {0: 'c', 1: 'm', 2: 'y'}
 
-pauli_operators = [qeye(2), sigmax(),sigmay(),sigmaz()]
+color_config = {'entangled': 'm', 'separable': 'c', 'unfaithful': 'y', 'ghz': 'r', 'w': 'g', 'cluster': 'b', 'bell': 'k'}
+color_dict = {0: 'm', 1: 'c', 2: 'y'}
+
 pauli_str = ['I', 'X', 'Y', 'Z']
+pauli_operators = [qeye(2), sigmax(),sigmay(),sigmaz()]
+I, X, Y, Z = qeye(2), sigmax(), sigmay(), sigmaz()
+
+def pauli_tensor_observables(n_qubit):
+    return [ tensor(list(pauli)) for pauli in itertools.product(*[pauli_operators for i in range(n_qubit)]) ]
+
+def pauli_tensor_labels(n_qubit):
+    return np.array([ ''.join(list(pauli)) for pauli in itertools.product(*[pauli_str for i in range(n_qubit)]) ])
+
+two_pauli_tomo_operators = pauli_tensor_observables(2)
+two_pauli_tomo_labels = pauli_tensor_labels(2)
+
+def tomographic_ansatz(n_qubit,n_feature):
+    pauli_operators = [sigmax(),sigmay(),sigmaz()]
+    pauli_str = ['X', 'Y', 'Z']
+    # pauli_operators = [qeye(2), sigmax(),sigmay(),sigmaz()]
+    # pauli_str = ['I', 'X', 'Y', 'Z']
+
+    # generate all pauli tensor observables and corresponding labels
+    pauli_tensor = [ tensor(list(pauli)) for pauli in itertools.product(*[pauli_operators for i in range(n_qubit)]) ]
+    # itertools.product example
+    # ranges = [range(0, 2), range(1, 3), range(2, 4)]
+    # [ list(i) for i in itertools.product(*ranges) ]
+    pauli_label  = [ ''.join(list(pauli)) for pauli in itertools.product(*[pauli_str for i in range(n_qubit)]) ]
+
+    # randomly select observables (features)
+    pauli_tensor_subset, pauli_label_subset = zip(*random.sample(list(zip(pauli_tensor, pauli_label)), n_feature))
+    ## zip example
+    # x_sub, y_sub = zip(*random.sample(list(zip( list(range(1, 10)), list("abcdefghij"))), 3))
+    # print(x_sub,y_sub)
+
+    # print(len(pauli_tensor_subset))
+
+    return (list(pauli_tensor_subset), list(pauli_label_subset))
+
 
 """ Random states creation """
+# rand_herm
+# rand_unitary
+# rand_unitary_haar
+
+
 def generate_rand_product_state(n, m, noise_limit=0, is_pure=True):
     random_white_noise_p = [random.random() * noise_limit for i in range(m)]
     dim = [2 for i in range(n)]
@@ -45,7 +86,7 @@ def generate_rand_product_state(n, m, noise_limit=0, is_pure=True):
         return [tensor([rand_dm(2) for j in range(n)]) for i in range(m)]
 
 
-def generate_rand_product_density(n, m, noise_limit):
+def generate_rand_product_density(n, m, noise_limit=0):
     print('generate_rand_product_density:', n, 'qubits,', m, 'samples')
     # print(rand_dm(2))
     # print(tensor([rand_dm(2),rand_dm(2),rand_dm(2)]))
@@ -121,6 +162,15 @@ def generate_noisy_ghz_ensemble(n, m, noise_limit):
     ]
 
 
+def generate_coherent_noisy_ghz_ensemble(n, m, theta_limit, phi_limit):
+    print(f'generate_coherent_noisy_ghz_ensemble: n = {n}, m = {m}, theta_limit = {theta_limit:.2f}, phi_limit = {phi_limit:.2f}')
+    theta_list = [random.random() * theta_limit for i in range(m)]
+    phi_list = [random.random() * phi_limit for i in range(m)]
+    return [
+        ket2dm( sin(theta) * tensor([basis(2,0) for i in range(n)]) + cos(theta) * exp(random.choice(phi_list) * 1j) * tensor([basis(2,1) for i in range(n)]) )       for theta in theta_list
+    ]
+
+
 def generate_noisy_w_ensemble(n, m, noise_limit):
     return [
         ket2dm(w_state(N=n)) * (1 - p_noise) + p_noise /
@@ -128,6 +178,27 @@ def generate_noisy_w_ensemble(n, m, noise_limit):
         for p_noise in [random.random() * noise_limit for i in range(m)]
     ]
 
+
+zero_state = basis(2, 0)
+one_state = basis(2, 1)
+plus_state = (zero_state + one_state) / sqrt(2)
+minus_state = (zero_state - one_state) / sqrt(2)
+# print(minus_state)
+
+def generate_linear_cluster(n):
+    initial_state = tensor([basis(2, 0) for i in range(n)])
+    # print(initial_state)
+    # https://qutip-qip.readthedocs.io/en/stable/qip-simulator.html#
+    # qc = QubitCircuit(N=4, num_cbits=3)
+    qc = QubitCircuit(N=n)
+    for i in range(n):
+        qc.add_gate("SNOT", targets=[i])
+    for i in range(n - 1):
+        qc.add_gate("CZ", targets=[i + 1], controls=i)
+    # qc.add_gate("CZ", targets=[3], controls=0)
+    qc.png
+    cluster_state = qc.run(state=initial_state)
+    return cluster_state
 
 # bell_like_pure_state = generate_bell_like_pure_state(10, False)
 
@@ -154,16 +225,36 @@ def ppt_criterion(rho):
     # print(smallest_eigenval)
     return smallest_eigenval
 
+epsilon = -0.00000000000001
+def generate_random_ppt_state(n_qubit,m):
+    rand_dm_2 = [rand_dm(N=2**n_qubit, dims=[[2, 2] for i in range(n_qubit)]) for j in range(m*5) ]
+    # print(ppt_criterion(random.choice(rand_dm_2)))
+    ppt_state = [rho for rho in rand_dm_2 if ppt_criterion(rho) >= epsilon]
+    if len(ppt_state) >= m:
+        return ppt_state[:m]
+    else:
+        print('not enough data points')
+        return ppt_state
+
+def generate_random_npt_state(n_qubit,m):
+    rand_dm_2 = [rand_dm(N=2**n_qubit, dims=[[2, 2] for i in range(n_qubit)]) for j in range(m*5) ]
+    # print(ppt_criterion(random.choice(rand_dm_2)))
+    npt_state = [rho for rho in rand_dm_2 if ppt_criterion(rho) < epsilon]
+    if len(npt_state) >= m:
+        return npt_state[:m]
+    else:
+        print('not enough data points')
+        return npt_state
 
 def generate_two_qubit_random_state_PPT(m, plot=False):
     rand_dm_2 = [rand_dm(N=4, dims=[[2, 2], [2, 2]]) for i in range(m)]
     # print(ppt_criterion(random.choice(rand_dm_2)))
-    entangled = [rho for rho in rand_dm_2 if ppt_criterion(rho) < 0]
+    entangled = [rho for rho in rand_dm_2 if ppt_criterion(rho) < epsilon]
     # entangled = [filter(lambda p: ppt_criterion(p) < 0, rand_dm_2)]
     # print(entangled)
 
     # for product pure states, the smallest eigenvalue is a very very small negative one
-    separable = [rho for rho in rand_dm_2 if ppt_criterion(rho) >= 0]
+    separable = [rho for rho in rand_dm_2 if ppt_criterion(rho) >= epsilon]
     print('# entangled state:', len(entangled), '; # separable state:',
           len(separable))
     # print()
@@ -194,7 +285,6 @@ def generate_two_qubit_random_state_PPT(m, plot=False):
 # machine learning
 #####################################################
 def construct_training_dataset(states_labels,operators,verbose=False):
-    print("------- construct_training_dataset -------")
     states_labels = np.array(states_labels,dtype=object)
     all_states = states_labels[:,0].flatten()
     # print(all_states)
@@ -215,8 +305,11 @@ def construct_training_dataset(states_labels,operators,verbose=False):
         print(y)
     # print(features)
 
-    print('number of samples:', n_sample, '; number of labels:', len(y), '; dimension:', shape(features))
-    print("------------------- end -------------------")
+    if verbose:
+        print("------- construct_training_dataset -------")
+        print(f'# samples: {n_sample}; # labels: {len(y)}; dimension: {shape(features)}')
+        print("------------------- end -------------------")
+
     return (features, y)
 
 
@@ -235,30 +328,39 @@ def plot_ranking(x_labels, ranking):
     plt.savefig('feature_rank.png', dpi=300)
 
 
-def plot_feature_space(X, y, filter):
-    fig_feature, ax_feature = plt.subplots(figsize=(6, 4))
+def plot_feature_space(X, y, clf, filter, labels, savefig=False):
+    fig, ax = plt.subplots(figsize=(6, 4))
     # ax_feature.scatter(X_train[:, filter][:, 0], X_train[:, filter][:, 1], c=y_train, zorder=10, cmap=plt.cm.Paired, edgecolor="k", s=20)
     # https://stackoverflow.com/questions/47006268/matplotlib-scatter-plot-with-color-label-and-legend-specified-by-c-option
-
+    cm = plt.cm.PiYG
+    cm_bright = ListedColormap([color_dict[0], color_dict[1]])
+    # cm_bright = ListedColormap(["#FF0000", "#0000FF"])
     # https://matplotlib.org/stable/gallery/color/named_colors.html
-    for g in np.unique(y):
-        ix = np.where(y == g)
-        ax_feature.scatter(X[:, filter][ix, 2],
-                           X[:, filter][ix, 1],
-                           c=color_dict[g],
-                           edgecolor="k",
-                           s=30)
-    ax_feature.set_ylabel('Select feature #2')
-    ax_feature.set_xlabel('Select feature #1')
-    ax_feature.legend(['entangled', 'separable'], loc='upper right')
-    plt.savefig('feature_space.png', dpi=300)
+    if len(filter) == 2:
+        DecisionBoundaryDisplay.from_estimator(clf,
+                                               X[:, filter],
+                                               cmap=cm,
+                                               alpha=0.8,
+                                               ax=ax,
+                                               eps=0.5)
+        # for g in np.unique(y):
+        #     ix = np.where(y == g)
+        #     ax.scatter(X[:, filter][ix, 0],
+        #                     X[:, filter][ix, 1],
+        #                     c=color_dict[g],
+        #                     edgecolor="k",
+        #                     s=30)
+        ax.scatter(X[:, filter][:, 0], X[:, filter][:, 1], c=y, cmap=cm_bright, edgecolor="k", s=30)
+        ax.set_ylabel('Select feature #2:'+ labels[1])
+        ax.set_xlabel('Select feature #1:'+ labels[0])
+        # ax.legend(['entangled', 'separable'], loc='upper right')
+        if savefig:
+            plt.savefig('feature_space_2d.png', dpi=300)
 
 
 def my_svm(X, y, size_test, kernel, legend, rfe=False, to_features=3):
     ################# SVM training ####################
-    print(
-        "=========================== SVM summary start ============================"
-    )
+    print("======================= SVM summary start ========================")
     print("size of training set:", len(X), "; size of testing set:", size_test)
     # print("size of testing set:", size_test)
     n_sample = len(X)
@@ -334,9 +436,7 @@ def my_svm(X, y, size_test, kernel, legend, rfe=False, to_features=3):
     # ax.hist([expect(state, bell_inequality) for state in [ ket2dm(ket) for ket in test_1 ] ])
     # ax.hist([expect(state, bell_inequality) for state in test_2 ])
 
-    print(
-        "============================= SVM summary end =============================="
-    )
+    print("======================== SVM summary end =========================")
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectation value')
     ax.set_title('2-qubit')
@@ -356,14 +456,14 @@ def plot_score(size_list, train_score_list, test_score_list):
     ax.set_ylabel('Score (accuray)')
     ax.set_xlabel('Number of samples')
     plt.savefig('two_qubit_scores.png', dpi=300)
-    
 
-def plot_expectation_hist(ax, expectation_list, legends, title=''):
+
+def plot_expectation_hist(ax, expectation_lists, legends, title=''):
     ax.axvline(0.0, ls="--", color="gray")
-    for expectation in expectation_list:
+    for expectation in expectation_lists:
         ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
     ax.legend(legends, loc='upper left', prop ={'size': 9})
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectations of different entanglement witness')
-    ax.text(0.04, 0.62, title, transform=ax.transAxes)
+    ax.text(0.44, 0.92, title, transform=ax.transAxes)
     # ax.set_title('3-qubit case '+title)
