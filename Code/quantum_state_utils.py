@@ -163,11 +163,11 @@ def generate_noisy_ghz_ensemble(n, m, noise_limit):
 
 
 def generate_coherent_noisy_ghz_ensemble(n, m, theta_limit, phi_limit):
-    print(f'generate_coherent_noisy_ghz_ensemble: n = {n}, m = {m}, theta_limit = {theta_limit:.2f}, phi_limit = {phi_limit:.2f}')
+    print(f'generate_coherent_noisy_ghz_ensemble: n = {n}, m = {m}, theta_limit = {theta_limit:.2f}*pi, phi_limit = {phi_limit:.2f}*pi')
     theta_list = [random.random() * theta_limit for i in range(m)]
     phi_list = [random.random() * phi_limit for i in range(m)]
     return [
-        ket2dm( sin(theta) * tensor([basis(2,0) for i in range(n)]) + cos(theta) * exp(random.choice(phi_list) * 1j) * tensor([basis(2,1) for i in range(n)]) )       for theta in theta_list
+        ket2dm( sin(pi*theta) * tensor([basis(2,0) for i in range(n)]) + cos(pi*theta) * exp(pi*random.choice(phi_list) * 1j) * tensor([basis(2,1) for i in range(n)]) )       for theta in theta_list
     ]
 
 
@@ -337,12 +337,7 @@ def plot_feature_space(X, y, clf, filter, labels, savefig=False):
     # cm_bright = ListedColormap(["#FF0000", "#0000FF"])
     # https://matplotlib.org/stable/gallery/color/named_colors.html
     if len(filter) == 2:
-        DecisionBoundaryDisplay.from_estimator(clf,
-                                               X[:, filter],
-                                               cmap=cm,
-                                               alpha=0.8,
-                                               ax=ax,
-                                               eps=0.5)
+        DecisionBoundaryDisplay.from_estimator(clf, X[:, filter], cmap=cm, alpha=0.8, ax=ax, eps=0.5)
         # for g in np.unique(y):
         #     ix = np.where(y == g)
         #     ax.scatter(X[:, filter][ix, 0],
@@ -351,12 +346,59 @@ def plot_feature_space(X, y, clf, filter, labels, savefig=False):
         #                     edgecolor="k",
         #                     s=30)
         ax.scatter(X[:, filter][:, 0], X[:, filter][:, 1], c=y, cmap=cm_bright, edgecolor="k", s=30)
-        ax.set_ylabel('Select feature #2:'+ labels[1])
-        ax.set_xlabel('Select feature #1:'+ labels[0])
+        ax.set_ylabel(f'feature #2: <{labels[1]}>')
+        ax.set_xlabel(f'feature #1: <{labels[0]}>')
         # ax.legend(['entangled', 'separable'], loc='upper right')
         if savefig:
             plt.savefig('feature_space_2d.png', dpi=300)
 
+
+def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=False):
+    ################# SVM training ####################
+    if verbose:
+        print("======================= SVM start ========================")
+        print("kernel method: ", kernel, "; size of training set:", len(X), "; size of testing set:", size_test)
+    # print("kernel method: ", kernel)
+    n_sample = len(X)
+    X_train = X[:int(0.9 * n_sample)]
+    # print(X_train)
+    y_train = y[:int(0.9 * n_sample)]
+    X_test = X[int(0.9 * n_sample):]
+    y_test = y[int(0.9 * n_sample):]
+    # kernel
+    if kernel == 'linear':
+        print("---- recursive feature elimination ----")
+        estimator = SVC(kernel="linear", C=1)
+        clf = RFE(estimator=estimator,
+                    n_features_to_select=to_features,
+                    step=1)
+        clf.fit(X_train, y_train)
+        filter = clf.support_
+        # print('feature filter:', filter)
+        ranking = clf.ranking_.reshape(X_train[0].shape)
+        print('feature ranking:', ranking)
+        print('----------------------------------------')
+        # print(y_train)
+        plot_ranking(two_pauli_tomo_labels, ranking) 
+    else:
+        clf = svm.SVC()
+        clf.fit(X_train, y_train)
+
+    train_score = clf.score(X_train, y_train)
+    test_score = clf.score(X_test, y_test)
+    score = (train_score+test_score)/2
+    print(f'train score: {train_score:.4f}; test score: {test_score:.4f}')
+    # print("======================== SVM end =========================")
+
+    return (clf, score)
+
+def evaluate_features(operators,states):
+    return  np.array([ expect(operators, state) for state in states ])
+
+def evaluate_witness(witness, features_set):
+    expect_val_set = [witness.decision_function(features) for features in features_set]
+    # print(prediction_test)
+    return expect_val_set
 
 def my_svm(X, y, size_test, kernel, legend, rfe=False, to_features=3):
     ################# SVM training ####################
@@ -465,5 +507,5 @@ def plot_expectation_hist(ax, expectation_lists, legends, title=''):
     ax.legend(legends, loc='upper left', prop ={'size': 9})
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectations of different entanglement witness')
-    ax.text(0.44, 0.92, title, transform=ax.transAxes)
+    ax.text(0.54, 0.95, title, transform=ax.transAxes)
     # ax.set_title('3-qubit case '+title)
