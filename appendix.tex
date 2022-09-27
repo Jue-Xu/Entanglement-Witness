@@ -236,7 +236,7 @@ It worth noting that 2D cluster (rectangular lattice graph) state is the univers
 	% cluster states are defined on lattice (graphs).
 \end{definition}
 \begin{question}
-	how to relate graph state entanglement to \nameref{prm:graph_property_test}
+	how to relate graph state entanglement to graph property test
 	..??. (graph kernel??)
 	\cite{heinEntanglementGraphStates2006}.
 	witness; bounds; \nameref{def:graph_property}? vertex cover?
@@ -356,56 +356,37 @@ However, note that SVM is only a linear classifier. while most real-world data, 
 	% \end{itemize}
 \end{example}
 
-similarity measures? advantages? why? (isomorphism?)
-\begin{definition}[divergence]\label{def:divergence}
-	KL divergence (relative \nameref{def:entropy}): measure the distance (similarity) between two probability distributions:
-	\begin{equation}
-		\kl (P || Q) := \sum P(x) \log (P(x)/Q(x))
-	\end{equation}
-	symmetric version: Jensen-Shannon divergence (machine learning)
-	\begin{equation}
-		\jsd (P || P') := \frac{1}{2} \qty(\kl(P|| M) + \kl(P'||M))
-		\equiv H_S(M)-\frac{1}{2} (H_S(P) - H_S(P') ) 
-	\end{equation}
-	where $M=(P+P')/2$ and Shannon \nameref{def:entropy} $H_S$.
-	Analogously, quantum Jensen-Shannon divergence $D_{\qjs}$ of two density matrices can be defined...
-	\begin{equation}
-		D_{\qjs}(\dm||\dm'):= 
-		H_V(\dm_M) - \frac{1}{2} (H_V(\dm) - H_V(\dm') ) 
-	\end{equation}
-	as a quantum graph kernel ($\dm$ induced by quantum random walk)
-\end{definition}
-\begin{definition}[geometric difference]\label{def:geometric_difference}
-	\begin{equation}
-		g(K^1|| k^2) = \sqrt{\norm{\sqrt{K^2} (K^1)^{-1}\sqrt{K^2}}_{\infty}}
-	\end{equation}
-	where $\norm{\cdot}_{\infty}$ is the spectral \nameref{def:norm}.
-\end{definition}
+% \begin{definition}[geometric difference]\label{def:geometric_difference}
+% 	% \begin{equation}
+% 		$g(K^1|| k^2) = \sqrt{\norm{\sqrt{K^2} (K^1)^{-1}\sqrt{K^2}}_{\infty}}$,
+% 	% \end{equation}
+% 	where $\norm{\cdot}_{\infty}$ is the spectral \nameref{def:norm}.
+% \end{definition}
 
-\subsubsection{Graph kernel}
-\begin{definition}[graph property]\label{def:graph_property}
-	% The setting of graph property testing provides a natural class of partial graph properties.
-	monotone ...
-\end{definition}
-\begin{example}[colorable]\label{exm:colorable}
-	$k$-colorable is a graph property, i.e., allow for a coloring of the vertices with $k$ colors such that no two adjacent vertices have the same color.
-	A graph is bipartite $\iff$ 2-colorable.
-	other graph properties: isomorphism; vertex cover; Hamiltonian cycle ...
-\end{example}
-\begin{problem}[graph property test]\label{prm:graph_property_test}
-	\textbf{promise}: the input graph either has a property, or is $\epsilon$-far from having the property, meaning that we must change at least an $\epsilon$ fraction of the edges to make the property hold.
-\end{problem}
-\begin{theorem}[bounds for graph property test]
-\end{theorem}
-\begin{question}
-	\cite{montanaroSurveyQuantumProperty2018}
-	Is there any graph property which admits an exponential quantum speed-up?
-	\cite{ben-davidSymmetriesGraphProperties2020}
-	depends on input model (query adjacency matrix/list)
-	% quantum algorithms (bounds) for graph properties \cite{ben-davidSymmetriesGraphProperties2020}
-\end{question}
-Graphs is another kind of data which is fundamentally different from a real value vector because of vertex-edge relation and graph isomorphism.
-So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
+% \subsubsection{Graph kernel}
+% \begin{definition}[graph property]\label{def:graph_property}
+% 	% The setting of graph property testing provides a natural class of partial graph properties.
+% 	monotone ...
+% \end{definition}
+% \begin{example}[colorable]\label{exm:colorable}
+% 	$k$-colorable is a graph property, i.e., allow for a coloring of the vertices with $k$ colors such that no two adjacent vertices have the same color.
+% 	A graph is bipartite $\iff$ 2-colorable.
+% 	other graph properties: isomorphism; vertex cover; Hamiltonian cycle ...
+% \end{example}
+% \begin{problem}[graph property test]\label{prm:graph_property_test}
+% 	\textbf{promise}: the input graph either has a property, or is $\epsilon$-far from having the property, meaning that we must change at least an $\epsilon$ fraction of the edges to make the property hold.
+% \end{problem}
+% \begin{theorem}[bounds for graph property test]
+% \end{theorem}
+% \begin{question}
+% 	\cite{montanaroSurveyQuantumProperty2018}
+% 	Is there any graph property which admits an exponential quantum speed-up?
+% 	\cite{ben-davidSymmetriesGraphProperties2020}
+% 	depends on input model (query adjacency matrix/list)
+% 	% quantum algorithms (bounds) for graph properties \cite{ben-davidSymmetriesGraphProperties2020}
+% \end{question}
+% Graphs is another kind of data which is fundamentally different from a real value vector because of vertex-edge relation and graph isomorphism.
+% So, graph kernel \cite{kriegeSurveyGraphKernels2020} need additional attention.
 \begin{definition}[graph kernel]\label{def:graph_kernel}
 	given a pair of graphs $(\graph,\graph')$,
 	\emph{graph kernel} is $\kernel (\graph,\graph')  =$.
@@ -440,12 +421,13 @@ related works:
 	where $\U_{\phi(\vbx)}$ is a quantum circuit or physics process that encoding an input $\vbx$.
 	In quantum physics, quantum kernel is also known as transition amplitude (quantum propagator);
 \end{definition}
-classical graph data mapped to graph state, then fidelity represents a kernel function??.
-\begin{theorem}
-	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
-	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
-\cite{chenVariationalQuantumAlgorithms2022}
-\end{theorem}
+% classical graph data mapped to graph state, then fidelity represents a kernel function??.
+% \begin{theorem}
+% 	On quantum computers, evaluating the trace distances is probably hard since even judging whether $\dm$ and $\dm'$ have large or small trace distance is known to be QSZK-complete \cite{watrousQuantumComputationalComplexity2008}, where QSZK (quantum statistical zero-knowledge) is a complexity class that includes BQP (bounded-error quantum polynomial time).
+% 	% Variational Quantum Algorithms for Trace Distance and Fidelity Estimation
+% \cite{chenVariationalQuantumAlgorithms2022}
+% \end{theorem}
+
 % \begin{definition}[multivariate trace estimation]\label{def:multivariate_trace_estimation}
 % 	The task of estimating quantities like 
 % 	\begin{equation}
@@ -457,17 +439,17 @@ classical graph data mapped to graph state, then fidelity represents a kernel fu
 % is a fundamental building block in quantum information science
 
 % power of data - 
-\begin{proposition}[\cite{huangPowerDataQuantum2021}]
-	If a classical algorithm without training data can compute (label) $y=f(x)=\mel{x}{\U_{\textup{QNN}}^\dagger \ob U_{\textup{QNN}}}{x}$ (with amplitude encoding) efficiently (poly time in ...) for any $\U_{\textup{QNN}}$ and $\ob$, then $\nameref{def:bpp}=\nameref{def:bqp}$ (which is believed unlikely).
-\end{proposition}
-\begin{proposition}[\cite{huangPowerDataQuantum2021}]
-	Training an arbitrarily deep quantum neural network $\U_{\qnn}$ with a trainable observable $\ob$ is equivalent to training a \nameref{def:quantum_kernel} method with kernel $k_{Q}(\vbx,\vbx')=\Tr(\dm(\vbx)\dm'(\vbx'))$
-\end{proposition}
-\begin{definition}[projected quantum kernel]\label{def:projected_quantum_kernel}
-	....
-\end{definition}
+% \begin{proposition}[\cite{huangPowerDataQuantum2021}]
+% 	If a classical algorithm without training data can compute (label) $y=f(x)=\mel{x}{\U_{\textup{QNN}}^\dagger \ob U_{\textup{QNN}}}{x}$ (with amplitude encoding) efficiently (poly time in ...) for any $\U_{\textup{QNN}}$ and $\ob$, then $\nameref{def:bpp}=\nameref{def:bqp}$ (which is believed unlikely).
+% \end{proposition}
+% \begin{proposition}[\cite{huangPowerDataQuantum2021}]
+% 	Training an arbitrarily deep quantum neural network $\U_{\qnn}$ with a trainable observable $\ob$ is equivalent to training a \nameref{def:quantum_kernel} method with kernel $k_{Q}(\vbx,\vbx')=\Tr(\dm(\vbx)\dm'(\vbx'))$
+% \end{proposition}
+% \begin{definition}[projected quantum kernel]\label{def:projected_quantum_kernel}
+% 	....
+% \end{definition}
 
-\subsection{Neural network}\label{sec:neural_network}
+% \subsection{Neural network}\label{sec:neural_network}
 \subsubsection{neural network and kernel}
 \begin{definition}[neural tagent kernel]\label{def:neural_tangent_kernel}
 	neural tangent kernel \cite{jacotNeuralTangentKernel2020}: proved to be equivalent to deep neural network \cite{gaoEfficientRepresentationQuantum2017} in the limit ...
@@ -481,24 +463,10 @@ classical graph data mapped to graph state, then fidelity represents a kernel fu
 	\end{equation}
 \end{definition}
 
+% \subsubsection{quantum neural network}\label{sec:quantum_neural_network}
+% % \subsection{Unsupervised: PCA}
 
-
-\subsubsection{quantum neural network}\label{sec:quantum_neural_network}
-% \subsection{Unsupervised: PCA}
-
-\section{Hardness assumptions}
-\begin{definition}[\NP]\label{def:np}
-	\NP, \NP-hard, \NP-complete
-\end{definition}
-\begin{definition}[\sharpP]\label{def:sharpp}
-	\sharpP
-\end{definition}
-\begin{definition}[QMA]\label{def:qma}
-	QMA
-\end{definition}
-\begin{definition}[\BPP]\label{def:bpp}
-	\BPP
-\end{definition}
-\begin{definition}[\BQP]\label{def:bqp}
-	\BQP
-\end{definition}
+% \section{Hardness assumptions}
+% \begin{definition}[\NP]\label{def:np}
+% 	\NP, \NP-hard, \NP-complete
+% \end{definition}
