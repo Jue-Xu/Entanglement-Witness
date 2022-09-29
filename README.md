@@ -15,7 +15,7 @@ M. Weilenmann, B. Dive, D. Trillo, E. A. Aguilar and M. Navascués
 ## Installation
 
 The contents of the package do not need any installation beyond the packages required below.
-The package can simply be downloaded and run directly. 
+<!-- The package can simply be downloaded and run directly.  -->
 <!-- Note that the `quantum_state_utils.py` module must be in the same directory as the notebook `Entangle.ipynb` when they are run. -->
 
 ### Packages required: 
@@ -39,8 +39,8 @@ The package can simply be downloaded and run directly.
 
 The package is organised as follows. 
 `quantum_state_utils.py` contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
-The `Entangle.ipynb` notebook contains the scripts that generates a particular example or a figure.
-The `quantum_state_utils.py` module must be in the same directory as the notebook `Entangle.ipynb` when they are run.
+The `entangle_detection.ipynb` notebook contains the scripts that generates a particular example or a figure.
+The `quantum_state_utils.py` module must be in the same directory as the notebook `entangle_detection.ipynb` when they are run.
 <!-- Each of the other files have the scripts that correspond to
 a particular example, figure, or table in the manuscript, and can be run independently. -->
 

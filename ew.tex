@@ -164,7 +164,6 @@ floatfix,
 % \affiliation{Department of Computer Science, University of Maryland, College Park.}
 \date{\today}
 %%%%%%%%%%%%%%%%%%%
-% \vspace{10mm}
 \begin{abstract}
 	Detection of entanglement is an indispensable step for practical quantum computation and communication.
 	In this work, we propose an end-to-end, machine learning assisted entanglement detection protocol.
@@ -176,8 +175,7 @@ floatfix,
 
 \maketitle
 % \setcounter{tocdepth}{0}
- \tableofcontents
-% \newpage
+% \tableofcontents
 
 %%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -198,14 +196,14 @@ In experiments, we make use of classical shadow \cite{huangPredictingManyPropert
 % \subsection{Related works}
 % \subsection{Notations}
 % Notations: 
-\begin{notation}
-	The hats on the matrices such as
-	% $\hat{A}$, Hamiltonian $\hamiltonian$, 
-	observables $\ob$, entanglement witness $\ew$, 
-	emphasize that they play the roles of operators (Hermitian matrices).
-	density matrix $\dm$ (omitted)
-	$\qty{I,X,Y,Z}$
-\end{notation}
+% \begin{notation}
+% 	The hats on the matrices such as
+% 	% $\hat{A}$, Hamiltonian $\hamiltonian$, 
+% 	observables $\ob$, entanglement witness $\ew$, 
+% 	emphasize that they play the roles of operators (Hermitian matrices).
+% 	density matrix $\dm$ (omitted)
+% 	$\qty{I,X,Y,Z}$
+% \end{notation}
 \begin{notation}
 	In the machine learning setting,
 	denote vector (matrix) $\vbx$, $\vbw$, $\vb{K}$ by boldface font.
@@ -217,7 +215,7 @@ In experiments, we make use of classical shadow \cite{huangPredictingManyPropert
 % For simplicity, we let $N \equiv 2^n$ and $\ket{\vb{0}}\equiv\ket{0^n} \equiv\ket{0}^{\otimes n}$ if no ambiguity.
 \begin{notation}
 	If no ambiguity,
-	we omitted the tensor product for readability,
+	we omitted the tensor products and the hats for readability,
 	that is,
 	% shorthand 
 	$\ket{\psi_A}\ket{\psi_B}\equiv \ket{\psi_A}\otimes \ket{\psi_B}$ 
@@ -618,6 +616,7 @@ entanglement detection \cite{guhneEntanglementDetection2009}.
 	% \end{equation}
 	% \cite{terhalBellInequalitiesSeparability2000}
 \end{definition}
+There is no entanglement witness that detects all entangled states \cite{heinosaariMathematicalLanguageQuantum2011}.
 % Entanglement verification. Fidelities with pure target states can also serve as (bipartite) entanglement witnesses. For every (bipartite) entangled state $\dm$, there exists a constant $\alpha$ and an observable $\ob = \op{\psi}$ such that $\Tr(\ob \dm ) > \alpha \ge \Tr(\ob \dm_s )$, for all (bipartite) separable states $\dm_s$. Establishing $\Tr(\ob \dm ) > \alpha$ verifies the existence of entanglement in the state $\dm$. Any $\ob = \op{\psi}$ that satisfies the above condition is known as an entanglement witness for the state $\dm$. 
 
 % \subsubsection{Fidelity, projector-based witness, and stabilizer state}
@@ -636,12 +635,12 @@ The number of local measurements in these decompositions seems to increase expon
 local measurements \cite{tothDetectingGenuineMultipartite2005}
 stabilizer \cite{tothEntanglementDetectionStabilizer2005}
 graph state \cite{zhouDetectingMultipartiteEntanglement2019}
-\begin{proposition}[Section 6.3 of \cite{heinosaariMathematicalLanguageQuantum2011}]
-	A state $\dm$ is separable iff $\forall \ew,\Tr[\dm \ew]\ge 0$. 
-	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
-	There is no entanglement witness that detects all entangled states.
-% any individual entanglement witness leaves many entangled states undetected.
-\end{proposition}
+% \begin{proposition}[Section 6.3 of \cite{heinosaariMathematicalLanguageQuantum2011}]
+% 	A state $\dm$ is separable iff $\forall \ew,\Tr[\dm \ew]\ge 0$. 
+% 	Corollary, a state $\dm$ is entangled $\iff$  $\exists \ew,\Tr[\dm \ew]<0$. 
+% 	There is no entanglement witness that detects all entangled states.
+% % any individual entanglement witness leaves many entangled states undetected.
+% \end{proposition}
 
 % 	\cite{sciaraUniversalPartiteLevel2019}
 % % \begin{remark}[universal entanglement witness]
@@ -964,7 +963,7 @@ separable states generation
 % 	\caption{Compare different entanglement witnesses: GHZ, fully separable}
 % \end{figure}
 
-\subsection{Sample-efficient trace estimation methods}
+\subsection{Sample-efficient expectation estimation methods}
 % \subsection{Estimate classical features of quantum states}
 To make use of classical machine learning method, we need the classical \textbf{features} of quantum states.
 We cannot directly process quantum data (raw data).
@@ -999,10 +998,14 @@ Intuitively, a general tomography \cite{altepeterPhotonicStateTomography2005} th
 % 		\end{equation}
 % 	\end{itemize}
 % \end{problem}
-However, tomography is experimentally and computationally demanding; for a state consisting of $n$ particles, with each residing in a $d$-dimensional Hilbert space, we would have to perform $M = \bigO(d^{2n})$ measurements.
+However, full quantum state tomography is experimentally and computationally demanding; for a state consisting of $n$ particles, with each residing in a $d$-dimensional Hilbert space, we would have to perform $M = \bigO(d^{2n})$ copies/measurements \cite{haahSampleoptimalTomographyQuantum2017}. 
+$\Omega(D^2)$ is required.
+Intermediate between independent measurements and unrestricted (also called “collective” or “entangled”) measurements are adaptive measurements in which the copies of $\dm$ are measured individually, but the choice of measurement basis can change in response to earlier measurements.
 \begin{theorem}[lower bound of \nameref{prm:full_tomography}?\cite{haahSampleoptimalTomographyQuantum2017}]
 	Known fundamental lower bounds [66, 73] state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace \nameref{def:distance}.
 	\cite{huangProvablyEfficientMachine2021}
+	% Though formally “efficient” in the sense that $N$ scales polynomially with $m$ for any fixed approximation error $\epsilon$, 
+	... the required amount of training data scales badly with $\epsilon$. This unfortunate scaling is not a shortcoming of the considered ML algorithm, but a necessary feature.
 \end{theorem}
 % \begin{problem}[Fidelity estimate]
 % 	defined as follows
@@ -1031,12 +1034,13 @@ This enables the possibility to shadow tomography.
 	\emph{shadow tomography}
 	\begin{itemize}
 		\item \textbf{Input}: an \textbf{unknown} $N$-dimensional mixed state $\rho$, $M$ known 2-outcome measurements $E_1,\dots,E_M$
-		\item \textbf{Output}: estimate $\probability[E_i \text{ accept } \dm]$ to within additive error $\epsilon$, $\forall i\in [M]$, with $\ge 2/3$ success probability.	
+		\item \textbf{Output}: estimate $\probability[E_i \text{ accept } \dm]=?\Tr(E_i \dm)$ to within additive error $\epsilon$, $\forall i\in [M]$, with $\ge 2/3$ success probability.	
 	\end{itemize}
 \end{problem}
 \begin{theorem}[bounds of shadow tomography \cite{aaronsonShadowTomographyQuantum2018}]\label{thm:shadow_tomography}
-	It is possible to do \nameref{prm:shadow_tomography} using $\tilde{\bigO}(\frac{\log^4 M\cdot \log N}{\epsilon^4})$ copies. [no construction algorithm?]
+	It is possible to do \nameref{prm:shadow_tomography} using $\tilde{\bigO}(\log^4 M\cdot \log N\cdot\epsilon^{-4})$ copies.
 	sample complexity lower bound $\Omega(\log (M) \cdot \epsilon^{-2})$, 
+	(additive error $\epsilon\ll 1/D$).
 \end{theorem}
 % more details in \cref{sec:classical_shadow}
 \begin{remark}[compare shadow tomography with classical shadow \cite{huangPredictingManyProperties2020}]
@@ -1415,6 +1419,11 @@ classical shadow experiments \cite{zhangExperimentalQuantumState2021}
 % \cite{zhuFlexibleLearningQuantum2022}
 
 \section{Conclusion and discussion}
+rigorous proof of sample (training set) complexity scaling with size of a system;
+better kernel;
+number of features required; 
+universal classifier;
+quantum machine learning
 % \begin{itemize}
 % 	\item experiment (generation, verification) \cite{luEntanglementStructureEntanglement2018}
 % 	\item error correction? not benchmark
