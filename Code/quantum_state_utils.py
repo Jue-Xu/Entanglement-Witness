@@ -501,7 +501,7 @@ def plot_score(size_list, train_score_list, test_score_list):
 
 
 def plot_expectation_hist(ax, expectation_lists, legends, title=''):
-    ax.axvline(0.0, ls="--", color="gray")
+    ax.axvline(0.0, ls="--", color="gray", label='_nolegend_')
     for expectation in expectation_lists:
         ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
     ax.legend(legends, loc='upper left', prop ={'size': 9})

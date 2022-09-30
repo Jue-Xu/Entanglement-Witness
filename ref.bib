@@ -1317,6 +1317,23 @@
   abstract = {A quantal system in an eigenstate, slowly transported round a circuit C by varying parameters R in its Hamiltonian \^H(R), will acquire a geometrical phase factor exp\{i{$\gamma$}(C)\} in addition to the familiar dynamical phase factor. An explicit general formula for {$\gamma$}(C) is derived in terms of the spectrum and eigenstates of \^H(R) over a surface spanning C. If C lies near a degeneracy of \^H, {$\gamma$}(C) takes a simple form which includes as a special case the sign change of eigenfunctions of real symmetric matrices round a degeneracy. As an illustration {$\gamma$}(C) is calculated for spinning particles in slowly-changing magnetic fields; although the sign reversal of spinors on rotation is a special case, the effect is predicted to occur for bosons as well as fermions, and a method for observing it is proposed. It is shown that the Aharonov-Bohm effect can be interpreted as a geometrical phase factor.}
 }
 
+@misc{berryQuantifyingQuantumAdvantage2022,
+  title = {Quantifying {{Quantum Advantage}} in {{Topological Data Analysis}}},
+  author = {Berry, Dominic W. and Su, Yuan and Gyurik, Casper and King, Robbie and Basso, Joao and Barba, Alexander Del Toro and Rajput, Abhishek and Wiebe, Nathan and Dunjko, Vedran and Babbush, Ryan},
+  year = {2022},
+  month = sep,
+  number = {arXiv:2209.13581},
+  eprint = {2209.13581},
+  eprinttype = {arxiv},
+  primaryclass = {quant-ph},
+  publisher = {{arXiv}},
+  url = {http://arxiv.org/abs/2209.13581},
+  urldate = {2022-09-29},
+  abstract = {Lloyd et al. were first to demonstrate the promise of quantum algorithms for computing Betti numbers in persistent homology (a way of characterizing topological features of data sets). Here, we propose, analyze, and optimize an improved quantum algorithm for topological data analysis (TDA) with reduced scaling, including a method for preparing Dicke states based on inequality testing, a more efficient amplitude estimation algorithm using Kaiser windows, and an optimal implementation of eigenvalue projectors based on Chebyshev polynomials. We compile our approach to a fault-tolerant gate set and estimate constant factors in the Toffoli complexity. Relative to the best classical heuristic algorithms, our analysis reveals that super-quadratic quantum speedups are only possible for this problem when targeting a multiplicative error approximation and the Betti number grows asymptotically. Further, we propose a dequantization of the quantum TDA algorithm that shows that having exponentially large dimension and Betti number are necessary, but insufficient conditions, for super-polynomial advantage. We then introduce and analyze specific problem examples for which super-polynomial advantages may be achieved, and argue that quantum circuits with tens of billions of Toffoli gates can solve some seemingly classically intractable instances.},
+  archiveprefix = {arXiv},
+  keywords = {Quantum Physics}
+}
+
 @article{berrySimulatingHamiltonianDynamics2015,
   title = {Simulating {{Hamiltonian}} Dynamics with a Truncated {{Taylor}} Series},
   author = {Berry, Dominic W. and Childs, Andrew M. and Cleve, Richard and Kothari, Robin and Somma, Rolando D.},
@@ -6662,6 +6679,25 @@
   keywords = {Computer Science - Computational Complexity,Quantum Physics}
 }
 
+@article{lloydQuantumAlgorithmsTopological2016,
+  title = {Quantum Algorithms for Topological and Geometric Analysis of Data},
+  author = {Lloyd, Seth and Garnerone, Silvano and Zanardi, Paolo},
+  year = {2016},
+  month = apr,
+  journal = {Nat Commun},
+  volume = {7},
+  number = {1},
+  eprint = {1408.3106},
+  eprinttype = {arxiv},
+  pages = {10138},
+  issn = {2041-1723},
+  doi = {10.1038/ncomms10138},
+  url = {http://www.nature.com/articles/ncomms10138},
+  urldate = {2022-09-30},
+  archiveprefix = {arXiv},
+  langid = {english}
+}
+
 @article{lloydQuantumPrincipalComponent2014,
   title = {Quantum Principal Component Analysis},
   author = {Lloyd, Seth and Mohseni, Masoud and Rebentrost, Patrick},
@@ -8791,6 +8827,23 @@
   abstract = {We extend the recently developed real-time Diagrammatic Monte Carlo method, in its hybridization expansion formulation, to the full Kadanoff-Baym-Keldysh contour. This allows us to study real-time dynamics in correlated impurity models starting from an arbitrary, even interacting, initial density matrix. As a proof of concept we apply the algorithm to study the non equilibrium dynamics after a local quantum quench in the Anderson Impurity Model. Being a completely general approach to real-time dynamics in quantum impurity models it can be used as a solver for Non Equilibrium Dynamical Mean Field Theory.},
   archiveprefix = {arXiv},
   keywords = {Condensed Matter - Mesoscale and Nanoscale Physics,Condensed Matter - Strongly Correlated Electrons}
+}
+
+@misc{schmidhuberComplexityTheoreticLimitationsQuantum2022,
+  title = {Complexity-{{Theoretic Limitations}} on {{Quantum Algorithms}} for {{Topological Data Analysis}}},
+  author = {Schmidhuber, Alexander and Lloyd, Seth},
+  year = {2022},
+  month = sep,
+  number = {arXiv:2209.14286},
+  eprint = {2209.14286},
+  eprinttype = {arxiv},
+  primaryclass = {quant-ph},
+  publisher = {{arXiv}},
+  url = {http://arxiv.org/abs/2209.14286},
+  urldate = {2022-09-30},
+  abstract = {Quantum algorithms for topological data analysis (TDA) seem to provide an exponential advantage over the best classical approach while remaining immune to dequantization procedures and the data-loading problem. In this paper, we argue that quantum algorithms for TDA run in exponential time for almost all inputs by showing that (under widely believed complexity-theoretic conjectures) the central problem of TDA - estimating Betti numbers - is intractable even for quantum computers. Specifically, we prove that the problem of computing Betti numbers exactly is \textbackslash\#P-hard, while the problem of approximating Betti numbers up to multiplicative error is NP-hard. Moreover, both problems retain their hardness if restricted to the regime where quantum algorithms for TDA perform best. Because quantum computers are not expected to solve \textbackslash\#P-hard or NP-hard problems in subexponential time, our results imply that quantum algorithms for TDA offer only a polynomial advantage. We verify our claim by showing that the seminal quantum algorithm for TDA developed by Lloyd, Garnerone and Zanardi \textbackslash cite\{LloydAlgo\} achieves a quadratic speedup over the best classical approach on average, and a power-of-four speedup in the best case. Finally, we argue that an exponential quantum advantage can be recovered if the data is given as a specification of simplices rather than as a list of vertices and edges -- for example, if we wish to calculate the homology of Facebook from a list of Facebook groups and their members rather than from a list of pairwise interactions between Facebook users.},
+  archiveprefix = {arXiv},
+  keywords = {Quantum Physics}
 }
 
 @article{schoenSequentialGenerationEntangled2005,

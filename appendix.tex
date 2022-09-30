@@ -3,9 +3,9 @@
 
 \section{Definitions}\label{sec:definitions}
 \begin{definition}[density matrix]\label{def:density_matrix}
-	pure state $\ket{\psi}$;
-	A quantum state $\dm$ is defined to be a positive operator $ \dm \in \text{End}(V )$ with $\Tr( \dm ) = 1$.
-	density matrix $\dm$ (trace one, Hermitian, PSD)...
+	A quantum (mixed) state $\dm$ can be represented by a density matrix which is a Hermitian, \nameref{def:psd} operator (matrix) of trace one. 
+	% defined to be a positive operator $ \dm \in \text{End}(V )$ with $\Tr( \dm ) = 1$.
+	If the rank of $\dm$ is 1, then the state is a pure state $\dm\equiv\op{\psi}$.
 \end{definition}
 \begin{definition}[POVM]\label{def:povm}
 	A positive-operator valued measurement (POVM) $M$ consists of a set of positive operators that sum to the identity operator $\identity$. 
@@ -13,7 +13,8 @@
 	observables ... $\expectation[x]\equiv\expval{\ob_x}:=\tr(\ob_x\dm)$
 \end{definition}
 \begin{definition}[positive, semidefinite]\label{def:psd}
-	denoted $X \preceq Y $ provided $Y-X $ is positive
+	% denoted $X \preceq Y $ provided $Y-X $ is positive
+	A matrix (operator) is positive, semidefinite if all its eigenvalues are non-negative.
 \end{definition}
 \begin{definition}[partial trace]\label{def:partial_trace}
 	% partial trace;
@@ -22,11 +23,11 @@
 % \begin{definition}[partial trace]
 % 	partial trace
 % \end{definition}
-\begin{remark}
-	% (def partial trace ...)
-	a pure (bipartite) state is entangled $\iff$ the reduced state $\dm^A=\Tr_A(\dm)$ is mixed.
-	The mixedness of this reduced state allows one to quantify the amount of entanglement in this state.
-\end{remark}
+% \begin{remark}
+% 	% (def partial trace ...)
+% 	a pure (bipartite) state is entangled $\iff$ the reduced state $\dm^A=\Tr_A(\dm)$ is mixed.
+% 	The mixedness of this reduced state allows one to quantify the amount of entanglement in this state.
+% \end{remark}
 \begin{definition}[partial transpose]\label{def:partial_transpose}
 	\cite{horodeckiSeparabilityMixedStates1996}
 	The partial transpose (PT) operation - acting on subsystem $A$ - is defined as
@@ -36,10 +37,10 @@
 	\end{equation}
 	where $\qty{\ket{k_A,k_B}}$ is a product basis of the joint system AB.
 \end{definition}
-\begin{definition}[maximally entangled]
-	a state vector is \emph{maximually entangled} $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
-	$\Tr_A(\op{\psi})=\frac{1}{2}$.
-\end{definition}
+% \begin{definition}[maximally entangled]
+% 	a state vector is \emph{maximually entangled} $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
+% 	$\Tr_A(\op{\psi})=\frac{1}{2}$.
+% \end{definition}
 \begin{definition}[Schmidt measure]\label{def:schmidt_measure}
 	Consider the following bipartite pure state, written in Schmidt form:
 	\begin{equation}
@@ -60,7 +61,7 @@
 \begin{definition}[entropy]\label{def:entropy}
 	In quantum mechanics (information), the von Neumann \emph{entropy} of a density matrix is $H_N(\dm): = -\Tr(\dm \log \dm)=-\sum_i\lambda_i\log(\lambda_i)$;
 	In classical information (statistical) theory, the Shannon entropy of a probability distribution $P$ is  $H_S(P):= -\sum_i P(x_i) \log P(x_i)$.
-	relative entropy (\nameref{def:divergence})
+	% relative entropy (\nameref{def:divergence})
 \end{definition}
 \begin{definition}[entanglement entropy]\label{def:entanglement_entropy}
 	The bipartite \emph{von Neumann entanglement entropy} $S$
@@ -89,6 +90,7 @@
 	The \nameref{def:schmidt_measure} for any multi-partite \nameref{exm:ghz} states is 1, because there are just two terms.
 	Schmidt measure for 1D, 2D, 3D-\nameref{def:cluster_state} is $\floor{\frac{N}{2}}$.
 	Schmidt measure of tree is the size of its minimal vertex cover[??].
+	other entanglement measures...
 \end{example}
 
 % \subsubsection{Distance measures}\label{sec:distance_measure}
@@ -104,7 +106,7 @@
 	% 	F(\rho,\rho') : = \Tr \sqrt{\sqrt{\rho}\rho'\sqrt{\rho}}
 	% \end{equation}
 \end{definition}
-different distance measures \cite{badescuQuantumStateCertification2017}
+% different distance measures \cite{badescuQuantumStateCertification2017}
 \begin{notation}[norm]\label{def:norm}
 	Schatten p-norm $\norm{x}_p:= (\sum_i \abs{x_i}^p)^{1/p}$.
 	Euclidean norm $l_2$ norm;
@@ -136,11 +138,11 @@ different distance measures \cite{badescuQuantumStateCertification2017}
 
 
 % \subsection{Stabilizer formalism}\label{sec:stabilizer_formalism}
-denote a group by $\group$ and a subgroup $\subgroup$. 
-\begin{definition}[Pauli group]
-\end{definition}
-\begin{definition}[Clifford group]\label{def:clifford}
-\end{definition}
+% denote a group by $\group$ and a subgroup $\subgroup$. 
+% \begin{definition}[Pauli group]
+% \end{definition}
+% \begin{definition}[Clifford group]\label{def:clifford}
+% \end{definition}
 \begin{definition}[Stabilizer]\label{def:stabilizer}
 	An observable $S_k$ is a stabilizing operator of an $n$-qubit state $\ket{\psi}$ if the state $\ket{\psi}$ is an eigenstate of $S_k$ with eigenvalue 1,
 
@@ -235,13 +237,13 @@ It worth noting that 2D cluster (rectangular lattice graph) state is the univers
 	% \end{itemize}
 	% cluster states are defined on lattice (graphs).
 \end{definition}
-\begin{question}
-	how to relate graph state entanglement to graph property test
-	..??. (graph kernel??)
-	\cite{heinEntanglementGraphStates2006}.
-	witness; bounds; \nameref{def:graph_property}? vertex cover?
-	Hamiltonian cycle of a graph state? 
-\end{question} 
+% \begin{question}
+% 	how to relate graph state entanglement to graph property test
+% 	..??. (graph kernel??)
+% 	\cite{heinEntanglementGraphStates2006}.
+% 	witness; bounds; \nameref{def:graph_property}? vertex cover?
+% 	Hamiltonian cycle of a graph state? 
+% \end{question} 
 
 % \begin{proposition}\label{thm:entanglement_witness_gme}
 % 	Given a state $\ket{\psi}$,
