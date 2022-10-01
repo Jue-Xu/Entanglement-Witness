@@ -507,5 +507,5 @@ def plot_expectation_hist(ax, expectation_lists, legends, title=''):
     ax.legend(legends, loc='upper left', prop ={'size': 9})
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectations of different entanglement witness')
-    ax.text(0.54, 0.95, title, transform=ax.transAxes)
+    ax.text(0.51, 0.95, title, transform=ax.transAxes)
     # ax.set_title('3-qubit case '+title)

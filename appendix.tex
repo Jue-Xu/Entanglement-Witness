@@ -12,9 +12,9 @@
 	When a measurement $M = \qty{ E_1 , \dots , E_k }$ is applied to a quantum state $\dm$, the outcome is $i \in [k]$ with probability $p_i = \tr( \dm E_i )$.
 	observables ... $\expectation[x]\equiv\expval{\ob_x}:=\tr(\ob_x\dm)$
 \end{definition}
-\begin{definition}[positive, semidefinite]\label{def:psd}
+\begin{definition}[PSD]\label{def:psd}
 	% denoted $X \preceq Y $ provided $Y-X $ is positive
-	A matrix (operator) is positive, semidefinite if all its eigenvalues are non-negative.
+	A matrix (operator) is positive, semidefinite (PSD) if all its eigenvalues are non-negative.
 \end{definition}
 \begin{definition}[partial trace]\label{def:partial_trace}
 	% partial trace;
@@ -35,7 +35,7 @@
 		\op{k_A,k_B}{l_A,l_B}^{\T_A}
 		:= \op{l_A,k_B}{k_A,l_B}
 	\end{equation}
-	where $\qty{\ket{k_A,k_B}}$ is a product basis of the joint system AB.
+	where $\qty{\ket{k_A,k_B}}$ is a product basis of the joint system $\hilbertspace_{AB}$.
 \end{definition}
 % \begin{definition}[maximally entangled]
 % 	a state vector is \emph{maximually entangled} $\iff$ the reduced state at one qubit is maximally mixed, i.e.,
@@ -143,20 +143,19 @@
 % \end{definition}
 % \begin{definition}[Clifford group]\label{def:clifford}
 % \end{definition}
-\begin{definition}[Stabilizer]\label{def:stabilizer}
+\begin{definition}[stabilizer]\label{def:stabilizer}
 	An observable $S_k$ is a stabilizing operator of an $n$-qubit state $\ket{\psi}$ if the state $\ket{\psi}$ is an eigenstate of $S_k$ with eigenvalue 1,
-
-	A stabilizer set $S = \qty{ S_1, \dots , S_n}$ consisting of n mutually commuting and independent stabilizer operators is called the set of stabilizer “generators”.
+	A stabilizer set $S = \qty{ S_1, \dots , S_n}$ consisting of $n$ mutually commuting and independent stabilizer operators is called the set of stabilizer “generators”.
 \end{definition}
 Many highly entangled $n$-qubit states can be uniquely defined by $n$ stabilizing operators which are locally measurable, i.e., they are products of Pauli matrices.
-A stabilizer $S_i$ is an $n$-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
+A \nameref{def:stabilizer} $S_i$ is an $n$-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
 % \begin{remark}
 	An $n$-partite(qubit) graph state can also be uniquely determined by $n$ independent stabilizers, 
 	$S_i:= X_i \bigotimes_{j\in n}Z_j$, 
 	which commute with each other and $\forall i,S_i\ket{G}=\ket{G}$.??
 	The graph state is the unique eigenstate wtih eignevalue of +1 for all the $n$ stabilizers.
 	As a result, a graph state can be written as a product of stailizer projectors, $\op{G}=\prod_{i=1}^n \frac{S_i +\identity}{2}$.
-	\nameref{def:stabilizer} formalism
+	% \nameref{def:stabilizer} formalism
 	% stabilizer formalism
 % \end{remark}
 \begin{example}[GHZ]\label{exm:ghz}
@@ -185,8 +184,7 @@ A stabilizer $S_i$ is an $n$-fold tensor product of $n$ operators chosen from th
 	\begin{equation}
 		\ew_{\ghz_n} = (n-1) \identity - \sum_{k=1}^n S_k{(\ghz_n)}
 	\end{equation}
-	where $\stbz_k$ is the \nameref{def:stabilizer} ... \cite{tothEntanglementDetectionStabilizer2005}
-	Detecting Genuine Multipartite Entanglement with Two Local Measurements \cite{tothDetectingGenuineMultipartite2005}
+	where $\stbz_k$ is the \nameref{def:stabilizer} ... \cite{tothEntanglementDetectionStabilizer2005}	
 \end{example}
 % \begin{question}
 % 	how far/close to the target state (entanglement witness), noise limit?
@@ -259,14 +257,14 @@ It worth noting that 2D cluster (rectangular lattice graph) state is the univers
 \begin{table}[!ht]
 \centering
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
-	 & $\ket{\ghz_3}$ & $\ket{W_3}$ & $\ket{CL_3}$ & $\ket{\psi_2}$ & $\ket{\D_{2,4}}$ & $\ket{\ghz_n}$ & $\ket{W_3}$ & $\ket{G_n}$ \\
+	 & $\ket{\ghz_3}$ & $\ket{W_3}$ & $\ket{CL_3}$ & $\ket{\psi_2}$ & $\ket{\D_{2,4}}$ & $\ket{\ghz_n}$ & $\ket{W_n}$ & $\ket{G_n}$ \\
 	\hline
-	$\alpha$ & $1/2$ & $2/3$ & $1/2$ & $3/4$ & $2/3$ & $1/2$ & $(n-1)/n$ & $1/2$ \\
-	maximal $p_{\noise}$ & 4/7 & 8/21 & 8/15 & 4/15 & 16/45 & $1/2 \cdot (1-1/2^n)^{-1}$ & & \\
-	local measurements & 4 & 5 & 9 & 15 & 21 & $n+1$ & $2n-1$ & depend on graphs \\
+	maximal overlap $\alpha$ & $1/2$ & $2/3$ & $1/2$ & $3/4$ & $2/3$ & $1/2$ & $(n-1)/n$ & $1/2$ \\
+	maximal $p_{\noise}$ & 4/7 & 8/21 & 8/15 & 4/15 & 16/45 & $1/2 \cdot (1-1/2^n)^{-1}$ & $1/n \cdot (1-1/2^n)^{-1}$ & $1/2 \cdot (1-1/2^n)^{-1}$ \\
+	\# local measurements & 4 & 5 & 9 & 15 & 21 & $n+1$ & $2n-1$ & depend on graphs \\
 	\hline
 \end{tabular}
-\caption{\cite{guhneEntanglementDetection2009}}
+\caption{Results on local decompositions of different entanglement witnesses for different states. \cite{guhneEntanglementDetection2009}}
 \end{table}
 
 \section{Machine learning background}
@@ -316,7 +314,7 @@ However, note that SVM is only a linear classifier. while most real-world data, 
 		\kernel (\vbx,\vbx') : = \expval{\phi(\vbx),\phi(\vbx')}
 	\end{equation}
 	If the input $\vbx\in \realnumber^d$ (conventional machine learning task, e.g., image classification), the feature map $\phi(\vbx): \realnumber^d\to \realnumber^n$ ($d < n$) from a low dimensional space to a higher dimensional space.
-	The corresponding kernel (Gram) matrix $\mathbf{K}$ should be a positive, semidefinite (PSD) matrix, i.e. all eigenvalues are non-negative
+	The corresponding kernel (Gram) matrix $\mathbf{K}$ is \nameref{def:psd}.
 \end{definition}
 \begin{example}[kernels]
 	Some common kernels: 
@@ -398,16 +396,16 @@ However, note that SVM is only a linear classifier. while most real-world data, 
 	\cite{baiQuantumJensenShannon2015}	
 \end{definition}
 
-\subsubsection{Quantum kernel}
-related works:
-\begin{itemize}
-	\item quantum kernel method: estimate kernels by quantum algorithms (circuits)	\cite{havlicekSupervisedLearningQuantum2019}
-	\cite{schuldQuantumMachineLearning2019}: for classical problem (data)
+\subsubsection{Quantum kernel}\label{sec:quantum_kernel}
+% related works:
+% \begin{itemize}
+% 	\item quantum kernel method: estimate kernels by quantum algorithms (circuits)	\cite{havlicekSupervisedLearningQuantum2019}
+% 	\cite{schuldQuantumMachineLearning2019}: for classical problem (data)
 
-	\item rigorous and robust quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}. group structured data \cite{glickCovariantQuantumKernels2021}
+% 	\item rigorous and robust quantum advantage of quantum kernel method in SVM \cite{liuRigorousRobustQuantum2021}. group structured data \cite{glickCovariantQuantumKernels2021}
 
-	\item power of data in quantum machine learning \cite{huangPowerDataQuantum2021}: input??? projected quantum kernel
-\end{itemize}
+% 	\item power of data in quantum machine learning \cite{huangPowerDataQuantum2021}: input??? projected quantum kernel
+% \end{itemize}
 % \begin{remark}[\cite{horodeckiDirectDetectionQuantum2002}]
 % 	Direct entanglement detections, can be \textbf{employed as sub-routines in quantum computation}. For example, one may consider performing or not performing a quantum operation on a given quantum system conditioned on some part of quantum data being entangled or not. In fact direct entanglement detections can be viewed as quantum computations solving an inherently quantum decision problem: given as an input n copies of decide whether is entangled. Here the \textbf{input data is quantum} and such a decision problem cannot even be even formulated for classical computers. 
 % 	% Nonetheless the problem is perfectly well deﬁned for quantum computers.
