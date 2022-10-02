@@ -2,7 +2,7 @@
 
 ## The Paper
 <!-- Entanglement-Witness-by-Quantum -->
-Code supporting the paper:
+
 `Towards efficient and generic entanglement detection`.
 Jue Xu and Qi Zhao, 2022,
 arXiv: ...
@@ -12,13 +12,13 @@ M. Weilenmann, B. Dive, D. Trillo, E. A. Aguilar and M. Navascués
 
 
 <!-- ####################### INSTALLATION ########################## -->
-## Installation
+<!-- ## Installation
 
-The contents of the package do not need any installation beyond the packages required below.
+The contents of the package do not need any installation beyond the packages required below. -->
 <!-- The package can simply be downloaded and run directly.  -->
 <!-- Note that the `quantum_state_utils.py` module must be in the same directory as the notebook `Entangle.ipynb` when they are run. -->
 
-### Packages required: 
+## Packages required for numeric simulation: 
 - anaconda
 - python, version > 3.8.8
 - numpy, version > 1.21.5
@@ -35,9 +35,10 @@ The contents of the package do not need any installation beyond the packages req
 
 
 <!-- ######################### USAGE ############################# -->
-## Usage
+## Usage of code
 
-The package is organised as follows. 
+`Code` folder includes the code supporting the [paper](https://github.com/Jue-Xu/Entanglement-Witness/blob/main/ew.pdf).
+The script and notebook are organized as follows. 
 `quantum_state_utils.py` contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
 The `entangle_detection.ipynb` notebook contains the scripts that generates a particular example or a figure.
 The `quantum_state_utils.py` module must be in the same directory as the notebook `entangle_detection.ipynb` when they are run.

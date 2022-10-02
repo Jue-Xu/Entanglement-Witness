@@ -16,7 +16,8 @@
 	% denoted $X \preceq Y $ provided $Y-X $ is positive
 	A matrix (operator) is positive, semidefinite (PSD) if all its eigenvalues are non-negative.
 \end{definition}
-\begin{definition}[partial trace]\label{def:partial_trace}
+\begin{definition}[reduced density matrix]\label{def:reduced_density_matrix}
+% \begin{definition}[partial trace]\label{def:partial_trace}
 	% partial trace;
 	reduced density matrix $\dm_A = \Tr_B(\dm_{AB})$
 \end{definition}
@@ -76,8 +77,8 @@
 		= -\Tr(\dm_B \log \dm_B)
 		= S(\dm_B)
 	\end{equation}
-	where $\dm_A= \Tr_B(\dm_{AB})$ and $\dm_B = \Tr_A(\dm_{AB})$ 
-	are the reduced density matrices for each partition.
+	where $\dm_A$ and $\dm_B $ 
+	are the \nameref{def:reduced_density_matrix} for each partition.
 	With Schmidt decomposition (\cref{eq:schmidt_decomposition}), the entropy of entanglement is simply $-\sum_ip_i^2\log(p_i)$.
 	the $n$th Renyi entropy,
 	$S_n = \frac{1}{n-1} \log (R_n)$
@@ -149,15 +150,6 @@
 \end{definition}
 Many highly entangled $n$-qubit states can be uniquely defined by $n$ stabilizing operators which are locally measurable, i.e., they are products of Pauli matrices.
 A \nameref{def:stabilizer} $S_i$ is an $n$-fold tensor product of $n$ operators chosen from the one qubit Pauli operators $\qty{\identity,X,Y,Z}$.
-% \begin{remark}
-	An $n$-partite(qubit) graph state can also be uniquely determined by $n$ independent stabilizers, 
-	$S_i:= X_i \bigotimes_{j\in n}Z_j$, 
-	which commute with each other and $\forall i,S_i\ket{G}=\ket{G}$.??
-	The graph state is the unique eigenstate wtih eignevalue of +1 for all the $n$ stabilizers.
-	As a result, a graph state can be written as a product of stailizer projectors, $\op{G}=\prod_{i=1}^n \frac{S_i +\identity}{2}$.
-	% \nameref{def:stabilizer} formalism
-	% stabilizer formalism
-% \end{remark}
 \begin{example}[GHZ]\label{exm:ghz}
 	% Greenberger-Horne-Zeilinger (GHZ) 
 	For GHZ state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$,
@@ -190,11 +182,6 @@ A \nameref{def:stabilizer} $S_i$ is an $n$-fold tensor product of $n$ operators 
 % 	how far/close to the target state (entanglement witness), noise limit?
 % \end{question}
 
-\nameref{def:graph_state} is an important large class of multipartite states in quantum information,
-because (connected) graph states represent a large class of genuine multipartite entangled states that have concise representations.
-Typical graph states include cluster states, \nameref{exm:ghz} states, and the states involved in error correction (toric code).
-	% Any connected graph state is \nameref{def:fully_entangled} state.
-It worth noting that 2D cluster (rectangular lattice graph) state is the universal resource for the measurement based quantum computation (MBQC) \cite{briegelMeasurementbasedQuantumComputation2009}.
 % cluster state is the special case of graph state.
 \begin{definition}[cluster state]\label{def:cluster_state}
 	1D four qubits
