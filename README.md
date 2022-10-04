@@ -37,11 +37,11 @@ The contents of the package do not need any installation beyond the packages req
 <!-- ######################### USAGE ############################# -->
 ## Usage of code
 
-`Code` folder includes the code supporting the [paper](https://github.com/Jue-Xu/Entanglement-Witness/blob/main/ew.pdf).
+[Code](https://github.com/Jue-Xu/Entanglement-Witness/tree/main/Code) folder includes the code supporting the [paper](https://github.com/Jue-Xu/Entanglement-Witness/blob/main/ew.pdf).
 The script and notebook are organized as follows. 
-`quantum_state_utils.py` contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
-The `entangle_detection.ipynb` notebook contains the scripts that generates a particular example or a figure.
-The `quantum_state_utils.py` module must be in the same directory as the notebook `entangle_detection.ipynb` when they are run.
+[quantum_state_utils.py](https://github.com/Jue-Xu/Entanglement-Witness/blob/main/Code/quantum_state_utils.py) contains the functions that generate specific data (e.g. bi-separable, genuine entangled quantum states) and construct the training/testing datasets. 
+The [entangle_detection.ipynb](https://github.com/Jue-Xu/Entanglement-Witness/blob/main/Code/entangle_detection.ipynb) notebook contains the scripts that generates a particular example or a figure.
+The `.py` script must be in the same directory as the notebook when they are run.
 <!-- Each of the other files have the scripts that correspond to
 a particular example, figure, or table in the manuscript, and can be run independently. -->
 
