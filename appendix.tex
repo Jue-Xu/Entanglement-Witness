@@ -253,6 +253,7 @@ A \nameref{def:stabilizer} $S_i$ is an $n$-fold tensor product of $n$ operators 
 	\hline
 \end{tabular}
 \caption{Results on local decompositions of different entanglement witnesses for different states. \cite{guhneEntanglementDetection2009}}
+\label{tab:summary_fidelity_witness}
 \end{table}
 
 \section{Machine learning background}
@@ -292,6 +293,7 @@ Lagrange multipliers $\alpha$
 % 	L_D = \sum_i \alpha^{(i)} - \frac{1}{2} \sum_{ij} \alpha^{(i)} \alpha^{(j)} y^{(i)} y^{(i)}
 % 	\vbx^{(i)} \cdot \vbx^{(j)}
 % \end{equation}
+[TODO]
 
 \subsubsection{kernel method}
 However, note that SVM is only a linear classifier. while most real-world data, such as cat/dog images and entangled/separable quantum states are not linearly separable. For example, with this two dimension dataset, we are unable to find a hyperplane to separate red points from the purple points very well. Fortunately, there is a very useful tool called kernel method or kernel trick to remedy this drawback. The main idea is mapping the features to a higher dimensional space such that  they can be linearly separated in the high dimensional feature space. Just like this example, two dimensional data are mapped to the three dimensional space. Now, we can easily find the separating plane. With SVM and kernel methods, we expect to find a generic and flexible way for entanglement detection.
