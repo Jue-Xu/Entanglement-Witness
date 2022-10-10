@@ -155,10 +155,10 @@ A \nameref{def:stabilizer} $S_i$ is an $n$-fold tensor product of $n$ operators 
 	% Greenberger-Horne-Zeilinger (GHZ) 
 	For GHZ state: $\ket{\ghz}:=\frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n} )$,
 	the projector based witness 
-	% $\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ 
-	\begin{equation}
-		\ew_{\ghz_3}= \frac{1}{2} \identity - \op{\ghz}
-	\end{equation}
+	$\ew_{\ghz_3}=\identity/2 - \op{\ghz}$ 
+	% \begin{equation}
+	% 	\ew_{\ghz_3}= \frac{1}{2} \identity - \op{\ghz}
+	% \end{equation}
 	requires four measurement settings.
 	% (the direction projection is hard to evaluate because the state is entangled).
 	For three-qubit GHZ state 
@@ -282,6 +282,7 @@ SVM is a typical supervised learning algorithm for classification. Taking the ex
 		\norm{\vb{w}}^2
 		\text{ s.t. }
 		\forall i , y^{(i)}\cdot (\vb{w}\cdot\vb{x}+b)\ge 1.
+		\label{eq:svm_opt}
 	\end{equation}
 \end{definition}
 Lagrange multipliers $\alpha$
