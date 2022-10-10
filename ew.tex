@@ -901,7 +901,7 @@ This method only requires local (Pauli) measurements even when the target state 
 		\While{  accuracy not high enough} {
 			randomly select $j$ features $\tilde{\vbx}_i$ from $\vbx_i$, $\forall i$ \\
 			% kernel estimation \tcp*{classical kernel}
-			accuracy, classifier = SVM($\qty{(\tilde{\vbx}_i,y_i)}^m_i$)
+			accuracy, classifier = SVM($\qty{(\tilde{\vbx}^{(i)},y^{(i)})}^m_i$)
 			% \tcp*{train SVM}
 			% \tcc{comment in a new line}
 		}
