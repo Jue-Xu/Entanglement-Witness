@@ -245,8 +245,10 @@ at last, numerical simulation results are discussed in \cref{sec:numerical_simul
 	and $\px^{(1)}\pz^{(3)} \equiv \hat{X} \otimes \identity \otimes \hat{Z}$.
 \end{notation}
 \begin{notation}
-	Denote $\pob_{\sigma}:=\bigotimes \sigma$ for a Pauli observable where $\sigma\in \qty{I,X,Y,Z}^n$ is a string of Pauli operators.
-	Denote $\vbx_{\dm,\bmsigma}:=(\Tr(\dm\pob_{\sigma_1}),\dots,\Tr(\dm\pob_{\sigma_M}))$ for expectations of $M$ Pauli observables with respect to the state $\dm$ where $\bmsigma\subseteq \qty{I,X,Y,Z}^n$.
+	Denote $\pob_{\sigma}\in \qty{I,X,Y,Z}^{\otimes n}$ for a Pauli observable.
+	% Denote $\pob_{\sigma}:=\bigotimes \sigma$ for a Pauli observable.
+	% where $\sigma\in \qty{I,X,Y,Z}^n$ is a string of Pauli operators.
+	Denote $\vbx_{\dm,\bmsigma}:=(\Tr(\dm\pob_{\sigma_1}),\dots,\Tr(\dm\pob_{\sigma_M}))$ for expectations of $M$ Pauli observables with respect to the state $\dm$ where $\bmsigma\subseteq \qty{I,X,Y,Z}^{\otimes n}$.
 	Denote vectors $\vbx$, $\bmsigma$, $\vbw$ by boldface font.
 \end{notation}
 % \begin{notation}
@@ -1025,7 +1027,7 @@ multivariate functions:  $\Tr(\dm_1 \cdots \dm_m)$, \nameref{def:quantum_kernel}
 % 	\end{itemize}
 % \end{problem}
 % Nevertheless, we usually only need specific properties of a target state rather than full classical descriptions about the state.
-This enables the possibility to \emph{shadow tomography} proposed by Aaronson \cite{aaronsonShadowTomographyQuantum2018}.
+This enables the possibility to \emph{shadow tomography} \cite{aaronsonShadowTomographyQuantum2018}.
 \begin{problem}[shadow tomography]\label{prm:shadow_tomography}
 	Aaronson's formulation	
 	($\probability[E_i \text{ accept } \dm]=?\Tr(E_i \dm)$)
@@ -1053,7 +1055,7 @@ In our pipeline, we focus on the classical shadow method and its variants.
 % \subsubsection{Estimate expectations via classical shadow}\label{sec:classical_shadow}
 
 A classical shadow is a succinct classical description of a quantum state, which can be extracted by performing reasonably simple single-copy measurements on a reasonably small number of copies of the state.
-The classical shadow attempts to approximate this expectation value by an empirical average over $T$ independent samples, much like Monte Carlo sampling approximates an integral.
+The classical shadow attempts to approximate this expectation value by an empirical average over $R$ independent samples, much like Monte Carlo sampling approximates an integral.
 	\begin{equation}
 		o_i = \Tr(O_i \dm_{\cs})
 		\text{ obeys }
@@ -1104,26 +1106,26 @@ classical shadows are based on random Clifford measurements and do not depend on
     \Output{estimation of $\vbx_{\dm,\bmsigma_{\ml}}:=\Tr(\dm\pob_{\bmsigma_{\ml}})$}
     % \Output{\nameref{def:classical_shadow} $\dm_{cs}$}
     \BlankLine
-    \For{ $i = 1,2, \ldots, N$} {
+    \For{ $i = 1,2, \ldots, R$} {
         $\dm\mapsto \U\dm \U^\dagger$ \tcp*{apply a random unitary}
 		$\ket{b}\in \qty{0,1}^n $ \tcp*{measurement outcome}
 		$\dm_{\cs}=\mathcal{M}^{-1}\qty(\U^\dagger \op{b} \U)$ \tcp*{$\mathcal{M}$ quantum channel}
         % \tcc{comment in a new line}
     % {\Return ?}
     }
-    $\text{CS}(\dm,N)=\qty{\dm_{\cs_1},\dots,\dm_{\cs_N}}$ \tcp*{call this array the classical shadow of $\dm$}
-	\Return  $\vbx_{\dm,\bmsigma_{\ml}}$
-	\tcp{estimate features for SVM}
+    $\text{CS}(\dm,R)=\qty{\dm_{\cs_1},\dots,\dm_{\cs_R}}$ \tcp*{classical shadow}
+	\tcp{estimate features for SVM from classical shadow}
+	\Return  $\vbx_{\dm,\bmsigma_{\ml}}=\textsc{MedianOfMeans}(\text{CS}(\dm,R)\bmsigma_{\ml})$
     \caption{estimate features by CS}
     \label{alg:classical_shadow}
 \end{algorithm}
 Given a quantum state $\dm$,
-a classical shadow is created by repeatedly performing a simple procedure: Apply a unitary transformation $\dm \mapsto \U \dm \U^\dagger$, and then measure all the qubits in the computational basis ...$\ket{b}$. 
-Its classical shadow (snapshots) $\dm_{\cs}$ is 
+a classical shadow is created by repeatedly performing a simple procedure: Apply a unitary transformation $\dm \mapsto \U \dm \U^\dagger$, and then measure all the qubits in the computational basis $\ket{\vb{b}}\in \qty{\ket{0},\ket{1}}^{\otimes n}$. 
+Its classical shadow (snapshots) $\dm_{\cs}$ (a density matrix) can be reconstructed
 \begin{equation}
-	\dm_{\cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{\hat{b}} U)
+	\dm_{\cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{\vb{b}} U)
 \end{equation}
-where $\mathcal{M}$ is the channel ....
+where $\mathcal{M}$ is a quantum channel that depends on the ensemble of random unitary transformation... .
 The algorithm is summarized in Algorithm. \ref{alg:classical_shadow}.
 The number of times this procedure is repeated is called the size of the classical shadow. 
 Classical shadows with size of order $\log(M)$ suffice to predict $M$ target functions $\qty{\ob_1,\dots,\ob_M}$.
