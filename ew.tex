@@ -891,7 +891,7 @@ This method only requires local (Pauli) measurements even when the target state 
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{states with labels: $\qty{(\dm^{(i)},y^{(i)})}^m_{i=1}$}
+    \Input{states with labels: $\qty{\qty(\dm^{(i)},y^{(i)})}^m_{i=1}$}
     \Output{a classifier $\vbw_{\ml}$, $\bmsigma_{\ml}$}
     \BlankLine
 	% \tcp*{---------------------------------------------- training phase ------------------------------------------------}
@@ -901,7 +901,7 @@ This method only requires local (Pauli) measurements even when the target state 
 		\While{  accuracy not high enough} {
 			randomly select $j$ features $\tilde{\vbx}_i$ from $\vbx_i$, $\forall i$ \\
 			% kernel estimation \tcp*{classical kernel}
-			accuracy, classifier = SVM($\qty{(\tilde{\vbx}^{(i)},y^{(i)})}^m_i$)
+			accuracy, classifier = SVM($\qty{\qty(\tilde{\vbx}^{(i)},y^{(i)})}^m_i$)
 			% \tcp*{train SVM}
 			% \tcc{comment in a new line}
 		}
@@ -1445,7 +1445,8 @@ Possible directions for future research:
 (2) better kernel options such as graph kernel, quantum kernel, shadow kernel and neural tangent kernel;
 (3) quantum machine learning for estimating all classical features (tomography) efficiently;
 (4) if we have all classical features, is it possible to train a universal classifier or with weaker promise;
-(5) can we estimate concurrence... by quantum circuit
+(5) can we estimate concurrence... by quantum circuit;
+(6) quantum complexity for \nameref{prm:separability}
 
 
 % \subsection*{Acknowledgements}
