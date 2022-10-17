@@ -17,6 +17,26 @@ from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.svm import SVC
 from sklearn.feature_selection import RFE
 
+SMALL_SIZE = 10
+MEDIUM_SIZE = 11  #default 10
+LARGE_SIZE = 13
+
+import matplotlib.pyplot as plt
+
+plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
+plt.rc('axes', titlesize=LARGE_SIZE)  # fontsize of the axes title
+plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
+plt.rc('xtick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
+plt.rc('ytick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
+plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
+plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
+
+# font = {'family' : 'normal', fontfamily='serif',
+#         'weight' : 'bold',
+#         'size'   : 22}
+
+# matplotlib.rc('font', **font)
+
 ########################################
 """ PUBLIC FUNCTIONS USED IN NOTEBOOK """
 ########################################
@@ -346,11 +366,12 @@ def plot_feature_space(X, y, clf, filter, labels, savefig=False):
         #                     edgecolor="k",
         #                     s=30)
         ax.scatter(X[:, filter][:, 0], X[:, filter][:, 1], c=y, cmap=cm_bright, edgecolor="k", s=30)
-        ax.set_ylabel(f'feature #2: <{labels[1]}>')
-        ax.set_xlabel(f'feature #1: <{labels[0]}>')
+        ax.set_xlabel(r'feature #1: $\langle {{{}}} \rangle$'.format(labels[0]))
+        ax.set_ylabel(r'feature #2: $\langle {{{}}} \rangle$'.format(labels[1]))
+        # ax.set_xlabel(f'feature #1: <{labels[0]}>')
         # ax.legend(['entangled', 'separable'], loc='upper right')
         if savefig:
-            plt.savefig('feature_space_2d.png', dpi=300)
+            plt.savefig('feature_space_2d.png', dpi=400)
 
 
 def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=False):
@@ -379,7 +400,7 @@ def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=Fals
         print('feature ranking:', ranking)
         print('----------------------------------------')
         # print(y_train)
-        plot_ranking(two_pauli_tomo_labels, ranking) 
+        plot_ranking(two_pauli_tomo_labels, ranking)
     else:
         clf = svm.SVC()
         clf.fit(X_train, y_train)
@@ -483,7 +504,7 @@ def my_svm(X, y, size_test, kernel, legend, rfe=False, to_features=3):
     ax.set_xlabel('Expectation value')
     ax.set_title('2-qubit')
     ax.legend(legend, loc='upper right')
-    plt.savefig('two_qubit_hist.png', dpi=300)
+    plt.savefig('two_qubit_hist.png', dpi=400)
 
     # return clf
     return (train_score, test_score)
@@ -497,15 +518,16 @@ def plot_score(size_list, train_score_list, test_score_list):
     ax.legend(['train','test'], loc='upper right')
     ax.set_ylabel('Score (accuray)')
     ax.set_xlabel('Number of samples')
-    plt.savefig('two_qubit_scores.png', dpi=300)
+    plt.savefig('two_qubit_scores.png', dpi=400)
 
 
 def plot_expectation_hist(ax, expectation_lists, legends, title=''):
     ax.axvline(0.0, ls="--", color="gray", label='_nolegend_')
     for expectation in expectation_lists:
         ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
-    ax.legend(legends, loc='upper left', prop ={'size': 9})
+    ax.legend(legends, loc='upper left')
+    # ax.legend(legends, loc='upper left', prop ={'size': 9})
     ax.set_ylabel('Number of samples')
     ax.set_xlabel('Expectations of different entanglement witness')
-    ax.text(0.51, 0.95, title, transform=ax.transAxes)
+    ax.text(0.51, 0.92, title, transform=ax.transAxes)
     # ax.set_title('3-qubit case '+title)
