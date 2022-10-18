@@ -371,7 +371,7 @@ def plot_feature_space(X, y, clf, filter, labels, savefig=False):
         # ax.set_xlabel(f'feature #1: <{labels[0]}>')
         # ax.legend(['entangled', 'separable'], loc='upper right')
         if savefig:
-            plt.savefig('feature_space_2d.png', dpi=400)
+            plt.savefig('feature_space_2d.png', dpi=400, bbox_inches='tight')
 
 
 def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=False):
@@ -521,13 +521,13 @@ def plot_score(size_list, train_score_list, test_score_list):
     plt.savefig('two_qubit_scores.png', dpi=400)
 
 
-def plot_expectation_hist(ax, expectation_lists, legends, title=''):
+def plot_expectation_hist(ax, expectation_lists, legends, title='',fontsize=LARGE_SIZE,xlabel=r'$\Tr(W\rho)$'):
     ax.axvline(0.0, ls="--", color="gray", label='_nolegend_')
     for expectation in expectation_lists:
         ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
-    ax.legend(legends, loc='upper left')
+    ax.legend(legends, loc='upper left',fontsize=fontsize-2)
     # ax.legend(legends, loc='upper left', prop ={'size': 9})
-    ax.set_ylabel('Number of samples')
-    ax.set_xlabel('Expectations of different entanglement witness')
-    ax.text(0.51, 0.92, title, transform=ax.transAxes)
+    ax.set_ylabel('Number of samples',fontsize=fontsize)
+    ax.set_xlabel(xlabel,fontsize=fontsize)
+    ax.text(0.51, 0.92, title, transform=ax.transAxes,fontsize=fontsize-2)
     # ax.set_title('3-qubit case '+title)

@@ -178,7 +178,7 @@ floatfix,
 	Detection of entanglement is an indispensable step to practical quantum computation and communication.
 	In this work, we propose an end-to-end, machine learning assisted entanglement detection protocol.
 	In this protocol, an entanglment witness for a generic entangled state is obtained by classical machine learning with a synthetic dataset which consists of classical features of states and their labels. 
-	In actual experiments, classical features of a state, that is expectation values of a set of  Pauli observables, are estimated by sample-efficient methods such as classical shadow.
+	In actual experiments, classical features of a state, that is expectation values of a set of  Pauli observables, are estimated by the sample-efficient scheme such as classical shadow.
 	% In this work, we compare complexity and performance of several recently-developed methods, including entanglement witness methods, shadow tomography, classical machine learning, and quantum algorithms (circuits).
 	% We illustrate the advantages and limitations of machine learning and quantum algorithms.
 \end{abstract}
@@ -470,7 +470,7 @@ Whereas, these hardness results does not rule out the possibility to solve it ef
 A related but different problem setting is how to determine \nameref{def:bipartite_separable} given copies of an unknown state (from experiments) rather than its density matrix.
 Since the input to this problem is quantum data (states), direct estimation of \nameref{def:reduced_density_matrix}'s spectrum by quantum circuits is a good option (without fully recovering density matrix).
 % Rather than qualitatively determining bi-separability, there are measures to quantify entanglement, such as entanglement entropy, negativity and purity of reduced density matrices.
-For example, multivariate trace $\Tr(\dm_A^m)$ encodes the entanglement information (e.g., purity, negativity, and entanglement entropy) of $\dm_{AB}$ where $\dm_A$ is the  reduced density matrix
+For example, multivariate trace $\Tr(\dm_A^m)$ encodes the entanglement information (e.g., purity, negativity, and entanglement entropy) of $\dm_{AB}$ with $\dm_A$ being the  reduced density matrix
  \cite{ekertDirectEstimationsLinear2002} \cite{horodeckiDirectDetectionQuantum2002}
 \footnote{
 	The well-known identity (related to the replica trick originating in spin glass theory)
@@ -1471,6 +1471,8 @@ dataset size for training: $10^3$ for 3-qubit case; more qubits [TODO]...
 
 \section{Conclusion and discussion}\label{sec:conclusion}
 Related experiments: ....
+our protocol is more flexible (a subset of observables which are realistic in experiments),
+but no guarantee (need more research)
 Possible directions for future research:
 (1) rigorous proof for dataset size and number of features (required for high training accuracy) scaling with the system size;
 (2) better kernel options such as graph kernel, quantum kernel, shadow kernel and neural tangent kernel;
