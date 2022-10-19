@@ -500,7 +500,7 @@ def my_svm(X, y, size_test, kernel, legend, rfe=False, to_features=3):
     # ax.hist([expect(state, bell_inequality) for state in test_2 ])
 
     print("======================== SVM summary end =========================")
-    ax.set_ylabel('Number of samples')
+    ax.set_ylabel('Number of occurrences')
     ax.set_xlabel('Expectation value')
     ax.set_title('2-qubit')
     ax.legend(legend, loc='upper right')
@@ -521,13 +521,15 @@ def plot_score(size_list, train_score_list, test_score_list):
     plt.savefig('two_qubit_scores.png', dpi=400)
 
 
-def plot_expectation_hist(ax, expectation_lists, legends, title='',fontsize=LARGE_SIZE,xlabel=r'$\Tr(W\rho)$'):
+def plot_expectation_hist(ax, expectation_lists, legends, title='',fontsize=LARGE_SIZE,xlabel=r'Tr$(W\rho)$', legend_loc='upper left'):
     ax.axvline(0.0, ls="--", color="gray", label='_nolegend_')
     for expectation in expectation_lists:
         ax.hist(expectation, alpha=0.7, edgecolor="k",linewidth=0.5)
-    ax.legend(legends, loc='upper left',fontsize=fontsize-2)
+    ax.legend(legends, loc=legend_loc,fontsize=fontsize-2)
     # ax.legend(legends, loc='upper left', prop ={'size': 9})
-    ax.set_ylabel('Number of samples',fontsize=fontsize)
+    ax.set_ylabel('Number of occurrences',fontsize=fontsize)
     ax.set_xlabel(xlabel,fontsize=fontsize)
+    ax.tick_params(axis='both', which='major', labelsize=fontsize-2)
+    ax.tick_params(axis='both', which='minor', labelsize=fontsize-4)
     ax.text(0.51, 0.92, title, transform=ax.transAxes,fontsize=fontsize-2)
     # ax.set_title('3-qubit case '+title)
