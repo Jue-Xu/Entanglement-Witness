@@ -407,7 +407,7 @@ def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=Fals
 
     train_score = clf.score(X_train, y_train)
     test_score = clf.score(X_test, y_test)
-    score = (train_score+test_score)/2
+    score = (9*train_score+test_score)/10
     print(f'train score: {train_score:.4f}; test score: {test_score:.4f}')
     # print("======================== SVM end =========================")
 
