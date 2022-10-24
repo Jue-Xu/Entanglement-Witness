@@ -182,12 +182,17 @@ def generate_noisy_ghz_ensemble(n, m, noise_limit):
     ]
 
 
-def generate_coherent_noisy_ghz_ensemble(n, m, theta_limit, phi_limit):
-    print(f'generate_coherent_noisy_ghz_ensemble: n = {n}, m = {m}, theta_limit = {theta_limit:.2f}*pi, phi_limit = {phi_limit:.2f}*pi')
+def generate_coherent_noisy_ghz_ensemble(n, m, theta_limit, phi_limit, p_limit=0):
+    print(f'generate_coherent_noisy_ghz_ensemble: n = {n}, m = {m}, theta_limit = {theta_limit:.2f}*pi, phi_limit = {phi_limit:.2f}*pi, p_limit = {p_limit:.2f}')
     theta_list = [random.random() * theta_limit for i in range(m)]
     phi_list = [random.random() * phi_limit for i in range(m)]
-    return [
+    p_noise_list = [random.random() * p_limit for i in range(m)]
+    ghz_coherent_noise = [
         ket2dm( sin(pi*theta) * tensor([basis(2,0) for i in range(n)]) + cos(pi*theta) * exp(pi*random.choice(phi_list) * 1j) * tensor([basis(2,1) for i in range(n)]) )       for theta in theta_list
+    ]
+    return [
+        ghz_coherent_noise_state * (1 - p_noise_list[index]) + p_noise_list[index] /
+        (2**n) * qeye([2 for j in range(n)]) for index,ghz_coherent_noise_state in enumerate(ghz_coherent_noise)
     ]
 
 
