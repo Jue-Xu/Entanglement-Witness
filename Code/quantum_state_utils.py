@@ -116,7 +116,7 @@ def generate_rand_product_density(n, m, noise_limit=0):
 # generate_rand_product_density(3,1,0)
 
 
-def generate_noisy_biseparable(n_A, n_B, m, noise_limit):
+def generate_noisy_biseparable(n_A, n_B, m, noise_limit=0):
     random_white_noise_p = [random.random() * noise_limit for i in range(m)]
     # print(tensor(rand_dm([2]),rand_dm([2,2])))
     dim_AB = [2 for i in range(n_A + n_B)]
@@ -412,8 +412,8 @@ def svm_train_witness(X, y, size_test, kernel='rbf', to_features=3, verbose=Fals
 
     train_score = clf.score(X_train, y_train)
     test_score = clf.score(X_test, y_test)
-    score = (9*train_score+test_score)/10
-    print(f'train score: {train_score:.4f}; test score: {test_score:.4f}')
+    score = (len(y_train)*train_score+len(y_test)*test_score)/(len(y_train)+len(y_test))
+    print(f'train score: {train_score:.4f}; test score: {test_score:.4f}; number of features: {len(X[0])}')
     # print("======================== SVM end =========================")
 
     return (clf, score)
