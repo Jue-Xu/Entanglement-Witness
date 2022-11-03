@@ -7,6 +7,8 @@ def estimate_exp(full_measurement, one_observable):
         not_match = 0
         product = 1
 
+        print(single_measurement)
+        # print(one_observable)
         for pauli_XYZ, position in one_observable:
             if pauli_XYZ != single_measurement[position][0]:
                 not_match = 1
