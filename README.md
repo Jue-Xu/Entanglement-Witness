@@ -1,5 +1,6 @@
 # README
-
+![Figure](schematic_bg.png)
+<!-- [Figure](https://excalidraw.com/#json=XBnibVJopP0Gr8kOZ-69F,DMmLNTof7_3ff3TVo4K_0Q) -->
 ## The Paper
 <!-- Entanglement-Witness-by-Quantum -->
 

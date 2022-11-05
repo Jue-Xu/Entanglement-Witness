@@ -946,7 +946,7 @@ It is worth noting that training such a universal classifier for high-dimensiona
 \begin{figure*}[!ht]
 	\centering
 		\centering
-		\includegraphics[width=.6\linewidth]{schematic_entangle.png}
+		\includegraphics[width=.6\linewidth]{schematic.png}
 	% 	\includegraphics[width=.9\linewidth]{gme.jpg}
 	% . \includegraphics[width=.7\linewidth]{witness.png}
 	% 	\includegraphics[width=.8\linewidth]{sep.jpg}
@@ -964,7 +964,7 @@ In other words, we derive the entanglement witness (classifier) for certain targ
 	\;
 	\begin{itemize}
 		\item \textbf{Input}: a dataset $\qty{\qty(\dm^{(i)},y^{(i)})}$ consist of randomly sampled entangled states $\dm$ around $\ket{\psi_{\target}}$ with label $y=-1$ and randomly sampled separable states with label $1$.
-		\item \textbf{Output}: a learned classifier $f(\vbx_{\dm,\bmsigma})$ with high training accuracy where $\bmsigma$ is a subset of all Pauli observables and $\vbx_{\dm,\bmsigma}$ is a vector of corresponding expectation values.
+		\item \textbf{Output}: a learned classifier $f(\vbx_{\dm,\tilde{\bmsigma}})$ with high training accuracy where $\tilde{\bmsigma}$ is a subset of all Pauli observables and $\vbx_{\dm,\tilde{\bmsigma}}$ is a vector of corresponding expectation values.
 		% (minimal) 
 	\end{itemize}
 \end{problem}
@@ -1032,11 +1032,12 @@ are hyperplanes in feature spaces,
 but the SVM witness is more flexible because the classifier $(\vbw,b)$ can be numerically derived through optimization for any generic target state.
 And it only requires local Pauli observables (measurements) $\pob_{\sigma}$ that is feasible in most experiments, even when the target state is a non-stabilizer state.
 
-The SVM formalism allows for the programmatic elimination of features \cite{guyonGeneSelectionCancer2002}, i.e., reducing the cost of experimental measurements and copies (samples).
+The SVM formalism allows for the programmatic elimination of features \cite{guyonGeneSelectionCancer2002}, i.e., reducing the cost of experimental measurements (samples).
 We start with the feature vector of all $k$-local Pauli observables,
 % (for 4-qubit states, there are $9*4choose2$ 2-local Pauli observables)
-then we randomly eliminate one feature such that the training accuracy keeps high.
-By repeating this procedure, we finally obtain a classifier with minimal number of features.
+then we randomly eliminate one feature such that the training accuracy remains high enough with the new feature vector $\tilde{\vbx}$.
+By repeating this procedure, we obtain a classifier $f(\vbx_{\dm,\tilde{\bmsigma}})$, 
+where $\abs{\tilde{\bmsigma}}=M$ is the minimal number of Pauli observables required for classification.
 The algorithm summarized in Algorithm. \ref{alg:classical_learning}.
 % for a generic state with desired entanglement structures.
 % \onecolumngrid
@@ -1045,12 +1046,12 @@ The algorithm summarized in Algorithm. \ref{alg:classical_learning}.
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
     \Input{dataset $\qty{\qty(\dm^{(i)},y^{(i)})}^m_{i=1}$, minimal number of features: $M$, and tolerance $\epsilon$}
-    \Output{a classifier $f(\vbx_{\dm,\bmsigma})$}
+    \Output{a classifier $f(\vbx_{\dm,\tilde{\bmsigma}})$ }
     \BlankLine
 	% \tcp*{---------------------------------------------- training phase ------------------------------------------------}
 	% \tcc{training phase}
-	\tcc{evaluate all $k$-local Pauli observables}
-	$\vbx^{(i)}:=\Tr(\dm^{(i)}\pob_{\bmsigma}), \forall i$ \\
+	% \tcc{evaluate all $k$-local Pauli observables and shuffle}
+	$\vbx^{(i)}:=\Tr(\dm^{(i)}\pob_{\bmsigma}), \forall i$ \tcp*{evaluate all $k$-local Pauli observables and shuffle}
 	\While{\textup{accuracy $< \epsilon$ or} $len(\vbx)>M$ } {
 		\For{$j \textup{ in  range}(len(\vbx)) $} {
 			\tcc{eliminate $j$-th feature}
@@ -1064,10 +1065,10 @@ The algorithm summarized in Algorithm. \ref{alg:classical_learning}.
 				$\vbx^{(i)}:=\tilde{\vbx}^{(i)}$ and then \textbf{break}
 			}\ElseIf{\textup{accuracy $<\epsilon$  and} $j=len(\vbx)$} {
 			\tcc{If cannot find a classifier with less features, then output the last classifier with high accuracy}
-				\Return a classifier $f(\vbx_{\dm,\bmsigma})$
+				\Return a classifier $f(\vbx_{\dm,\tilde{\bmsigma}})$
 			}
 		}
-	} \Return a classifier $f(\vbx_{\dm,\bmsigma})$
+	} \Return a classifier $f(\vbx_{\dm,\tilde{\bmsigma}})$ with $\abs{\tilde{\bmsigma}}=M$
 	% \tcp{call Algorithm. \ref{alg:classical_shadow}}
 	% \tcp*{============================================= prediction =============================================== //}
 	% Test the classifier on test dataset
@@ -1079,13 +1080,6 @@ The algorithm summarized in Algorithm. \ref{alg:classical_learning}.
     \label{alg:classical_learning}
 \end{algorithm}
 % \twocolumngrid
-A key drawback of conventional witnesses is its linearity because many real-world datasets are not linearly-separable in a low-dimensional feature space.
-Despite the nonlinear witness \cite{guhneNonlinearEntanglementWitnesses2006} proposed, its experimental implementation is more challenging than linear ones.
-The good news is,
-within the framework of SVM, non-linearity can be easily achieved by the so-called kernel method \cite{hofmannKernelMethodsMachine2008}.
-The main idea is mapping the features $\vbx$ to a higher dimensional space via a feature map $\phi(\vbx)$ such that they can be linearly separated in the high-dimensional feature space.
-% the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map $\phi(\vbx)$ ...
-% An important feature of kernel method is that kernels can be computed efficiently without evaluating feature map (might be infinite dimension) explicitly.
 \begin{figure*}[!ht]
 	\centering
 	% \includegraphics[width=.4\linewidth]{./notebook/feature_space_2.png}
@@ -1099,14 +1093,21 @@ The main idea is mapping the features $\vbx$ to a higher dimensional space via a
 	\subfloat{%
 		\includegraphics[width=.9\columnwidth]{./Code/feature_space_2d_XZ_XX_23.png}
 	}
-	\caption{The two-dimensional embedding (a low-dimensinoal feature space $\expval{XZ}$ VS $\expval{XX}$) of 2-qubit states: green dots represent randomly sampled separable states, while pink ones represent entangled Bell states mixed with white noise in the range (left figure) $p_{\noise}\in[0,1/3]$ and (right figure) $p_{\noise}\in[0,2/3]$. The colored shade indicates the nonlinear decision boundary of the kernel SVM classifier. When the white noise is larger, the gap between two sets of data points is smaller such that training a classifier becomes harder.}
+	\caption{The two-dimensional embedding (a low-dimensinoal feature space $\expval{XZ}$ VS $\expval{XX}$) of 2-qubit states: green dots represent randomly sampled separable states, while pink ones represent entangled Bell states mixed with white noise in the range (left figure) $p_{\noise}\in[0,1/3]$ and (right figure) $p_{\noise}\in[0,2/3]$. The colored shade indicates the nonlinear decision boundary of the RBF kernel SVM classifier. When the white noise is larger, the gap between two sets of data points is smaller such that training a classifier becomes harder.}
 	% \caption{feature space, recursive feature elimination}
 	\label{fig:feature_space}
 \end{figure*}
+A key drawback of conventional witnesses is its linearity because many real-world datasets are not linearly-separable in a low-dimensional feature space.
+Despite the nonlinear witness \cite{guhneNonlinearEntanglementWitnesses2006} proposed, its experimental implementation is more challenging than linear ones.
+The good news is,
+within the framework of SVM, non-linearity can be easily achieved by the so-called kernel method \cite{hofmannKernelMethodsMachine2008}.
+The main idea is mapping the features $\vbx$ to a higher dimensional space via a feature map $\phi(\vbx)$ such that they can be linearly separated in the high-dimensional feature space.
+% the polynomial kernel $\kernel_{\text{poly}}(\vbx,\vbx') := (1+\vbx\cdot\vbx')^q$ with feature map $\phi(\vbx)$ ...
+% An important feature of kernel method is that kernels can be computed efficiently without evaluating feature map (might be infinite dimension) explicitly.
 The kernel function $\kernel(\vbx,\vbx'):\mathcal{X}\times \mathcal{X} \to \realnumber$ measures the similarity between two input data points in a high-dimensional feature space because a kernel can be written as an inner product $\langle \phi(\vbx),\phi(\vbx') \rangle$.
 The commonly used kernel is the radial basis function (RBF) kernel which a Gaussian function
 $\kernel_{\text{rbf}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ with $l_2$ Euclidean norm and a parameter $\gamma$.
-\cref{fig:feature_space} exhibits that two kinds of data points are clearly classified by a nonlinear (RBF kernel) SVM classifier, though it is not linearly separable in this 2-dimensional space.
+It can be easily observed in \cref{fig:feature_space} that two kinds of data points are clearly classified by a nonlinear (RBF kernel) SVM classifier, though it is not linearly separable in this 2-dimensional space.
 
 
 % \subsubsection{Our witness ansatz and optimization}
@@ -1121,22 +1122,22 @@ $\kernel_{\text{rbf}}(\vbx,\vbx') := \exp(-\gamma\norm{\vbx-\vbx'}^2_2)$ with $l
 		% convex?\cite{chakrabartiQuantumAlgorithmsLower2020} 
 % 		Bell (CHSH) inequality & constant & fixed & weak \\  
 		% entangle spectrum \cite{horodeckiDirectDetectionQuantum2002} & & & unknown \\  
-		Tomographic (NN)  & $4^n-1$ & trained & universal \\  
 		\textbf{SVM (kernel) } &  $\ll 4^n-1$ & trained & flexible \\  
+		Tomographic (NN)  & $4^n-1$ & trained & universal \\  
 		\hline
 	\end{tabular}
 	\caption{Comparison of conventional fidelity witness, tomographic classifier, and SVM witness.}
 	\label{tab:comparison}
 \end{table}
-In \cref{tab:comparison}, we compare different kinds of witness. 
-The conventional fidelity witness only need few local measurement settings for stabilizer states, but it is a one-side test (required very strong promise measured by fidelity). 
+We compare the characters of different kinds of witnesses in \cref{tab:comparison}. 
+The conventional fidelity witness only need few local measurement settings for stabilizer states, but it is a one-side test. 
 The tomographic witness trained by NN only need the promise that there is a gap between entangled and separable states (almost universal), but it requires complete information of a state ($4^n-1$ features).
-Between these two cases, the SVM witness is more robust than conventional fidelity witnesses and don't need as many classical features as the tomgraphic witnesses.
+Between these two cases, the SVM witness has stronger classification capability than conventional fidelity witnesses and do not need as many classical features as the tomgraphic witness.
 However, these prior ML witnesses only consider the robustness to white noise and cannot be directly applied to experiments.
 %  because they didn't address the problem of estimating classical features. 
 In numerical simulation, we can efficiently evaluate classical features by direct calculation, 
 but in actual experiments, entries of a density matrix are not explicitly known.
-Instead, we need to estimate the observables by repeat measurements, which we are going to discuss in next section.
+Instead, we need to estimate observables (classical features) by repeat measurements, which we are going to discuss in next section.
 
 
 % \subsubsection{Variational entanglement witness (ansatz)}
@@ -1152,7 +1153,7 @@ The brute force approach to fully characterize a state in an experiment is quant
 \footnote{Quantum state tomography refers to the task of recovering the density matrix of an unknown $D$-dimensional state $\dm$ within error tolerence $\epsilon$, 
 given the ability to prepare and measure copies of $\dm$.}.
 With a recovered densitry matrix, we can directly calculate classcial features or separability measures,
-but full tomography is experimentally and computationally demanding.
+but full tomography is experimentally demanding.
 % \begin{problem}[quantum state tomography]\label{prm:full_tomography}
 % 	Informally, quantum state tomography refers to the task of estimating complete description (density matrix) of an unknown $D$-dimensional state $\dm$ within error tolerence $\epsilon$, 
 % 	given the ability to prepare and measure copies of $\dm$.
@@ -1173,7 +1174,7 @@ but full tomography is experimentally and computationally demanding.
 % \cite{altepeterPhotonicStateTomography2005}.
 	% Stokes decomposition
 % Since there are $D^2$ entries in a density matrix, navie full tomography based on independent measurements need at least $D^2$ copies.
-Even if adaptive or collective measurements (and post-processing) allowed 
+Even adaptive or collective measurements (and post-processing) allowed 
 \footnote{Adaptive measurements are the intermediate between independent measurements and collective (entangled) measurements, in which the copies of $\dm$ are measured individually, but the choice of measurement basis can change in response to earlier measurements.},
 rigorous analysis \cite{haahSampleoptimalTomographyQuantum2017} \cite{odonnellEfficientQuantumTomography2016} showed that 
 $\Omega(D^2/\epsilon^2)$ measurements (copies)  are required for recovering a $D\times D$ density matrix
@@ -1203,7 +1204,7 @@ Now that full tomography is intractable for large systems, a workaround is to ex
 % this enables the possibility to \emph{shadow tomography} \cite{aaronsonShadowTomographyQuantum2018}:
 \begin{problem}[shadow tomography]\label{prm:shadow_tomography}
 	% Aaronson's formulation	
-	Given $m$ copies of an unknown $D$-dimensional state and $M$ known 2-outcome measurements $\qty{E_1,\dots,E_M}$,
+	Given $m$ copies (samples) of an unknown $D$-dimensional state and $M$ known 2-outcome measurements $\qty{E_1,\dots,E_M}$,
 	to estimate $\forall i,\Tr(\dm E_i)$ within additive error $\epsilon$ with success probability at least $1-\delta$.
 	% \hfill
 	% \begin{itemize}
@@ -1221,7 +1222,7 @@ Now that full tomography is intractable for large systems, a workaround is to ex
 	% Though formally “efficient” in the sense that $N$ scales polynomially with $m$ for any fixed approximation error $\epsilon$, 
 % \end{theorem}
 Since shadow tomography can be implemented with $\tilde{\bigO}(\log^4 M\cdot \log D\cdot \log 1/\delta \cdot\epsilon^{-4})$ copies \footnote{$\tilde{\bigO}$ hides a polylog factor. A full tomography require estimate $D^2$ measuremments (observables) with additive error $\epsilon\ll 1/D$ for all $E_i$, so the sample complexity of shadow tomography is compatiable with lower bounds of full quantum state tomography.} \cite{aaronsonShadowTomographyQuantum2018},
-we can evaluate classical features $x_{\dm,\sigma}=\Tr(\dm\pob_{\sigma})$ for entanglement witness in a samples-efficient (copies) manner.
+we can estimate $M$ classical features (Pauli observables) for $f(\vbx_{\dm,\tilde{\bmsigma}})$ in a samples-efficient manner.
 % \footnote{nonlinear functions: von Neumann entropy $\Tr(\dm\log(\dm))$;
 % multivariate functions:  $\Tr(\dm_1 \cdots \dm_m)$, fidelity (quantum kernel?) $\Tr(\dm\dm')$,  quadratic $\Tr(\ob \dm_i \otimes \dm_j)$.},
 However, Aaronson's shadow tomography procedure is very demanding in terms of quantum hardware (in the collective preparation and measurement on $\dm^{\otimes m}$).
@@ -1235,8 +1236,8 @@ A classical shadow is a succinct classical description of a quantum state, which
 (i.e., each measurement measures all qubits in some Pauli $X$, $Y$, or $Z$-basis) 
 on a reasonably small number of copies of the state.
 The classical shadow attempts to approximate this expectation value by an empirical average over $R$ independent samples, 
-i.e., $o_i = \Tr(O_i \dm_{\cs})$ obeys $\expectation[o_i] =\Tr(O_i \dm)$.
-find the local measurement settings....
+i.e., $o = \Tr(O \dm_{\cs})$ obeys $\expectation[o] =\Tr(O \dm)$.
+From the perspective of entanglement witness, the classical shadow method finds a effective local measurement settings for a sets of $k$-local Pauli observables.
 % much like Monte Carlo sampling approximates an integral.
 	% \begin{equation}
 	% 	o_i = \Tr(O_i \dm_{\cs})
@@ -1282,32 +1283,35 @@ find the local measurement settings....
     \DontPrintSemicolon
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
-    \Input{copies of $\dm$ and selected observables $\pob_{\bmsigma_\ml}$}
+    \Input{$R$ copies of $\dm$ and selected observables $\pob_{\tilde{\bmsigma}}$}
 	% (black-box access to a circuit preparing a state)
 	% , observables $\ob$...
-    \Output{estimation of $\vbx_{\dm,\bmsigma_{\ml}}:=\Tr(\dm\pob_{\bmsigma_{\ml}})$}
+    \Output{estimation of $\vbx_{\dm,\tilde{\bmsigma}}:=\Tr(\dm\pob_{\tilde{\bmsigma}})$}
     % \Output{\nameref{def:classical_shadow} $\dm_{cs}$}
     \BlankLine
+	Randomly select $R$ Pauli observables from $\qty{X,Y,Z}^n$ 
+	\tcp{assume $n$-qubit state $\dm$}
     \For{ $i = 1,2, \ldots, R$} {
         $\dm\mapsto \U\dm \U^\dagger$ \tcp*{apply a random unitary}
-		$\U\dm \U^\dagger\mapsto \ket{b}\in \qty{0,1}^n $ \tcp*{measure in computational basis}
-		$\dm_{\cs}=\mathcal{M}^{-1}\qty(\U^\dagger \op{b} \U)$ \tcp*{$\mathcal{M}$ quantum channel}
+		$\ket{b}\in \qty{0,1}^n $ \tcp*{measure in computational basis}
+		$\dm_{\cs}=\bigotimes_j \qty(3U_j^\dagger \op{b_j} U_j-I)$ \tcp*{}
+		% $\dm_{\cs}=\mathcal{M}^{-1}\qty(\U^\dagger \op{b} \U)$ \tcp*{$\mathcal{M}$ quantum channel}
         % \tcc{comment in a new line}
     % {\Return ?}
     }
     $\text{CS}(\dm,R)=\qty{\dm_{\cs_1},\dots,\dm_{\cs_R}}$ \tcp*{classical shadow}
 	\tcp{estimate features for SVM from classical shadow}
-	\Return  $\vbx_{\dm,\bmsigma_{\ml}}=\textsc{MedianOfMeans}(\text{CS}(\dm,R)\bmsigma_{\ml})$
+	\Return  $\vbx_{\dm,\tilde{\bmsigma}}=\textsc{Expectation}(\text{CS}(\dm,R)O_{\tilde{\bmsigma}})$
     \caption{estimate features (local Pauli observables by (randomized) classical feature}
     \label{alg:classical_shadow}
 \end{algorithm}
-Given a quantum state $\dm$,
+Given a quantum state $\dm$ of $n$ qubits,
 a classical shadow is created by repeatedly performing a simple procedure: Apply a unitary transformation $\dm \mapsto \U \dm \U^\dagger$, and then measure all the qubits in the computational basis $\ket{\vb{b}}\in \qty{\ket{0},\ket{1}}^{\otimes n}$. 
 Its classical shadow (snapshots) $\dm_{\cs}$ (a density matrix) can be reconstructed
-\begin{equation}
-% 	\dm_{\cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{b} U),
-	\dm_{\cs} := \bigotimes \qty(3U_j^\dagger \op{b_j} U_j-I),
-\end{equation}
+% \begin{equation}
+% % 	\dm_{\cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{b} U),
+% 	\dm_{\cs} := \bigotimes_j \qty(3U_j^\dagger \op{b_j} U_j-I),
+% \end{equation}
 % where $\mathcal{M}=$.
 The algorithm is summarized in Algorithm. \ref{alg:classical_shadow}.
 The number of times this procedure is repeated is called the size of the classical shadow. 
@@ -1316,11 +1320,13 @@ The classical shadow size required to accurately approximate $M$ $k$-local Pauli
 % \footnote{Known fundamental lower bounds state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace distance.}
 % \footnote{ $\Omega(\log(M) 3^k/\epsilon^2)$ lower bound ??}
 % \subsubsection{Derandomization}
-There are several variants of classical shadow method \cite{huangEfficientEstimationPauli2021} \cite{chenRobustShadowEstimation2021}.
-The derandomized version is the refinement of the original randomized protocol which provides better performance for $k$-local observables, 
-but not guarantees better performance for global observables (involving all subsystems).  
+% There are several variants of classical shadow method \cite{huangEfficientEstimationPauli2021} \cite{chenRobustShadowEstimation2021}.
+There are several variants of classical shadow method.
+The derandomized classical shadow \cite{huangEfficientEstimationPauli2021} is the refinement of the original randomized protocol which provides better performance for $k$-local observables. 
+The core idea of derandomized version is to select more Pauli measurements compatiable with $k$-local Pauli observables to be estimated.
+% but not guarantees better performance for global observables (involving all subsystems).  
 % noise-resilient variant \cite{chenRobustShadowEstimation2021} ...
-The detect entanglement by estimating $p_3$-PPT with classical shadow and comparison with related methods have been done experimentally \cite{elbenMixedstateEntanglementLocal2020} \cite{zhangExperimentalQuantumState2021}.
+The entanglement detection by estimating $p_3$-PPT with classical shadow and comparison with related methods have been done experimentally \cite{elbenMixedstateEntanglementLocal2020} \cite{zhangExperimentalQuantumState2021}.
 % Similar to the PPT condition, the $p_3$-PPT condition (without full tomography) applies to mixed states and is completely independent of the state in question \cite{elbenMixedstateEntanglementLocal2020}. 
 % \begin{figure}[!ht]
 % 	\centering
@@ -1579,6 +1585,7 @@ because SVM can correctly classifiy a mixture if it can classify each case.
 \end{figure}
 For the machine learning part, we make use of scikit-learning Python package \cite{pedregosaScikitlearnMachineLearning2011} to train SVM with RBF kernel.
 For training a 4-qubit SVM classifier with accuracy $0.999$, we generate $10^4$ states for each kind of states.
+bi-separable states including $\dm_{1}\otimes \dm_{234}$ and $\dm_{12}\otimes \dm_{34}$.....
 \cref{fig:conventional_witness} and \cref{fig:ml_compare} show that conventional fidelity witnesses cannot correctly classify when GHZ states with coherent noises $\theta=\pi/3,\phi>\pi/2$ (even mixed with white noise $p_\noise \in [0,0.1]$) and W states mixed with white noise $p_{\noise}>8/21$,
 while the SVM classifier can classify them with hight accuracy.
 \begin{figure}[!ht]
@@ -1589,11 +1596,12 @@ while the SVM classifier can classify them with hight accuracy.
 \end{figure}
 One set of features found by the kernel SVM are 
 $\vbx=\perm(\expval{XIIX},\expval{YIIZ},\expval{IIZZ},\expval{ZXII})$.
-permutations $(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)$ and by symmetry of qubits of GHZ and W states....
+permutations $\perm:=[(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]$ and by symmetry of qubits of GHZ and W states....
 % $\vbx=(\expval{ZZZ},\expval{XZX},\expval{ZZX},\expval{ZIZ},\expval{IZZ})$.
 The error of estimating these features VS the size of shadow is shown in \cref{fig:shadow}.
-\footnote{The open-source code for classical shadow \url{https://github.com/hsinyuan-huang/predicting-quantum-properties}}
+\footnote{The open-source code for classical shadow with the code from \url{https://github.com/hsinyuan-huang/predicting-quantum-properties}}
 (tradeoff between robustness and meaurement efficiency) 
+The derandomized version performs better than randomized shadow and independent measurement.
 
 
 % We consider a set of different regularization parameters,...
@@ -1649,7 +1657,9 @@ Interestingly, the task of estimating expectation values can also be achieved ef
 Huang et. al rigorously showed that, 
 % for any quantum process $\mathcal{E}$, observables $\ob$, and distribution $\mathcal{D}$, and for any quantum ML model, one can always design a classical ML model achieving a similar average prediction error such that $N_C$ (number of experiments?) is larger than $N_Q$ by at worst a small polynomial factor.
 % In contrast, 
-for achieving accurate prediction on all Pauli observables $\Tr(\dm\pob_{\sigma} ), \forall \sigma \in \qty{ I, X, Y, Z }^n$, the exponential quantum advantage over classical ML is possible
+for achieving accurate prediction on all $4^n-1$ Pauli observables 
+% $\Tr(\dm\pob_{\sigma} ), \forall \sigma \in \qty{ I, X, Y, Z }^n$, 
+the exponential quantum advantage over classical ML is possible
 \cite{huangInformationtheoreticBoundsQuantum2021}.
 Training a more powerful classifier with all Pauli observables as features might be one of our future research direction.
 	% \footnote{
