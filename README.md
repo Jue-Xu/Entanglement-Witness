@@ -1,10 +1,10 @@
 # README
-![Figure](schematic_bg.png)
+![Figure](schematic.png)
 <!-- [Figure](https://excalidraw.com/#json=XBnibVJopP0Gr8kOZ-69F,DMmLNTof7_3ff3TVo4K_0Q) -->
 ## The Paper
 <!-- Entanglement-Witness-by-Quantum -->
 
-`Towards efficient and generic entanglement detection`.
+`Towards efficient and generic entanglement detection by machine learning`.
 Jue Xu and Qi Zhao, 2022,
 arXiv: ...
 <!-- Entanglement Detection Beyond Measuring Fidelities
@@ -34,6 +34,9 @@ The contents of the package do not need any installation beyond the packages req
 [Scikit-learn](https://scikit-learn.org/stable/):
 	Installation instructions available at (https://scikit-learn.org/stable/install)
 
+Classical shadow: https://github.com/hsinyuan-huang/predicting-quantum-properties
+
+Unfaithful states: https://github.com/BenDive/Entanglement-Detection-Beyond-Measuring-Fidelities
 
 <!-- ######################### USAGE ############################# -->
 ## Usage of code
