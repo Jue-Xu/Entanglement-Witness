@@ -1,0 +1,228 @@
+% !TEX root = ./notes.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% math %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\calH}{\mathcal{calH}}
+\newcommand{\hilbertspace}{\mathcal{H}}
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\lagrangian}{\mathcal{L}}
+\newcommand{\VS}{\textrm{VS}}
+
+\newcommand{\realnumber}{\mathbb{R}}
+\newcommand{\complexnumber}{\mathbb{C}}
+\newcommand{\rationalnumber}{\mathbb{Q}}
+\newcommand{\integer}{\mathbb{Z}}
+\newcommand{\naturalnumber}{\mathbb{N}}
+\newcommand{\numberfield}{\mathbb{F}}
+
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\identity}{\mathds{1}}
+\newcommand{\midentity}{\mathds{1}}
+% \newcommand{\identity}{\mathbb{1}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bY}{\mathbf{Y}}
+\newcommand{\bepsilon}{\boldsymbol{\epsilon}}
+
+\newcommand{\ii}{\textup{i}}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+% probability
+\newcommand{\probability}{\mathbb{P}}
+\newcommand{\variance}{\textup{\textrm{Var}}}
+\newcommand{\covariance}{\textup{\textrm{Cov}}}
+\newcommand{\expectation}{\mathbb{E}}
+
+% group theory
+\newcommand{\group}{\mathbb{G}}
+\newcommand{\dihedral}{\mathbb{D}}
+\newcommand{\GL}{\mathbb{GL}}
+\newcommand{\SL}{\mathbb{SL}}
+\newcommand{\Sp}{\textup{Sp}}
+% \newcommand{\sp}{\mathfrak{sp}}
+\newcommand{\SU}[1]{\textup{SU(#1)}}
+\newcommand{\su}[1]{\mathfrak{su}(#1)}
+% \renewcommand{\SO}[1]{\textup{SO(#1)}}
+% \newcommand{\SO}{\textup{SO}}
+
+% graph theory
+\newcommand{\graph}{G}
+
+% matrix and linear algebra
+\newcommand{\diag}{\textup{diag}}
+% \let\span\relax
+% \DeclareMathOperator{\span}{\textup{span}}
+% \newcommand{\span}{\textup{span}}
+\newcommand{\spn}{\mathop{\mathrm{span}}}
+\DeclareMathOperator{\spann}{\textup{span}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%  CS  %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% cryptography
+\newcommand{\gen}{\textsf{Gen}}
+\newcommand{\enc}{\textsf{Enc}}
+\newcommand{\dec}{\textsf{Dec}}
+\newcommand{\mac}{\textsf{Mac}}
+\newcommand{\sign}{\textsf{Sign}}
+\newcommand{\verfy}{\textsf{Verfy}}
+\newcommand{\negl}{\textup{negl}}
+
+% quantum computing
+% gates
+\newcommand{\cnot}{\textup{\textsc{cnot}}}
+\newcommand{\hdm}{\textup{\textsc{h}}}
+\newcommand{\tphase}{\textup{\textsc{t}}}
+\newcommand{\cphase}{\textup{\textsc{cphase}}}
+\newcommand{\swap}{\textup{\textsc{swap}}}
+\newcommand{\negate}{\textup{\textsc{not}}}
+\newcommand{\QFT}{\textup{QFT}}
+
+% Boolean Functions
+\newcommand{\MAJ}{\textup{\textsc{maj}}}
+\newcommand{\NOT}{\textup{\textsc{not}}}
+\newcommand{\OR}{\textup{\textsc{or}}}
+\newcommand{\AND}{\textup{\textsc{and}}}
+\newcommand{\NAND}{\textup{\textsc{nand}}}
+\newcommand{\EQ}{\textup{\textsc{eq}}}
+\newcommand{\IP}{\textup{\textsc{ip}}}
+\newcommand{\DISJ}{\textup{\textsc{disj}}}
+\newcommand{\Parity}{\textup{\textsc{parity}}}
+\newcommand{\Threshold}{\textup{\textsc{thr}}}
+
+\newcommand{\GS}{\textup{\textsc{gs}}}
+\newcommand{\dejo}{\textup{\textsc{DeJo}}}
+\newcommand{\STAB}{\textup{\textsc{stab}}}
+
+% algorithms
+\newcommand{\algo}{\mathcal{A}}
+\newcommand{\maxcut}{\textup{\textsc{MaxCut}}}
+\newcommand{\sat}{\textup{\textsc{sat}}}
+\newcommand{\partition}{\textup{\textsc{Partition}}}
+\newcommand{\bosonsample}{\textup{\textsc{BosonSampling}}}
+
+% complexity measures
+\newcommand{\vcdim}{\mathsf{VCdim}}
+\DeclareMathOperator{\certificate}{\mathsf{Cert}}
+\DeclareMathOperator{\s}{\mathsf{s}}
+\DeclareMathOperator{\bs}{\mathsf{bs}}
+\DeclareMathOperator{\adeg}{\mathsf{\widetilde{deg}}}
+% \DeclareMathOperator{\adv}{\mathsf{Adv}}
+\DeclareMathOperator{\dqc}{\mathsf{D}}
+\DeclareMathOperator{\rqc}{\mathsf{R}}
+\DeclareMathOperator{\qqc}{\mathsf{Q}}
+\DeclareMathOperator{\cmc}{\mathsf{C}}
+\DeclareMathOperator{\rcmc}{\mathsf{RC}}
+\DeclareMathOperator{\qcmc}{\mathsf{QC}}
+\let\deg\relax
+\DeclareMathOperator{\deg}{\mathsf{deg}}
+\DeclareMathOperator{\poly}{\textup{poly}}
+
+% complexity classes
+\newcommand{\reduceto}{\le_P}
+\let\cclass\textup
+\let\P\relax
+\newcommand{\P}{\cclass{P}}
+\newcommand{\PP}{\cclass{PP}}
+\newcommand{\NP}{\cclass{NP}}
+\newcommand{\sharpP}{\cclass{\#P}}
+\newcommand{\coNP}{\cclass{co-NP}}
+\newcommand{\PH}{\cclass{PH}}
+\newcommand{\NPC}{\cclass{NPC}}
+\newcommand{\BQP}{\cclass{BQP}}
+\newcommand{\QMA}{\cclass{QMA}}
+\newcommand{\PSPACE}{\cclass{PSPACE}}
+\newcommand{\BPP}{\cclass{BPP}}
+
+% Optimization
+\newcommand{\subjectto}{\textup{subject to  }}
+
+\let\iff\relax
+\newcommand{\iff}{\text{iff}}
+\newcommand{\eff}{\textup{eff}}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\otherwise}{\text{otherwise}}
+\newcommand{\T}{\intercal}
+\newcommand{\OPT}{\textup{OPT}}
+
+
+\newcommand\vartextvisiblespace[1][.5em]{%
+  \makebox[#1]{%
+    \kern.07em
+    \vrule height.3ex
+    \hrulefill
+    \vrule height.3ex
+    \kern.07em
+  }% <-- don't forget this one!
+}
+\newcommand{\visiblespace}{\vartextvisiblespace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% Physics %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\zpartition}{\mathcal{Z}}
+\newcommand{\llaplacian}{\mathfrak{L}}
+\newcommand{\dlagrangian}{\mathcal{L}}
+\newcommand{\eaction}{\mathcal{A}}
+\newcommand{\action}{\mathcal{S}}
+\newcommand{\hhat}{\hat{H}}
+\newcommand{\xhat}{\hat{x}}
+\newcommand{\phat}{\hat{p}}
+\newcommand{\qhat}{\hat{q}}
+\newcommand{\nhat}{\hat{n}}
+\newcommand{\pihat}{\hat{\pi}}
+\newcommand{\phihat}{\hat{\phi}}
+\newcommand{\oph}{\mathbf{H}}
+\newcommand{\opx}{\mathbf{x}}
+\newcommand{\opp}{\mathbf{p}}
+\newcommand{\opq}{\mathbf{q}}
+\newcommand{\vecx}{\vec{x}}
+\newcommand{\vecp}{\vec{p}}
+\newcommand{\veck}{\vec{k}}
+\newcommand{\vecq}{\vec{q}}
+\newcommand{\vbk}{\vb{k}}
+\newcommand{\vbs}{\vb{s}}
+\newcommand{\vbx}{\vb{x}}
+\newcommand{\vbn}{\vb{n}}
+\newcommand{\vbp}{\vb{p}}
+\newcommand{\vbq}{\vb{q}}
+\newcommand{\vbr}{\vb{r}}
+\newcommand{\vbe}{\vb{e}}
+\newcommand{\vbv}{\vb{v}}
+\newcommand{\vbw}{\vb{w}}
+\newcommand{\vbB}{\vb{B}}
+\newcommand{\vbE}{\vb{E}}
+% \newcommand{\acreation}{\hat{a}^\dagger}
+% \newcommand{\aannihilation}{\hat{a}}
+\newcommand{\acreation}{\hat{a}^\dagger}
+\newcommand{\aannihilation}{\hat{a}}
+\newcommand{\bcreation}{\hat{b}^\dagger}
+\newcommand{\bannihilation}{\hat{b}}
+\newcommand{\ccreation}{\hat{c}^\dagger}
+\newcommand{\cannihilation}{\hat{c}}
+\newcommand{\homega}{\hbar \omega}
+\newcommand{\opsigma}{\hat{\bm{\sigma}}}
+\newcommand{\hatsigma}{\hat{\sigma}}
+\newcommand{\bmhsig}{\bm{\hat{\sigma}}}
+\newcommand{\hsig}{\hat{\sigma}}
+\newcommand{\splus}{\hat{\sigma}_+}
+\newcommand{\sminus}{\hat{\sigma}_-}
+
+\newcommand{\schrodinger}{\textup{Schr\"{o}dinger }}
+\newcommand{\tc}{T_c}
+\newcommand{\alembertian}{\square}
+\newcommand{\vecA}{\vb{A}}
+\newcommand{\magfield}{\vb{B}}
+\newcommand{\elefield}{\vb{E}}
+
+\newcommand{\deltat}{\Delta t}
+\newcommand{\deltatau}{\Delta \tau}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% Quantum Computing %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \newcommand{\gcommutator}[1]{[[ #1 ]]}
+\usepackage{stmaryrd}
+\newcommand{\gcommutator}[1]{\llbracket #1 \rrbracket}
