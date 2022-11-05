@@ -946,7 +946,7 @@ It is worth noting that training such a universal classifier for high-dimensiona
 \begin{figure*}[!ht]
 	\centering
 		\centering
-		\includegraphics[width=.6\linewidth]{schematic.png}
+		\includegraphics[width=.56\linewidth]{schematic.png}
 	% 	\includegraphics[width=.9\linewidth]{gme.jpg}
 	% . \includegraphics[width=.7\linewidth]{witness.png}
 	% 	\includegraphics[width=.8\linewidth]{sep.jpg}
@@ -1289,11 +1289,11 @@ To be more feasible for current experiments, Huang et. al \cite{huangPredictingM
 	% \tcp{assume $n$-qubit state $\dm$}
     \For{ $i = 1,2, \ldots, R$} {
 		\tcp{apply single-copy measurement $P$ to a copy $\dm$} 
-        $\dm\mapsto \U_P\dm \U_P^\dagger\mapsto \ket{\vb{b}}$ with $b_j\in \qty{0,1},\forall j\in[n]$ \\
+        $\dm\mapsto \U\dm \U^\dagger\mapsto \ket{\vb{b}}$ with $b_j\in \qty{0,1},\forall j\in[n]$ \\
 		% \tcp*{apply a random unitary}
 		% $\ket{b}\in \qty{0,1}^n $ \tcp*{measure in computational basis}
 		\tcp{inverse channel $\mathcal{M}^{-1}(\dm')=(3\dm'-I)$}
-		$\dm_{\cs}^{(i)}=\bigotimes_j \qty(3U_j^\dagger \op{b_j} U_j-I)$ 
+		$\dm_{\cs}^{(i)}=\bigotimes_j^n \qty(3U_j^\dagger \op{b_j} U_j-I)$ 
 		% $\dm_{\cs}=\mathcal{M}^{-1}\qty(\U^\dagger \op{b} \U)$ \tcp*{$\mathcal{M}$ quantum channel}
         % \tcc{comment in a new line}
     % {\Return ?}
@@ -1309,9 +1309,9 @@ To construct the randomized classical shadow, we firstly need to uniformly sampl
 Then, we apply single-copy measurement $P$ to a copy of $\dm$, i.e., each measurement measures all qubits in Pauli $X$, $Y$, or $Z$-basis according to $P$.
 Specifically, we apply the transformation $\dm \mapsto \U \dm \U^\dagger$ where $U^\dagger P U = \Sigma$ is the eigendecomposition of $P$ and then measure this rotated stated in computational basis (collapse to $\ket{\vb{b}}\in\qty{\ket{0},\ket{1}}^{\otimes n}$).
 % extracted by performing reasonably simple single-copy measurements 
-The expectation values of a set of observables can be approximated 
-A snapshot $\dm_{\cs}$ can be constructed by taking the inverse of the quantum channel $\mathcal{M}^{-1}(U^\dagger\op{\vb{b}}U)$.
-By repeating this procedure $R$ times, we obtain $R$ snapshots of $\dm$ which can be used to estimate the expectation values of a Pauli observable by an empirical average over $R$ classical shadows, 
+% The expectation values of a set of observables can be approximated 
+A snapshot $\dm_{\cs}=\mathcal{M}^{-1}(U^\dagger\op{\vb{b}}U)$ can be constructed by taking the inverse of the quantum depolarizing channel $\mathcal{M}$.
+By repeating this procedure $R$ times, we have $R$ snapshots of $\dm$ to estimate expectation values of a set of Pauli observables by an empirical average over snapshots, 
 i.e., $o = \Tr(O \dm_{\cs})$ obeys $\expectation[o] =\Tr(O \dm)$.
 % \begin{equation}
 % % 	\dm_{\cs} := \mathcal{M}^{-1} \qty(U^\dagger \op{b} U),
@@ -1320,20 +1320,20 @@ i.e., $o = \Tr(O \dm_{\cs})$ obeys $\expectation[o] =\Tr(O \dm)$.
 % where $\mathcal{M}=$.
 The algorithm is summarized in Algorithm. \ref{alg:classical_shadow}.
 
-The size of the classical shadow scales $\bigO(\log(M) 3^k/\epsilon^2)$ to approximate $M$ $k$-local Pauli observables with error tolerance $\epsilon$ \cite{huangPredictingManyProperties2020},
-so this scheme has advantage the small $k$ and large $M$ (many quite local observables).
+Surprisingly, the size of the classical shadow scales $\bigO(\log(M) 3^k/\epsilon^2)$ to approximate $M$ $k$-local Pauli observables with error tolerance $\epsilon$ \cite{huangPredictingManyProperties2020},
+so this scheme has advantage for small $k$ and large $M$ cases (many very local observables).
 % but is independent of the number of qubits
 % \footnote{Known fundamental lower bounds state that classical shadows of exponential size (at least) $T = \Omega( 2^n / \epsilon^2)$ are required to $\epsilon$-approximate $\dm$ in trace distance.}
 % \footnote{ $\Omega(\log(M) 3^k/\epsilon^2)$ lower bound ??}
 % \subsubsection{Derandomization}
 There are several variants of classical shadow method \cite{hadfieldMeasurementsQuantumHamiltonians2022, huangEfficientEstimationPauli2021, chenRobustShadowEstimation2021}.
 The derandomized version \cite{huangEfficientEstimationPauli2021} is the refinement of the original randomized protocol which provides better performance for $k$-local observables. 
-The core idea of derandomized version is to select more Pauli measurements compatiable with $k$-local Pauli observables to be estimated.
-The main result of this work is a procedure for identifying “good” Pauli measurements that allow for accurately predicting many (ﬁxed) Pauli expectation values. This procedure is designed to interpolate between two extremes: (i) completely randomized measurements (good for predicting many local observables) and (ii) completely deterministic measurements that directly measure observables sequentially (good for predicting few global observables).
-From the perspective of entanglement witness, the classical shadow method finds a effective local measurement settings for a sets of $k$-local Pauli observables.
+The core idea of derandomized version is to sample more global Pauli measurements that is compatiable with $k$-local Pauli observables to be estimated.
+This procedure is the interpolation between completely randomized measurements (the original classical shadow) and independent estimation (good for predicting few global observables).
+From the perspective of conventional entanglement witness, the classical shadow method finds a effective local measurement settings for a generic set of $k$-local Pauli observables.
 % but not guarantees better performance for global observables (involving all subsystems).  
 % noise-resilient variant \cite{chenRobustShadowEstimation2021} ...
-The entanglement detection by estimating $p_3$-PPT with classical shadow \cite{elbenMixedstateEntanglementLocal2020} and comparison of classical shadow methods \cite{zhangExperimentalQuantumState2021} have been done experimentally.
+In addition, the entanglement detection by estimating $p_3$-PPT with classical shadow \cite{elbenMixedstateEntanglementLocal2020} and comparison of classical shadow variants \cite{zhangExperimentalQuantumState2021} have been done experimentally.
 % Similar to the PPT condition, the $p_3$-PPT condition (without full tomography) applies to mixed states and is completely independent of the state in question \cite{elbenMixedstateEntanglementLocal2020}. 
 % \begin{figure}[!ht]
 % 	\centering
@@ -1538,14 +1538,14 @@ The entanglement detection by estimating $p_3$-PPT with classical shadow \cite{e
 \section{Numerical simulation and Discussion}\label{sec:numerical_simulation}
 % \subsection{Dataset preparation and states generation}\label{sec:data}
 
-We generate quantum state samples, construct quantum circuits, and manipulate quantum objects numerically by QuTiP Python library \cite{johanssonQuTiPPythonFramework2013,liPulselevelNoisyQuantum2022}.
-We generate multi-partite entangled states (synthetic data) including: Bell states, 3-qubit GHZ with coherent noise \cref{eq:coherent_noise} and W states with white noise \cref{eq:white_noise}, see \cref{fig:sample_data} for the samples used in \cref{fig:conventional_witness}.
-The the noise parameters are randomly (uniformly) sampled from a range.
-In contrast to entangled states, we generate random separable states for different number of qubits by tensoring random (sampled by Haar measure, calling \textsf{rand\_dm(N,dims)} function from QuTiP) density matrices of subsystems.
+We generate quantum state samples and manipulate quantum states numerically by QuTiP Python library \cite{johanssonQuTiPPythonFramework2013,liPulselevelNoisyQuantum2022}.
+Multi-partite entangled states including Bell states, GHZ states with coherent noise \cref{eq:coherent_noise} and W states with white noise \cref{eq:white_noise} are generated by calling functions provided by QuTiP (see \cref{fig:sample_data} for examples).
+The noise parameters $(\phi,\theta,p_{\noise})$ are uniformly sampled from certain ranges.
+In contrast to entangled states, we generate random separable states for different number of qubits by tensoring random density matrices of subsystems (sampled by Haar measure, calling \textsf{rand\_dm(N,dims)} function of QuTiP).
 For example,
 there are three different partitions $\dm_A\otimes \dm_{BC}$, $\dm_{AB}\otimes \dm_{C}$, and $\dm_B\otimes \dm_{AC}$ for 3-qubit separable states.
 It is not necessary to prepare the mixed separable states as convex combination of separable states with different partitions 
-because SVM can correctly classifiy a mixture if it can classify each case.
+because SVM can correctly classifiy a mixture if it can classify each separate case.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=.9\linewidth]{./Code/dataset_sample_3x2.png}
@@ -1579,37 +1579,39 @@ because SVM can correctly classifiy a mixture if it can classify each case.
 % performance of different methods: 
 
 For the machine learning part, we make use of scikit-learning Python package \cite{pedregosaScikitlearnMachineLearning2011} to train SVM with RBF kernel.
-For training a 4-qubit SVM classifier with accuracy $0.999$, we generate $10^4$ states for each kind of states.
-bi-separable states including $\dm_{1}\otimes \dm_{234}$ and $\dm_{12}\otimes \dm_{34}$.....
-\cref{fig:conventional_witness} and \cref{fig:ml_compare} show that conventional fidelity witnesses cannot correctly classify when GHZ states with coherent noises $\theta=\pi/3,\phi>\pi/2$ (even mixed with white noise $p_\noise \in [0,0.1]$) and W states mixed with white noise $p_{\noise}>8/21$,
-while the SVM classifier can classify them with hight accuracy.
+It has been shown in \cref{fig:conventional_witness} that conventional fidelity witnesses cannot correctly classify when 3-qubit GHZ states with coherent noises $\theta=\pi/3,\phi\in[0.5\pi,0.6\pi]$ and W states mixed with white noise $p_{\noise}\in[8/21,0.5]$.
+In contrast, the SVM classifier can detect the entanglement of 4-qubit GHZ state with coherence noise $\theta\in[0,\pi/3], \phi\in[0,0.6\pi]$ (even mixed with white noise $p_\noise \in [0,0.1]$) and the 4-qubit W state with large white noise $p_{\noise}\in[4/15,0.5]$ ($4/15$ is maximal white noise tolerance of 4-qubit W projector fidelity witness), with hight accuracy (see \cref{fig:ml_compare}).
+To train this 4-qubit SVM classifier with accuracy $0.999$, we generate $10^4$ states for each kind of states: noisy GHZ, W states with noise parameters uniformly sample, 
+bi-separable states $\dm_{1}\otimes \dm_{234}$ and $\dm_{12}\otimes \dm_{34}$.
 \begin{figure}[!ht]
 	% \begin{subfigure}{0.45\textwidth}
 	\centering
-		\includegraphics[width=.9\linewidth]{./Code/three_qubit_hist_ML.png}
+		\includegraphics[width=.9\linewidth]{./Code/three_qubit_hist_ML_4qubit.png}
 		% \includegraphics[width=.9\linewidth]{./Code/fidelity_witness_compare_2_long.png}
 		% \includegraphics[width=.9\linewidth]{./Code/fidelity_witness_compare.png}
 		% \includegraphics[width=.9\linewidth]{./notebook/three_qubit_hist.png}
 		% \caption{ML witness, unfaithful}
 	% \end{subfigure}
 	% 	\caption{compare different methods: Bell inequality, witness, ML ansatz; different white noise limit, unfaithful state}
-	\caption{The states beyond detection by fidelity witnesses (GHZ state with coherence noise $\theta\in[0,\pi/3], \phi\in[0,0.6\pi]$, and W state with large white noise $p_{\noise}\in[0,0.5]$) can be classified by the kernel SVM classifier with high accuracy.}
+	\caption{The 4-qubit GHZ state with coherence noise $\theta\in[0,\pi/3], \phi\in[0,0.6\pi]$ and white noise $p_{\noise}\in[0,0.1]$, and the 4-qubit W state with white noise $p_{\noise}\in[0,0.5]$ can be classified by the kernel RBF SVM classifier with high accuracy.}
 	\label{fig:ml_compare}
 \end{figure}
 
-One set of features found by the kernel SVM are 
-$\vbx=\perm(\expval{XIIX},\expval{YIIZ},\expval{IIZZ},\expval{ZXII})$.
-permutations $\perm:=[(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]$ and by symmetry of qubits of GHZ and W states....
+By programmatic elimination of features, one optimal set of features (i.e., four 2-local Pauli observables) found by the kernel SVM for classification are 
+$\vbx=\expval{XIIX},\expval{YIIZ},\expval{IIZZ},\expval{ZXII})$.
+You may have noticed that we only consider two partitions in bi-separable state.
+Fortunately, by the symmetry of GHZ and W states, we can exchange a set of positions $[(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]$ of qubits to get all partitions of biseparable states. 
 % $\vbx=(\expval{ZZZ},\expval{XZX},\expval{ZZX},\expval{ZIZ},\expval{IZZ})$.
-The error of estimating these features VS the size of shadow is shown in \cref{fig:shadow}.
-\footnote{The open-source code for classical shadow with the code from \url{https://github.com/hsinyuan-huang/predicting-quantum-properties}}
-(tradeoff between robustness and meaurement efficiency) 
-The derandomized version performs better than randomized shadow and independent measurement.
-The comparable size classical shadow has been implemented in photonic experiments  \cite{zhangExperimentalQuantumState2021}.
+So, there are in total $4*6=24$ features to be estimated (actually 22 due to duplication).
+To compare the performance of different estimation schemes, the average error of estimation over observables VS the number of samples is plotted in \cref{fig:shadow}
+\footnote{The open-source code for classical shadow with the code from \url{https://github.com/hsinyuan-huang/predicting-quantum-properties}}.
+% (tradeoff between robustness and meaurement efficiency) 
+The derandomized version outperforms randomized shadow for small number of samples and significantly better than independent estimation (smaller average error and variance).
+Notably, the comparable size classical shadow estimation has been implemented in photonic experiments \cite{zhangExperimentalQuantumState2021}.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=.9\linewidth]{./Code/estimation_error_compare_methods.png}
-	\caption{Average error of estimating expectation values of 30 2-local 4-qubit Pauli observables $\sum_i (o_i-\Tr(\ob_i\dm))^2/M$ by different estimation methods VS number of samples (the error bar indicates the standard deviation for each case). The blue line represents estimating each Pauli observables independently. The orange line is the estimation by the randomized classical shadow, while the green one is the derandomized version of classical shadow.}
+	\caption{Average error of estimating expectation values of twenty-four 2-local 4-qubit Pauli observables $\sum_i (o_i-\Tr(\ob_i\dm))^2/24$ by three different estimation methods VS number of samples (the error bar indicates the variance of estimation errors over 24 observables). The blue line represents estimating each Pauli observables independently. The orange line represents the estimation by the randomized classical shadow, while the green one represents the derandomized version of classical shadow.}
 	\label{fig:shadow}
 \end{figure}
 
@@ -1636,9 +1638,9 @@ The comparable size classical shadow has been implemented in photonic experiment
 % \section{Conclusion and discussion}\label{sec:conclusion}
 % Related experiments: ....
 In conclusion,
-our protocol is flexible and sample-efficient in detecting entanglement around certain entangled state by training a kernel SVM classifier with a synthetic dataset.
-We test our protocol for 4-qubit GHZ states with coherent noise and W states with large white noise.
-We also show that the features for training such machine learned classifier can be estimated by a sample-efficient scheme....
+our protocol is flexible and sample-efficient in detecting entanglement in the vicinity of entangled states.
+A generic entanglement classifier for a target state is obtained by training a kernel SVM (fitting/optimization over a synthetic dataset).
+This protocol can be efficiently implemented on current experiment devices because the number of features ($k$-local observables) has been optimized through SVM and efficient local measurement settings are found by the derandomized classical shadow scheme.
 % but no guarantee (need more research).
 % The reason for choosing SVM as our machine learning technique is many-fold:
 % (1) its clear geometric interpretation analoguous to entanglement witness;
@@ -1649,9 +1651,7 @@ We also show that the features for training such machine learned classifier can 
 % % (4) the SVM formalism allows for the programmatic elimination of features \cite{guyonGeneSelectionCancer2002}, i.e., reducing the cost of experimental measurements and copies (samples);
 % % (5) only requires local (Pauli) measurements $\vbx:=\Tr(\dm\pob_{\sigma})$ even when the target state is a non-stabilizer state, such as W state, which normally need nonlocal measurements.
 % % in exchange for a lower tolerance to white noise, in a manner similar 
-
-
-There are also several potential directions for future research:
+Meanwhile, there are also several potential directions for future research:
 (1) It is of practical interest to find rigorous proof or perform numerical simulation for the dataset size and number of features (required for high training accuracy) scaling with the system size (more than 4 qubits);
 (2) It is meaningful to test more kernels, such as graph kernel \cite{vishwanathanGraphKernels2010}, shadow kernel \cite{huangProvablyEfficientMachine2022}, and neural tangent kernel \cite{jacotNeuralTangentKernel2020}, for better performance of the kernel SVM.
 % As a recent advancement in machine learning theory, the neural tangent kernel SVM is theoretically as powerful as Neural Network.
@@ -1668,7 +1668,7 @@ for achieving accurate prediction on all $4^n-1$ Pauli observables
 % $\Tr(\dm\pob_{\sigma} ), \forall \sigma \in \qty{ I, X, Y, Z }^n$, 
 the exponential quantum advantage over classical ML is possible
 \cite{huangInformationtheoreticBoundsQuantum2021}.
-Training a more powerful (universal) classifier with all Pauli observables as features might be interesting.
+Training a more powerful (almost universal) classifier with all Pauli observables as features might be interesting for practice.
 	% \footnote{
 	% 	$\bigO(\log(M/\delta)\epsilon^{-4})$ copies of the unknown quantum state $\dm$.
 	% 	($M=4^n$ implies linear copy for full tomography???)
