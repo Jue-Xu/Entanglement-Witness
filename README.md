@@ -8,7 +8,7 @@
 
 `Towards efficient and generic entanglement detection by machine learning`.
 Jue Xu and Qi Zhao, 2022,
-arXiv: ...
+[arXiv: 2211.05592](http://arxiv.org/abs/2211.05592).
 <!-- Entanglement Detection Beyond Measuring Fidelities
 M. Weilenmann, B. Dive, D. Trillo, E. A. Aguilar and M. Navascués 
 20th December 2019Entanglement Detection Beyond Measuring Fidelities -->
@@ -45,6 +45,11 @@ Reference:
 - SVM: https://scikit-learn.org/stable/modules/svm.html?#support-vector-machines
 - kernel: https://scikit-learn.org/stable/modules/svm.html?#kernel-functions
 - feature elimination: https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html, https://scikit-learn.org/stable/auto_examples/feature_selection/plot_rfe_digits.html#sphx-glr-auto-examples-feature-selection-plot-rfe-digits-py
+
+<!-- #### Recursive feature elimination 
+https://stackoverflow.com/questions/71040368/feature-selection-not-working-in-svr-with-rbf-kernel-for-n-features-to-select
+https://towardsdatascience.com/powerful-feature-selection-with-recursive-feature-elimination-rfe-of-sklearn-23efb2cdb54e
+https://stackoverflow.com/questions/41592661/determining-the-most-contributing-features-for-svm-classifier-in-sklearn -->
 
 ## Related projects with open-source code
 Classical shadow: https://github.com/hsinyuan-huang/predicting-quantum-properties; https://github.com/charleshadfield/adaptiveshadows
