@@ -7,8 +7,11 @@
 <!-- Entanglement-Witness-by-Quantum -->
 
 `Towards efficient and generic entanglement detection by machine learning`.
-Jue Xu and Qi Zhao, 2022,
-[arXiv: 2211.05592](http://arxiv.org/abs/2211.05592).
+Jue Xu and Qi Zhao, 2022
+
+![https://arxiv.org/abs/2211.05592](https://img.shields.io/badge/paper%20%28v0%29-arXiv%3A2211.05592-B31B1B)
+<!-- Copyright by Jue Xu (juexu@cs.umd.edu) -->
+<!-- [arXiv: 2211.05592](http://arxiv.org/abs/2211.05592). -->
 <!-- Entanglement Detection Beyond Measuring Fidelities
 M. Weilenmann, B. Dive, D. Trillo, E. A. Aguilar and M. Navascués 
 20th December 2019Entanglement Detection Beyond Measuring Fidelities -->
