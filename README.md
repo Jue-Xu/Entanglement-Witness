@@ -6,7 +6,7 @@
 ## The Paper
 <!-- Entanglement-Witness-by-Quantum -->
 
-`Towards efficient and generic entanglement detection by machine learning`.
+[`Towards efficient and generic entanglement detection by machine learning`](http://arxiv.org/abs/2211.05592).
 Jue Xu and Qi Zhao, 2022
 
 ![https://arxiv.org/abs/2211.05592](https://img.shields.io/badge/paper%20%28v0%29-arXiv%3A2211.05592-B31B1B)
