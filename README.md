@@ -35,19 +35,19 @@ The contents of the package do not need any installation beyond the packages req
 ### [QuTiP](https://qutip.org/)
 Installation instructions available at (https://qutip.org/docs/latest/installation).
 Reference:
-- basic: https://qutip.org/docs/latest/guide/guide-basics.html
-- measurement: https://qutip.org/docs/latest/apidoc/functions.html#measurement, https://qutip.org/docs/latest/guide/guide-measurement.html
-- random states: https://qutip.org/docs/latest/apidoc/functions.html#module-qutip.random_objects
+- [basic](https://qutip.org/docs/latest/guide/guide-basics.html)
+- [measurement](https://qutip.org/docs/latest/apidoc/functions.html#measurement), https://qutip.org/docs/latest/guide/guide-measurement.html
+- [random states](https://qutip.org/docs/latest/apidoc/functions.html#module-qutip.random_objects)
 - gates and circuits: https://qutip.org/docs/latest/apidoc/functions.html?#quantum-information-processing, https://qutip.org/docs/latest/guide/qip/qip-simulator.html?#operator-level-circuit-simulation, https://qutip-qip.readthedocs.io/en/stable/qip-basics.html
-- visualization of states: https://qutip.org/docs/latest/apidoc/functions.html?#qutip.visualization.matrix_histogram, 
+- [visualization of states](https://qutip.org/docs/latest/apidoc/functions.html?#qutip.visualization.matrix_histogram)
 
 ### [Scikit-learn](https://scikit-learn.org/stable/)
 Installation instructions available at (https://scikit-learn.org/stable/install).
 Reference:
 
-- SVM: https://scikit-learn.org/stable/modules/svm.html?#support-vector-machines
-- kernel: https://scikit-learn.org/stable/modules/svm.html?#kernel-functions
-- feature elimination: https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html, https://scikit-learn.org/stable/auto_examples/feature_selection/plot_rfe_digits.html#sphx-glr-auto-examples-feature-selection-plot-rfe-digits-py
+- [SVM](https://scikit-learn.org/stable/modules/svm.html?#support-vector-machines)
+and [Kernel for SVM](https://scikit-learn.org/stable/modules/svm.html?#kernel-functions)
+- feature elimination: [sklearn.feature_selection.RFE](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html), [feature_selection](https://scikit-learn.org/stable/auto_examples/feature_selection/plot_rfe_digits.html#sphx-glr-auto-examples-feature-selection-plot-rfe-digits-py)
 
 <!-- #### Recursive feature elimination 
 https://stackoverflow.com/questions/71040368/feature-selection-not-working-in-svr-with-rbf-kernel-for-n-features-to-select
@@ -55,9 +55,9 @@ https://towardsdatascience.com/powerful-feature-selection-with-recursive-feature
 https://stackoverflow.com/questions/41592661/determining-the-most-contributing-features-for-svm-classifier-in-sklearn -->
 
 ## Related projects with open-source code
-Classical shadow: https://github.com/hsinyuan-huang/predicting-quantum-properties; https://github.com/charleshadfield/adaptiveshadows
+Classical shadow: [hsinyuan-huang/predicting-quantum-properties](https://github.com/hsinyuan-huang/predicting-quantum-properties); [charleshadfield/adaptiveshadows](https://github.com/charleshadfield/adaptiveshadows)
 
-Unfaithful states: https://github.com/BenDive/Entanglement-Detection-Beyond-Measuring-Fidelities
+Unfaithful states: [BenDive/Entanglement-Detection-Beyond-Measuring-Fidelities](https://github.com/BenDive/Entanglement-Detection-Beyond-Measuring-Fidelities)
 
 Neural Network for entanglement classification: [Matlab Code](https://figshare.com/articles/dataset/Codes_and_data_set_of_Transforming_Bell_s_Inequalities_into_State_Classifiers_with_Machine_Learning_/6231662)
 
@@ -78,5 +78,4 @@ a particular example, figure, or table in the manuscript, and can be run indepen
 <!-- ########################## LICENSE ############################ -->
 ## License
 
-The code here is made available under the Creative Commons Attribution license (CC BY 4.0)
-(https://creativecommons.org/licenses/by/4.0/
+The code here is made available under the [Creative Commons Attribution license (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
